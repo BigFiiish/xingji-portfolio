@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xingji Yan — Software Engineer</title>
+    <meta
+      name="description"
+      content="Xingji Yan. Software engineer. Agentic AI, multi-tenant SaaS, and high-performance backends. M.S. ECE, Carnegie Mellon. The job keeps swimming."
+    />
+    <meta property="og:title" content="Xingji Yan — Software Engineer" />
+    <meta
+      property="og:description"
+      content="Agentic AI, multi-tenant SaaS, high-performance backends. Carnegie Mellon ECE."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600&family=Syne:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <canvas id="fluid" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="cursor" id="cursor" aria-hidden="true">
+      <span class="cursor-dot"></span>
+      <span class="cursor-ring"></span>
+    </div>
+
+    <div class="loader" id="loader">
+      <p class="loader-kicker">Entering the current</p>
+      <h1 class="loader-name">XINGJI</h1>
+      <div class="loader-bar"><span></span></div>
+    </div>
+
+    <header class="nav">
+      <a class="nav-mark magnetic" href="#top">XY</a>
+      <nav>
+        <a class="magnetic" href="#work">Work</a>
+        <a class="magnetic" href="#projects">Projects</a>
+        <a class="magnetic" href="#resume">Resume</a>
+        <a class="magnetic" href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <p class="eyebrow reveal">Software Engineer · Carnegie Mellon ECE</p>
+        <h1 class="hero-title">
+          <span class="hero-line reveal">Xingji</span>
+          <span class="hero-line reveal delay-1">Yan</span>
+        </h1>
+        <p class="hero-tag reveal delay-2">
+          <em>The job keeps swimming.</em>
+          Agentic systems, multi-tenant SaaS, and backends that stay fast when
+          the warehouse is on fire.
+        </p>
+        <div class="hero-cta reveal delay-3">
+          <a class="btn magnetic" href="#projects">Selected work</a>
+          <a class="btn ghost magnetic" href="https://github.com/BigFiiish" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+        <div class="scroll-hint reveal delay-4">
+          <span class="drop"></span>
+          Drag the water · scroll the story
+        </div>
+      </section>
+
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          <span>Java</span><span>Spring Boot</span><span>MCP</span><span>Kafka</span>
+          <span>React</span><span>TypeScript</span><span>PostgreSQL</span><span>OAuth 2.1</span>
+          <span>Redis</span><span>Kubernetes</span><span>Claude Code</span><span>Cursor</span>
+          <span>Java</span><span>Spring Boot</span><span>MCP</span><span>Kafka</span>
+          <span>React</span><span>TypeScript</span><span>PostgreSQL</span><span>OAuth 2.1</span>
+          <span>Redis</span><span>Kubernetes</span><span>Claude Code</span><span>Cursor</span>
+        </div>
+      </div>
+
+      <section class="about" id="about">
+        <div class="section-head reveal">
+          <span class="idx">01</span>
+          <h2>About</h2>
+        </div>
+        <div class="about-grid">
+          <p class="lede reveal">
+            I ship the unglamorous systems that keep operations alive — then I
+            put an agent on top of them, with guardrails, so people can talk to
+            the warehouse instead of clicking through twelve screens.
+          </p>
+          <p class="body-copy reveal">
+            Most recently at <strong>JASCI Software</strong>: a smart WMS used
+            by 20+ 3PL customers and 500+ concurrent users. I took an LLM action
+            layer from a sketch to production — JSON Schema contracts, idempotent
+            writes, audit trails — and I still carried on-call. Before that:
+            search pipelines at <strong>Sonos</strong>, payment APIs at
+            <strong>Tencent</strong>. M.S. from Carnegie Mellon. Inventor.
+            Google Cloud Professional Cloud Architect.
+          </p>
+        </div>
+        <ul class="stats">
+          <li class="reveal"><b>4+</b><span>Years shipping</span></li>
+          <li class="reveal delay-1"><b>20+</b><span>Live customer sites</span></li>
+          <li class="reveal delay-2"><b>&lt;1s</b><span>Search, from 10s+</span></li>
+          <li class="reveal delay-3"><b>CMU</b><span>M.S. ECE</span></li>
+        </ul>
+      </section>
+
+      <section class="work" id="work">
+        <div class="section-head reveal">
+          <span class="idx">02</span>
+          <h2>Experience</h2>
+        </div>
+        <div class="track-switch" id="tracks" role="tablist" aria-label="Resume lens">
+          <button class="track on magnetic" data-track="ai" role="tab" aria-selected="true">
+            Agentic AI
+          </button>
+          <button class="track magnetic" data-track="fullstack" role="tab" aria-selected="false">
+            Full-Stack
+          </button>
+          <button class="track magnetic" data-track="backend" role="tab" aria-selected="false">
+            Backend
+          </button>
+        </div>
+        <p class="track-kicker" id="track-kicker">MCP · guardrails · production agents</p>
+        <div class="timeline" id="timeline"></div>
+      </section>
+
+      <section class="projects" id="projects">
+        <div class="section-head reveal">
+          <span class="idx">03</span>
+          <h2>Projects</h2>
+        </div>
+        <p class="lede reveal">
+          Public systems I built to prove the same muscles: tenant isolation,
+          evals before agents, durable workflows, live queues.
+        </p>
+        <div class="project-grid" id="project-grid"></div>
+      </section>
+
+      <section class="skills" id="skills">
+        <div class="section-head reveal">
+          <span class="idx">04</span>
+          <h2>Stack</h2>
+        </div>
+        <div class="skill-board" id="skills-board"></div>
+      </section>
+
+      <section class="resume" id="resume">
+        <div class="section-head reveal">
+          <span class="idx">05</span>
+          <h2>Resume</h2>
+        </div>
+        <p class="lede reveal">
+          One career, three lenses — the same story I send when a role leans AI,
+          product, or systems. Switch the track above, then print or save as PDF.
+        </p>
+        <div class="resume-card reveal">
+          <div class="resume-top">
+            <div>
+              <h3>Xingji Yan</h3>
+              <p>Software Engineer · M.S. ECE, Carnegie Mellon</p>
+            </div>
+            <button class="btn magnetic" id="print-resume" type="button">Print / PDF</button>
+          </div>
+          <dl class="resume-meta">
+            <div><dt>Email</dt><dd><a href="mailto:yanxingji7@gmail.com">yanxingji7@gmail.com</a></dd></div>
+            <div><dt>Phone</dt><dd><a href="tel:+13213670900">321-367-0900</a></dd></div>
+            <div><dt>GitHub</dt><dd><a href="https://github.com/BigFiiish" target="_blank" rel="noreferrer">github.com/BigFiiish</a></dd></div>
+            <div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/xingji-yan" target="_blank" rel="noreferrer">xingji-yan</a></dd></div>
+          </dl>
+          <div id="resume-body"></div>
+        </div>
+      </section>
+
+      <section class="contact" id="contact">
+        <div class="section-head reveal">
+          <span class="idx">06</span>
+          <h2>Contact</h2>
+        </div>
+        <a class="contact-mail magnetic" href="mailto:yanxingji7@gmail.com">yanxingji7@gmail.com</a>
+        <div class="contact-row">
+          <a class="btn magnetic" href="https://github.com/BigFiiish" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="btn ghost magnetic" href="https://www.linkedin.com/in/xingji-yan" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a class="btn ghost magnetic" href="tel:+13213670900">Call</a>
+        </div>
+        <p class="footer-note">© 2026 Xingji Yan · Close the tab. The water keeps moving.</p>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
