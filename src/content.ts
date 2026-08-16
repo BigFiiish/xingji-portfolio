@@ -38,7 +38,8 @@ export const domains = [
       { name: "Clearbay", href: "#clearbay" },
       { name: "Grantline", href: "#grantline" },
     ],
-    accent: "#3ecf8e",
+    story: "Tenant isolation · idempotency · signed identity",
+    accent: "#3ECF8E",
   },
   {
     id: "ai",
@@ -49,7 +50,8 @@ export const domains = [
       { name: "Durable Brief", href: "#durable-brief" },
       { name: "Dockline", href: "#dockline" },
     ],
-    accent: "#8b9cff",
+    story: "Agents · evaluation · durable execution",
+    accent: "#8F7BFF",
   },
   {
     id: "infra",
@@ -60,7 +62,8 @@ export const domains = [
       { name: "PulseQueue", href: "#pulsequeue" },
       { name: "SketchSync", href: "#sketchsync" },
     ],
-    accent: "#5ec8ff",
+    story: "Queues · real-time · observability",
+    accent: "#E0A657",
   },
 ] as const;
 
@@ -102,7 +105,7 @@ export const projects: Project[] = [
     stack: ["Java 21", "Spring Boot", "PostgreSQL", "Redis", "MCP"],
     live: "https://clearbay.onrender.com",
     repo: "https://github.com/BigFiiish/clearbay",
-    accent: "#3ecf8e",
+    accent: "#3ECF8E",
     preview: "clearbay",
     xray: ["Browser", "Spring REST API", "Tenant Context", "Service Layer", "PostgreSQL / Redis", "Async Worker", "MCP / Audit"],
     caseStudy: {
@@ -166,7 +169,7 @@ export const projects: Project[] = [
     stack: ["Go", "React", "TypeScript", "ed25519"],
     live: "https://grantline.onrender.com",
     repo: "https://github.com/BigFiiish/grantline",
-    accent: "#6ea8ff",
+    accent: "#5B8CFF",
     preview: "grantline",
     xray: ["Console", "Challenge / Prove", "Grant (ed25519)", "Policy", "Sessions + audit"],
     caseStudy: {
@@ -221,7 +224,7 @@ export const projects: Project[] = [
     stack: ["TypeScript", "Next.js", "Vercel Workflows"],
     live: "https://durable-brief.vercel.app",
     repo: "https://github.com/BigFiiish/durable-brief",
-    accent: "#9aa4ff",
+    accent: "#8F7BFF",
     preview: "durable",
     xray: ["Next.js", "Workflow", "Parallel Research", "Draft", "Eval Loop", "Human Hook"],
     caseStudy: {
@@ -281,7 +284,7 @@ export const projects: Project[] = [
     stack: ["TypeScript", "React", "SSE", "Node.js"],
     live: "https://pulsequeue-wokz.onrender.com",
     repo: "https://github.com/BigFiiish/pulsequeue",
-    accent: "#e0a657",
+    accent: "#E0A657",
     preview: "pulse",
     xray: ["React Dashboard", "SSE", "Express", "Worker Pool", "Queue Engine", "Retry / DLQ"],
     caseStudy: {
@@ -330,7 +333,7 @@ export const projects: Project[] = [
     name: "Dockline",
     slug: "dockline",
     year: "2026",
-    featured: true,
+    featured: false,
     headline: "Don't ask the model if the model was right.",
     blurb:
       "An eval-first agent layer with 40 deterministic cases testing tenant isolation, write refusal, schemas, clarification, and traces.",
@@ -477,4 +480,27 @@ export const education = [
 ];
 
 export const stackLine =
-  "Java · Go · Spring Boot · React · TypeScript · PostgreSQL · MCP · Kafka · OAuth 2.1";
+  "Java/Spring · React/TypeScript · AI systems · M.S. ECE · Carnegie Mellon";
+
+export const principles = [
+  {
+    idx: "01",
+    title: "Correctness",
+    line: "Retries should not double-write. Tenant boundaries should not depend on client input.",
+  },
+  {
+    idx: "02",
+    title: "State",
+    line: "Processes should survive the request that started them.",
+  },
+  {
+    idx: "03",
+    title: "Failure",
+    line: "Failures should be visible, bounded, and recoverable.",
+  },
+  {
+    idx: "04",
+    title: "Humans",
+    line: "Automation should know where its authority ends.",
+  },
+];

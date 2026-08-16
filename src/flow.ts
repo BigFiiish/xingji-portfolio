@@ -1,8 +1,8 @@
 /** Editorial scroll signal: one thin spine, motifs only at featured work. */
 
-type Motif = "clearbay" | "dockline" | "durable-brief" | "pulsequeue";
+type Motif = "clearbay" | "grantline" | "durable-brief" | "pulsequeue" | "failures";
 
-const MOTIFS: Motif[] = ["clearbay", "dockline", "durable-brief", "pulsequeue"];
+const MOTIFS: Motif[] = ["clearbay", "grantline", "durable-brief", "pulsequeue", "failures"];
 
 export function initFlow(svg: SVGSVGElement) {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -103,14 +103,16 @@ export function initFlow(svg: SVGSVGElement) {
       cap.dataset.strong = "0";
       cap.textContent =
         active === "clearbay"
-          ? "tenant isolation"
-          : active === "dockline"
-            ? "eval gate"
+          ? "idempotency"
+          : active === "grantline"
+            ? "policy gate"
             : active === "durable-brief"
               ? "join · human gate"
               : active === "pulsequeue"
                 ? "lease · retry · dlq"
-                : "";
+                : active === "failures"
+                  ? "unstable → resolve"
+                  : "";
     }
   };
 
@@ -135,7 +137,7 @@ function motifSvg(id: Motif, x: number, y: number): string {
       <path d="M ${x - 5} ${y - 28} V ${y + 28}" />
       <path d="M ${x + 5} ${y - 28} V ${y + 28}" />`;
   }
-  if (id === "dockline") {
+  if (id === "grantline") {
     return `
       <path d="M ${x} ${y - 22} L ${x + 7} ${y} L ${x} ${y + 22} L ${x - 7} ${y} Z" />`;
   }
@@ -145,6 +147,10 @@ function motifSvg(id: Motif, x: number, y: number): string {
       <path d="M ${x} ${y - 30} C ${x + 10} ${y - 12}, ${x + 10} ${y - 8}, ${x} ${y + 4}" />
       <path d="M ${x} ${y - 30} V ${y + 4}" />
       <circle cx="${x}" cy="${y + 14}" r="2.4" class="flow-gate" />`;
+  }
+  if (id === "failures") {
+    return `
+      <path d="M ${x - 8} ${y - 10} Q ${x} ${y + 18}, ${x + 8} ${y - 10}" />`;
   }
   return `
     <path d="M ${x - 6} ${y - 18} H ${x + 6}" />

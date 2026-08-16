@@ -3,11 +3,11 @@ import { domains } from "./content";
 export function initMap(svg: SVGSVGElement) {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const mobile = window.matchMedia("(max-width: 860px)").matches;
-  const cx = 240;
-  const cy = 248;
-  const radii = [88, 148, 204];
+  const cx = 260;
+  const cy = 268;
+  const radii = [96, 162, 228];
 
-  svg.setAttribute("viewBox", "0 0 480 500");
+  svg.setAttribute("viewBox", "0 0 520 540");
   svg.innerHTML = `
     <defs>
       <radialGradient id="xyg" cx="50%" cy="50%" r="50%">
@@ -56,14 +56,17 @@ export function initMap(svg: SVGSVGElement) {
       readout.replaceChildren(document.createTextNode(idle));
       return;
     }
-    readout.replaceChildren();
+    const wrap = document.createElement("span");
     domain.related.forEach((rel, n) => {
-      if (n) readout.append(" / ");
+      if (n) wrap.append(" / ");
       const a = document.createElement("a");
       a.href = rel.href;
       a.textContent = rel.name;
-      readout.append(a);
+      wrap.append(a);
     });
+    const story = document.createElement("small");
+    story.textContent = domain.story;
+    readout.replaceChildren(wrap, document.createElement("br"), story);
   };
 
   const go = (href: string) => {

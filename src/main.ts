@@ -1,11 +1,11 @@
 import "./style.css";
-import { experience, person } from "./content";
+import { person } from "./content";
 import { initCommand } from "./command";
 import { bindFailures, failSection } from "./failures";
 import { initFlow } from "./flow";
 import { initMap } from "./map";
 import { initPanel } from "./panel";
-import { bindXray, renderMore, renderWork } from "./work";
+import { bindXray, renderMore, renderPrinciples, renderWork } from "./work";
 
 document.documentElement.classList.add("js");
 
@@ -36,19 +36,10 @@ if (fails) {
   fails.querySelectorAll(".reveal").forEach((n) => io.observe(n));
 }
 
-const jobs = document.querySelector("#jobs");
-if (jobs) {
-  jobs.innerHTML = experience
-    .map(
-      (j) => `
-      <li class="reveal">
-        <div class="job-who"><strong>${j.company}</strong><span>${j.role}</span></div>
-        <p>${j.line}</p>
-        <em>${j.dates}</em>
-      </li>`
-    )
-    .join("");
-  jobs.querySelectorAll(".reveal").forEach((n) => io.observe(n));
+const principles = document.querySelector<HTMLElement>("#principles");
+if (principles) {
+  renderPrinciples(principles);
+  principles.querySelectorAll(".reveal").forEach((n) => io.observe(n));
 }
 
 const map = document.querySelector<SVGSVGElement>("#systems-map");
@@ -61,3 +52,24 @@ initPanel();
 initCommand();
 
 document.querySelector("#mail")?.setAttribute("href", `mailto:${person.email}`);
+
+const nav = document.querySelector(".nav");
+window.addEventListener(
+  "scroll",
+  () => nav?.classList.toggle("dense", window.scrollY > 24),
+  { passive: true },
+);
+
+const tintIO = new IntersectionObserver(
+  (entries) => {
+    const vis = entries
+      .filter((e) => e.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (!vis) return;
+    const accent = (vis.target as HTMLElement).style.getPropertyValue("--accent").trim();
+    document.body.style.setProperty("--tint", accent || "transparent");
+    document.body.dataset.chapter = (vis.target as HTMLElement).id;
+  },
+  { threshold: [0.35, 0.55] },
+);
+document.querySelectorAll(".work-row, #failures").forEach((n) => tintIO.observe(n));

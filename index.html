@@ -13,7 +13,8 @@
       property="og:description"
       content="I build systems people actually use. Carnegie Mellon ECE. Selected work: Clearbay, Grantline, Durable Brief, PulseQueue."
     />
-    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://www.xingjiyan.com/" />
+    <meta property="og:url" content="https://www.xingjiyan.com/" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -30,7 +31,7 @@
         "alumniOf": { "@type": "CollegeOrUniversity", "name": "Carnegie Mellon University" },
         "url": "https://www.xingjiyan.com",
         "sameAs": ["https://github.com/BigFiiish", "https://www.linkedin.com/in/xingji-yan"],
-        "knowsAbout": ["Clearbay", "Grantline", "Durable Brief", "PulseQueue", "Go", "Spring Boot"]
+        "knowsAbout": ["Clearbay", "Grantline", "Durable Brief", "PulseQueue", "Dockline", "SketchSync", "ResuMatch"]
       }
     </script>
     <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
@@ -49,7 +50,6 @@
       <a class="nav-mark" href="#top">XY</a>
       <nav>
         <a href="#work">Work</a>
-        <a href="#failures">Failures</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -62,18 +62,13 @@
     <main id="top">
       <section class="hero">
         <div class="hero-copy">
-          <p class="hero-name reveal">Xingji Yan</p>
-          <p class="hero-school reveal">
-            M.S. Electrical &amp; Computer Engineering
-            <span>Carnegie Mellon University</span>
-          </p>
+          <p class="hero-name reveal">Xingji Yan — Software Engineer</p>
           <h1 class="hero-title">
             <span class="reveal">I build systems</span>
             <span class="reveal delay-1">people <em class="sig">actually use.</em></span>
           </h1>
           <p class="hero-tag reveal delay-2">
-            Full-stack software engineer building reliable product systems, AI
-            workflows, and developer infrastructure.
+            Reliable product systems · AI workflows · developer infrastructure
           </p>
           <div class="hero-cta reveal delay-3">
             <a class="btn" href="#work">View selected work ↓</a>
@@ -101,34 +96,22 @@
         <div class="more" id="more"></div>
       </section>
 
-      <section class="failures" id="failures">
-        <div class="section-head reveal">
-          <span class="idx">02</span>
-          <h2>Systems get interesting when things go wrong.</h2>
-        </div>
+      <section class="failures" id="failures" style="--accent:#c4a882">
         <div class="fail-grid" id="fail-grid"></div>
-        <p class="fail-end reveal">Happy paths are easy. I design the other paths.</p>
       </section>
 
       <section class="about" id="about">
         <div class="section-head reveal">
           <span class="idx">03</span>
-          <h2>About</h2>
+          <h2>What I care about</h2>
         </div>
         <p class="lede reveal">
           I ship the unglamorous systems that keep operations alive — then I
           put an agent on top of them, with guardrails, so people can talk to
           the warehouse instead of clicking through twelve screens.
         </p>
-        <p class="body-copy reveal delay-1">
-          Most recently at JASCI Software: a smart WMS used by 20+ 3PL customers
-          and 500+ concurrent users. I took an LLM action layer from a sketch to
-          production — JSON Schema contracts, idempotent writes, audit trails —
-          and I still carried on-call. Before that: search pipelines at Sonos,
-          payment APIs at Tencent. M.S. ECE, Carnegie Mellon.
-        </p>
-        <ul class="jobs" id="jobs"></ul>
-        <p class="stack-line reveal">Java · Go · Spring Boot · React · TypeScript · PostgreSQL · MCP · Kafka · OAuth 2.1</p>
+        <ul class="principles" id="principles"></ul>
+        <p class="stack-line reveal">Java/Spring · React/TypeScript · AI systems · M.S. ECE · Carnegie Mellon</p>
       </section>
 
       <section class="contact" id="contact">
@@ -158,6 +141,18 @@
       <div id="cmd-list" role="listbox"></div>
     </dialog>
 
+    <noscript>
+      <section>
+        <h2>Selected work</h2>
+        <article><h3>Clearbay</h3><p>Financial workflows that stay correct under retries.</p></article>
+        <article><h3>Grantline</h3><p>Identity from a signed grant, never a header.</p></article>
+        <article><h3>Durable Brief</h3><p>AI workflows that can wait.</p></article>
+        <article><h3>PulseQueue</h3><p>Retries are easy. Correct retries aren't.</p></article>
+        <article><h3>Dockline</h3><p>Don't ask the model if the model was right.</p></article>
+        <article><h3>SketchSync</h3><p>Realtime whiteboard. Raw WebSockets.</p></article>
+        <article><h3>ResuMatch</h3><p>A match score, not a vibe.</p></article>
+      </section>
+    </noscript>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -1,16 +1,22 @@
-import { projects, type Project } from "./content";
+import { principles, projects, type Project } from "./content";
 import { caseFails } from "./failures";
-import { productMarkup, xrayMarkup } from "./mockups";
-import { bindLife } from "./life";
+import { xrayMarkup } from "./mockups";
+import { bindScenes, sceneMarkup } from "./scenes";
 
 const featured = () => projects.filter((p) => p.featured);
 const rest = () => projects.filter((p) => !p.featured);
+
+const shorts: Record<string, string> = {
+  dockline: "Agent evaluation without letting the model grade itself.",
+  sketchsync: "Realtime collaboration over a typed WebSocket protocol.",
+  resumatch: "Deterministic resume/JD scoring with an optional grounded LLM layer.",
+};
 
 export function renderWork(root: HTMLElement) {
   root.innerHTML = featured()
     .map(
       (p, i) => `
-      <article class="work-row reveal" id="${p.slug}" data-slug="${p.slug}" style="--accent:${p.accent}">
+      <article class="work-row scene-${p.slug} reveal" id="${p.slug}" data-slug="${p.slug}" style="--accent:${p.accent}">
         <div class="work-copy">
           <span class="work-idx">${String(i + 1).padStart(2, "0")}</span>
           <h3>${p.name}</h3>
@@ -24,19 +30,19 @@ export function renderWork(root: HTMLElement) {
           </p>
         </div>
         <div class="work-visual">
-          <p class="xray-pill">Hold <kbd>⇧</kbd> to inspect architecture</p>
+          <p class="xray-pill">SYSTEM MODE · Hold <kbd>⇧</kbd> to inspect architecture</p>
           <button class="xray-toggle" type="button" hidden>View architecture</button>
           <div class="frame">
             <div class="frame-bar"><span></span><span></span><span></span><em>${p.slug}</em></div>
             <div class="scan" aria-hidden="true"></div>
-            <div class="frame-body product">${productMarkup(p)}</div>
+            <div class="frame-body product">${sceneMarkup(p)}</div>
             <div class="frame-body xray">${xrayMarkup(p)}</div>
           </div>
         </div>
       </article>`
     )
     .join("");
-  bindLife(root);
+  bindScenes(root);
 }
 
 export function renderMore(root: HTMLElement) {
@@ -45,11 +51,17 @@ export function renderMore(root: HTMLElement) {
     rest()
       .map(
         (p) => `
-      <a class="more-row" href="${p.live ?? p.repo}" target="_blank" rel="noreferrer" id="${p.slug}">
-        <strong>${p.name}</strong>
-        <span>${p.headline}</span>
-        <em>${p.year}</em>
-      </a>`
+      <article class="more-row" id="${p.slug}">
+        <div>
+          <strong>${p.name}</strong>
+          <span>${shorts[p.slug] ?? p.headline}</span>
+        </div>
+        <em>${p.stack.join(" · ")}</em>
+        <p class="more-links">
+          ${p.live ? `<a href="${p.live}" target="_blank" rel="noreferrer">Live</a>` : ""}
+          <a href="${p.repo}" target="_blank" rel="noreferrer">GitHub</a>
+        </p>
+      </article>`
       )
       .join("");
 }
@@ -57,8 +69,9 @@ export function renderMore(root: HTMLElement) {
 export function bindXray(root: HTMLElement) {
   const coarse = window.matchMedia("(pointer: coarse)").matches;
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let pulsed = false;
 
-  root.querySelectorAll<HTMLElement>(".work-visual").forEach((visual) => {
+  root.querySelectorAll<HTMLElement>(".work-visual").forEach((visual, i) => {
     const product = visual.querySelector<HTMLElement>(".product");
     const xray = visual.querySelector<HTMLElement>(".xray");
     const pill = visual.querySelector<HTMLElement>(".xray-pill");
@@ -66,9 +79,16 @@ export function bindXray(root: HTMLElement) {
     const frame = visual.querySelector<HTMLElement>(".frame");
     if (!product || !xray || !frame) return;
 
-    const show = (on: boolean) => {
-      visual.classList.toggle("is-xray", on);
-    };
+    const show = (on: boolean) => visual.classList.toggle("is-xray", on);
+
+    if (pill && i < 2 && !coarse && !reduce && !pulsed) {
+      pill.classList.add("pulse");
+      window.setTimeout(() => {
+        pill.classList.remove("pulse");
+        pulsed = true;
+        root.querySelectorAll(".xray-pill").forEach((n) => n.classList.remove("pulse"));
+      }, 4200);
+    }
 
     if (coarse) {
       if (pill) pill.hidden = true;
@@ -97,19 +117,20 @@ export function bindXray(root: HTMLElement) {
         show(false);
       }
     });
-
-    if (!reduce) {
-      visual.addEventListener("pointermove", (e) => {
-        const r = visual.getBoundingClientRect();
-        const x = ((e.clientX - r.left) / r.width - 0.5) * 5;
-        const y = ((e.clientY - r.top) / r.height - 0.5) * -5;
-        frame.style.transform = `perspective(1100px) rotateY(${x}deg) rotateX(${y}deg)`;
-      });
-      visual.addEventListener("pointerleave", () => {
-        frame.style.transform = "";
-      });
-    }
   });
+}
+
+export function renderPrinciples(root: HTMLElement) {
+  root.innerHTML = principles
+    .map(
+      (p) => `
+    <li class="reveal">
+      <span>${p.idx}</span>
+      <strong>${p.title}</strong>
+      <p>${p.line}</p>
+    </li>`,
+    )
+    .join("");
 }
 
 export function caseHtml(p: Project): string {
@@ -119,15 +140,13 @@ export function caseHtml(p: Project): string {
       <p class="kicker">Dossier · ${p.name}</p>
       <p class="case-anno">01 / Problem</p>
       <h2 class="case-problem">${c.problem}</h2>
-      <p class="case-head">${p.headline}</p>
     </header>
     <section>
       <h3><span>02</span> Constraints</h3>
-      <ul class="case-list">${c.constraints.map((x) => `<li>${x}</li>`).join("")}</ul>
+      <ul class="case-list mono">${c.constraints.map((x) => `<li>${x}</li>`).join("")}</ul>
     </section>
     <section>
       <h3><span>03</span> Architecture</h3>
-      <p class="case-anno">signal path · ${p.stack[0]}</p>
       ${xrayMarkup(p)}
     </section>
     <section>
