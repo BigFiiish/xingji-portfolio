@@ -17,7 +17,7 @@ export function sceneMarkup(p: Project): string {
 
 function clearbay(): string {
   return `
-    <div class="scene scene-cb" data-scene="clearbay" data-mode="retry">
+    <div class="scene scene-cb" data-scene="clearbay" data-mode="retry" data-step="idle">
       <div class="cb-stack">
         <p class="scene-k" data-post="1">POST /invoice</p>
         <p class="scene-k mute" data-post="2">POST /invoice</p>
@@ -28,7 +28,7 @@ function clearbay(): string {
         <p class="scene-end" data-end></p>
       </div>
       <div class="scene-ops">
-        <button type="button" data-act="retry">Run retry</button>
+        <button type="button" data-act="retry">Run request</button>
         <button type="button" class="text" data-act="spoof" hidden>Tenant spoof</button>
         <button type="button" class="text" data-act="retry-mode" hidden>Idempotency</button>
       </div>
@@ -40,13 +40,16 @@ function grantline(): string {
     <div class="scene scene-gl" data-scene="grantline">
       <p class="scene-hero clock" data-ttl>04:59</p>
       <p class="gl-cap">grant ttl</p>
-      <ol class="vchain">
-        <li data-step="0">Challenge</li>
-        <li data-step="1">Proof</li>
-        <li data-step="2">Signed grant</li>
-        <li data-step="3">Policy</li>
-        <li data-step="4">Session</li>
-      </ol>
+      <div class="vchain-box">
+        <i class="gl-signal" aria-hidden="true"></i>
+        <ol class="vchain">
+          <li data-step="0">Challenge</li>
+          <li data-step="1">Proof</li>
+          <li data-step="2">Signed grant</li>
+          <li data-step="3">Policy</li>
+          <li data-step="4">Session</li>
+        </ol>
+      </div>
       <p class="scene-end" data-log></p>
       <div class="scene-ops">
         <button type="button" data-act="open">Open session</button>
@@ -106,47 +109,72 @@ export function bindScenes(root: HTMLElement) {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   root.querySelectorAll<HTMLElement>("[data-scene]").forEach((el) => {
     const kind = el.dataset.scene;
-    if (kind === "clearbay") bindClearbay(el);
+    if (kind === "clearbay") bindClearbay(el, reduce);
     if (kind === "grantline") bindGrantline(el, reduce);
     if (kind === "durable") bindDurable(el, reduce);
     if (kind === "pulse") bindPulse(el, reduce);
   });
 }
 
-function bindClearbay(el: HTMLElement) {
-  let invoice: string | null = null;
+function bindClearbay(el: HTMLElement, reduce: boolean) {
+  let created = false;
   let replayed = false;
+  let busy = false;
   const end = el.querySelector("[data-end]");
   const a = el.querySelector("[data-a]");
   const b = el.querySelector("[data-b]");
   const inv = el.querySelector("[data-inv]");
+  const post2 = el.querySelector("[data-post='2']");
   const spoofBtn = el.querySelector<HTMLButtonElement>("[data-act='spoof']");
   const backBtn = el.querySelector<HTMLButtonElement>("[data-act='retry-mode']");
   const retryBtn = el.querySelector<HTMLButtonElement>("[data-act='retry']");
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, reduce ? 0 : ms));
 
   const paintRetry = () => {
     el.dataset.mode = "retry";
+    delete el.dataset.flow;
     if (inv) inv.textContent = "#482";
+    if (post2) post2.textContent = "POST /invoice";
     if (a) a.textContent = "created";
     if (b) b.textContent = "replayed";
-    a?.classList.toggle("on", Boolean(invoice));
+    a?.classList.toggle("on", created);
     b?.classList.toggle("on", replayed);
     if (end) end.textContent = replayed ? "ONE INVOICE." : "";
-    el.dataset.step = replayed ? "replay" : invoice ? "create" : "";
-    if (retryBtn) retryBtn.hidden = false;
-    if (spoofBtn) spoofBtn.hidden = !invoice;
+    el.dataset.step = replayed ? "replay" : created ? "create" : "idle";
+    if (retryBtn) {
+      retryBtn.hidden = false;
+      retryBtn.textContent = created ? "Retry same request" : "Run request";
+    }
+    if (spoofBtn) spoofBtn.hidden = !replayed;
     if (backBtn) backBtn.hidden = true;
   };
 
-  retryBtn?.addEventListener("click", () => {
-    if (!invoice) invoice = "#482";
-    else replayed = true;
+  retryBtn?.addEventListener("click", async () => {
+    if (busy || replayed) return;
+    busy = true;
+    if (!created) {
+      if (!reduce) {
+        el.dataset.flow = "1";
+        await wait(320);
+      }
+      created = true;
+    } else {
+      if (!reduce) {
+        el.dataset.flow = "2";
+        await wait(320);
+      }
+      replayed = true;
+    }
     paintRetry();
+    busy = false;
   });
   spoofBtn?.addEventListener("click", () => {
+    if (busy || !replayed) return;
     el.dataset.mode = "spoof";
     el.dataset.step = "spoof";
-    if (inv) inv.textContent = "ACME";
+    delete el.dataset.flow;
+    if (inv) inv.textContent = "#482";
+    if (post2) post2.textContent = "X-Tenant-Id: globex";
     if (a) a.textContent = "header ignored";
     if (b) b.textContent = "jwt bound";
     a?.classList.add("on");
@@ -162,9 +190,12 @@ function bindClearbay(el: HTMLElement) {
 function bindGrantline(el: HTMLElement, reduce: boolean) {
   const ttl = el.querySelector("[data-ttl]");
   const log = el.querySelector("[data-log]");
-  const steps = [...el.querySelectorAll("[data-step]")];
+  const box = el.querySelector<HTMLElement>(".vchain-box");
+  const signal = el.querySelector<HTMLElement>(".gl-signal");
+  const steps = [...el.querySelectorAll<HTMLElement>(".vchain [data-step]")];
   let left = 299;
   let playing = false;
+  const pace = reduce ? 0 : 300;
   const tick = () => {
     if (left <= 0) {
       if (ttl) ttl.textContent = "00:00";
@@ -173,38 +204,95 @@ function bindGrantline(el: HTMLElement, reduce: boolean) {
     left -= 1;
     if (ttl) ttl.textContent = `${String(Math.floor(left / 60)).padStart(2, "0")}:${String(left % 60).padStart(2, "0")}`;
   };
-  if (!reduce) window.setInterval(tick, 1000);
-  const light = (n: number) => steps.forEach((s, i) => s.classList.toggle("on", i <= n));
+  window.setInterval(tick, 1000);
+  const place = (n: number, instant = false) => {
+    if (!signal || !box) return;
+    const step = steps[Math.max(n, 0)];
+    if (!step || n < 0) {
+      signal.style.opacity = "";
+      box.style.setProperty("--lit", "0px");
+      return;
+    }
+    const br = box.getBoundingClientRect();
+    const sr = step.getBoundingClientRect();
+    const y = sr.top - br.top + sr.height / 2;
+    if (instant) signal.style.transition = "none";
+    signal.style.top = `${y - signal.offsetHeight / 2}px`;
+    signal.style.opacity = "";
+    box.style.setProperty("--lit", `${Math.max(y, 0)}px`);
+    if (instant) {
+      void signal.offsetTop;
+      signal.style.transition = "";
+    }
+  };
+  const light = (n: number, instant = false) => {
+    steps.forEach((s, i) => s.classList.toggle("on", i <= n));
+    place(n, instant);
+  };
+  const lit = () => steps.reduce((acc, s, i) => (s.classList.contains("on") ? i : acc), -1);
+  if (box) new ResizeObserver(() => place(lit(), true)).observe(box);
   const setLog = (t: string) => {
     if (log) log.textContent = t;
   };
-  el.querySelector("[data-act='open']")?.addEventListener("click", () => {
+  const reset = () => {
+    delete el.dataset.payoff;
+    delete el.dataset.fail;
+    delete el.dataset.run;
+    setLog("");
+    light(-1, true);
+  };
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  el.querySelector("[data-act='open']")?.addEventListener("click", async () => {
     if (playing) return;
+    playing = true;
+    reset();
     if (left <= 0) {
-      light(2);
+      el.dataset.run = "expired";
+      light(0, true);
+      if (!reduce) await wait(pace);
+      el.dataset.fail = "exp";
       setLog("EXPIRED");
+      playing = false;
       return;
     }
-    playing = true;
-    light(-1);
-    setLog("");
-    let n = 0;
-    const step = () => {
+    el.dataset.run = "open";
+    if (reduce) {
+      light(4, true);
+      el.dataset.payoff = "open";
+      setLog("SESSION OPEN");
+      playing = false;
+      return;
+    }
+    light(0, true);
+    for (let n = 1; n <= 4; n += 1) {
+      await wait(pace);
       light(n);
-      if (n >= 4) {
-        setLog("SESSION OPEN");
-        playing = false;
-        return;
-      }
-      n += 1;
-      window.setTimeout(step, reduce ? 0 : 160);
-    };
-    step();
+    }
+    await wait(pace);
+    el.dataset.payoff = "open";
+    setLog("SESSION OPEN");
+    playing = false;
   });
-  el.querySelector("[data-act='badkey']")?.addEventListener("click", () => {
+  el.querySelector("[data-act='badkey']")?.addEventListener("click", async () => {
     if (playing) return;
+    playing = true;
+    reset();
+    el.dataset.run = "bad";
+    if (reduce) {
+      light(1, true);
+      el.dataset.fail = "sig";
+      setLog("SIGNATURE INVALID");
+      playing = false;
+      return;
+    }
+    light(0, true);
+    await wait(pace);
     light(1);
+    await wait(pace);
+    el.dataset.fail = "sig";
     setLog("SIGNATURE INVALID");
+    playing = false;
   });
 }
 
