@@ -82,8 +82,8 @@ export function initMap(svg: SVGSVGElement) {
           ? "Xingji Yan"
           : `${n.label}. ${domain?.label ?? ""}`;
         return `<g class="topo-node${n.hub ? " hub" : ""}" data-id="${n.id}" data-domain="${n.domain ?? ""}" data-href="${n.href ?? ""}" tabindex="${n.hub ? -1 : 0}" role="${n.hub ? "presentation" : "link"}" aria-label="${aria}">
-          <circle class="topo-hit" cx="${n.x}" cy="${n.y}" r="${n.hub ? 26 : 18}"/>
-          <circle class="topo-dot" cx="${n.x}" cy="${n.y}" r="${n.hub ? 15 : 4}"/>
+          <circle class="topo-hit" cx="${n.x}" cy="${n.y}" r="${n.hub ? 28 : 20}"/>
+          <circle class="topo-dot" cx="${n.x}" cy="${n.y}" r="${n.hub ? 17 : 4.4}"/>
           ${n.hub ? `<text class="topo-hub" x="${n.x}" y="${n.y}" text-anchor="middle" dominant-baseline="middle">XY</text>` : ""}
           ${n.hub ? "" : `<text class="topo-label" x="${n.x}" y="${n.y - 16}" text-anchor="${n.x > 520 ? "end" : "middle"}">${n.label}</text>`}
         </g>`;

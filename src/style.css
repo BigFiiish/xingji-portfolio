@@ -205,7 +205,7 @@ main {
 section.hero {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr);
+  grid-template-columns: minmax(0, 1.22fr) minmax(260px, 0.78fr);
   grid-template-rows: 1fr auto;
   align-items: center;
   column-gap: clamp(2.5rem, 6vw, 6.5rem);
@@ -221,6 +221,12 @@ section.hero {
   grid-column: 1;
   grid-row: 1;
   padding: 0.4rem 0 1.5rem;
+}
+
+@media (min-width: 981px) {
+  .hero-copy {
+    margin-top: -1.75rem;
+  }
 }
 
 .hero-map {
@@ -290,12 +296,18 @@ section.hero {
   font-weight: 500;
   line-height: 0.98;
   letter-spacing: -0.048em;
-  font-size: clamp(2.7rem, 6.1vw, 6.7rem);
+  font-size: clamp(2.55rem, 5.4vw, 6.15rem);
   color: #d8d6d0;
 }
 
 .hero-title span {
   display: block;
+}
+
+@media (min-width: 981px) {
+  .hero-title span {
+    white-space: nowrap;
+  }
 }
 
 .hero-title .sig {
@@ -312,30 +324,31 @@ section.hero {
 .hero-title .sig::after {
   content: "";
   position: absolute;
-  left: 0.04em;
-  right: 0.02em;
-  bottom: 0.08em;
+  left: 14%;
+  width: 70%;
+  bottom: 0.05em;
   height: 1px;
-  background: rgba(247, 246, 241, 0.38);
+  background: rgba(247, 246, 241, 0.34);
 }
 
 .hero-title .sig::before {
   content: "";
   position: absolute;
-  width: 5px;
-  height: 5px;
+  width: 3.5px;
+  height: 3.5px;
   border-radius: 50%;
   background: var(--ink);
-  bottom: calc(0.08em - 2px);
-  left: 0.04em;
-  animation: sig-run 5.2s var(--ease) infinite;
+  opacity: 0.7;
+  bottom: calc(0.05em - 1.25px);
+  left: 14%;
+  animation: sig-run 6.4s var(--ease) infinite;
 }
 
 @keyframes sig-run {
-  0% { left: 0.04em; opacity: 0; }
-  8% { opacity: 1; }
-  92% { opacity: 1; }
-  100% { left: calc(100% - 0.4em); opacity: 0; }
+  0% { left: 14%; opacity: 0; }
+  10% { opacity: 0.7; }
+  88% { opacity: 0.7; }
+  100% { left: calc(14% + 70% - 3.5px); opacity: 0; }
 }
 
 .hero-tag {
@@ -434,13 +447,13 @@ summary:focus-visible,
   font-size: clamp(0.95rem, 1.4vw, 1.2rem);
   font-weight: 500;
   letter-spacing: -0.03em;
-  color: #8e8c86;
+  color: #a7a59e;
 }
 
 .impact-strip span {
   display: block;
   margin-top: 0.4rem;
-  color: #5c5b57;
+  color: #6a6964;
   font-size: 0.72rem;
   line-height: 1.4;
   letter-spacing: 0.02em;
@@ -500,13 +513,13 @@ summary:focus-visible,
 
 .topo-node.hub .topo-dot {
   fill: #0c1018;
-  stroke: rgba(228, 232, 242, 0.55);
+  stroke: rgba(236, 238, 246, 0.78);
   stroke-width: 1.15;
 }
 
 .topo-hub {
   fill: var(--ink);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.16em;
   font-family: "Inter Tight", system-ui, sans-serif;
@@ -520,7 +533,7 @@ summary:focus-visible,
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-family: "IBM Plex Mono", monospace;
-  opacity: 0.42;
+  opacity: 0.58;
   pointer-events: none;
   transition: opacity 0.35s var(--ease);
 }
@@ -2164,7 +2177,7 @@ th {
   }
   .hero-copy {
     grid-row: 1;
-    max-width: none;
+    margin-top: 0;
     padding-bottom: 1rem;
   }
   .hero-map {
