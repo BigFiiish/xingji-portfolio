@@ -2,7 +2,6 @@ import "./style.css";
 import { person } from "./content";
 import { initCommand } from "./command";
 import { bindFailures, failSection } from "./failures";
-import { initFlow } from "./flow";
 import { initMap } from "./map";
 import { initPanel } from "./panel";
 import { bindXray, renderMore, renderPrinciples, renderWork } from "./work";
@@ -10,7 +9,7 @@ import { bindXray, renderMore, renderPrinciples, renderWork } from "./work";
 document.documentElement.classList.add("js");
 
 const loader = document.querySelector("#loader");
-window.setTimeout(() => loader?.classList.add("gone"), 600);
+window.setTimeout(() => loader?.classList.add("gone"), 380);
 
 const io = new IntersectionObserver(
   (entries) => {
@@ -45,9 +44,6 @@ if (principles) {
 const map = document.querySelector<SVGSVGElement>("#systems-map");
 if (map) initMap(map);
 
-const flow = document.querySelector<SVGSVGElement>("#page-flow");
-if (flow) initFlow(flow);
-
 initPanel();
 initCommand();
 
@@ -62,14 +58,14 @@ window.addEventListener(
 
 const tintIO = new IntersectionObserver(
   (entries) => {
-    const vis = entries
-      .filter((e) => e.isIntersecting)
-      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (!vis) return;
+    const vis = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (!vis) {
+      document.body.style.setProperty("--tint", "transparent");
+      return;
+    }
     const accent = (vis.target as HTMLElement).style.getPropertyValue("--accent").trim();
     document.body.style.setProperty("--tint", accent || "transparent");
-    document.body.dataset.chapter = (vis.target as HTMLElement).id;
   },
-  { threshold: [0.35, 0.55] },
+  { threshold: 0.45 },
 );
-document.querySelectorAll(".work-row, #failures").forEach((n) => tintIO.observe(n));
+document.querySelectorAll(".work-row").forEach((n) => tintIO.observe(n));

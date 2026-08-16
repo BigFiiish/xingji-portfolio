@@ -12,6 +12,8 @@ const shorts: Record<string, string> = {
   resumatch: "Deterministic resume/JD scoring with an optional grounded LLM layer.",
 };
 
+const shots: Partial<Record<string, { src: string; alt: string }>> = {};
+
 export function renderWork(root: HTMLElement) {
   root.innerHTML = featured()
     .map(
@@ -30,19 +32,25 @@ export function renderWork(root: HTMLElement) {
           </p>
         </div>
         <div class="work-visual">
-          <p class="xray-pill">SYSTEM MODE · Hold <kbd>⇧</kbd> to inspect architecture</p>
+          <p class="xray-pill">Hold <kbd>⇧</kbd> inspect system</p>
           <button class="xray-toggle" type="button" hidden>View architecture</button>
-          <div class="frame">
-            <div class="frame-bar"><span></span><span></span><span></span><em>${p.slug}</em></div>
+          <div class="stage">
             <div class="scan" aria-hidden="true"></div>
-            <div class="frame-body product">${sceneMarkup(p)}</div>
-            <div class="frame-body xray">${xrayMarkup(p)}</div>
+            <div class="stage-body product">${sceneMarkup(p)}</div>
+            <div class="stage-body xray">${xrayMarkup(p)}</div>
           </div>
+          ${shot(p.slug)}
         </div>
       </article>`
     )
     .join("");
   bindScenes(root);
+}
+
+function shot(slug: string): string {
+  const s = shots[slug];
+  if (!s) return "";
+  return `<figure class="shot"><img src="${s.src}" alt="${s.alt}" width="1280" height="720" loading="lazy" /></figure>`;
 }
 
 export function renderMore(root: HTMLElement) {
@@ -71,23 +79,25 @@ export function bindXray(root: HTMLElement) {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let pulsed = false;
 
-  root.querySelectorAll<HTMLElement>(".work-visual").forEach((visual, i) => {
+  root.querySelectorAll<HTMLElement>(".work-visual").forEach((visual) => {
     const product = visual.querySelector<HTMLElement>(".product");
     const xray = visual.querySelector<HTMLElement>(".xray");
     const pill = visual.querySelector<HTMLElement>(".xray-pill");
     const toggle = visual.querySelector<HTMLButtonElement>(".xray-toggle");
-    const frame = visual.querySelector<HTMLElement>(".frame");
-    if (!product || !xray || !frame) return;
+    const stage = visual.querySelector<HTMLElement>(".stage");
+    if (!product || !xray || !stage) return;
 
     const show = (on: boolean) => visual.classList.toggle("is-xray", on);
 
-    if (pill && i < 2 && !coarse && !reduce && !pulsed) {
-      pill.classList.add("pulse");
-      window.setTimeout(() => {
-        pill.classList.remove("pulse");
+    if (!coarse && !reduce && !pulsed && pill) {
+      const io = new IntersectionObserver((entries) => {
+        if (!entries.some((e) => e.isIntersecting) || pulsed) return;
         pulsed = true;
-        root.querySelectorAll(".xray-pill").forEach((n) => n.classList.remove("pulse"));
-      }, 4200);
+        pill.classList.add("pulse");
+        window.setTimeout(() => pill.classList.remove("pulse"), 2800);
+        io.disconnect();
+      }, { threshold: 0.5 });
+      io.observe(visual);
     }
 
     if (coarse) {
@@ -137,7 +147,6 @@ export function caseHtml(p: Project): string {
   const c = p.caseStudy;
   return `
     <header class="case-top">
-      <p class="kicker">Dossier · ${p.name}</p>
       <p class="case-anno">01 / Problem</p>
       <h2 class="case-problem">${c.problem}</h2>
     </header>
@@ -165,7 +174,7 @@ export function caseHtml(p: Project): string {
       </div>
     </section>
     <section>
-      <h3><span>05</span> Failure modes</h3>
+      <h3><span>05</span> Failure</h3>
       ${caseFails(p.slug)}
       <ul class="fail-list">
         ${c.failures.map((f) => `<li><b>${f.fail}</b><span>${f.handle}</span></li>`).join("")}

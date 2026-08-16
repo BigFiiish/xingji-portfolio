@@ -8,42 +8,47 @@ export const failDemos: {
   to: string;
   project: string;
   slugs: string[];
+  line: string;
 }[] = [
   {
     id: "retry",
     kicker: "Retry",
     title: "Duplicate billing request",
-    from: "POST /invoice twice. Same idempotency scope.",
-    to: "CREATED then REPLAYED. Same invoice #482.",
+    from: "POST /invoice twice.",
+    to: "CREATED · REPLAYED · #482",
     project: "Clearbay",
     slugs: ["clearbay"],
+    line: "Duplicate execution. Same outcome.",
   },
   {
     id: "race",
     kicker: "Race",
     title: "Two concurrent writes",
     from: "Both read version = 8.",
-    to: "A: 200 OK version = 9. B: 409 CONFLICT.",
+    to: "200 · version 9  /  409 CONFLICT",
     project: "Clearbay",
     slugs: ["clearbay"],
+    line: "Concurrent writes do not silently overwrite each other.",
   },
   {
     id: "fail",
     kicker: "Fail",
     title: "Job fails repeatedly",
-    from: "attempt 1 → 1s → 2 → 2s → 3.",
-    to: "DEAD LETTER. Infinite retry is not resilience.",
+    from: "1s · 2s · 4s",
+    to: "DEAD LETTER",
     project: "PulseQueue",
     slugs: ["pulsequeue"],
+    line: "Infinite retry is not resilience.",
   },
   {
     id: "hallucinate",
     kicker: "Hallucinate",
     title: "Untrusted tool call",
-    from: '{ "action": "release", "tenant": "globex", "unexpected": true }',
-    to: "SCHEMA REJECTED. The model is an untrusted caller.",
+    from: "SCHEMA → AUTH → EXECUTE",
+    to: "SCHEMA REJECTED",
     project: "Dockline",
     slugs: ["dockline"],
+    line: "The model is an untrusted caller.",
   },
 ];
 
@@ -53,116 +58,83 @@ export function failSection(): string {
       <p class="pause-a reveal">Happy paths are easy.</p>
       <p class="pause-b reveal delay-1">I design the other paths.</p>
     </div>
-    <div class="play-board">
-      <div class="play-controls" role="tablist" aria-label="Failure simulations">
-        ${failDemos
-          .map(
-            (d, i) =>
-              `<button type="button" role="tab" class="play-tab${i === 0 ? " on" : ""}" data-fail="${d.id}" aria-selected="${i === 0}">${d.kicker}</button>`,
-          )
-          .join("")}
-      </div>
-      <div class="play-stage" id="play-stage">${stage("retry")}</div>
-      <button type="button" class="play-reset" data-reset>Reset</button>
-    </div>`;
+    <div class="play-words" role="tablist" aria-label="Failure simulations">
+      ${failDemos
+        .map(
+          (d) =>
+            `<button type="button" role="tab" class="play-word" data-fail="${d.id}" aria-selected="false">${d.kicker}</button>`,
+        )
+        .join("")}
+    </div>
+    <div class="play-stage" id="play-stage" hidden></div>
+    <button type="button" class="play-reset" data-reset hidden>Reset</button>`;
 }
 
 function stage(id: FailId): string {
   const d = failDemos.find((x) => x.id === id)!;
-  return `
-    <p class="play-proj">${d.project}</p>
-    <h3>${d.title}</h3>
-    ${failSvg(id)}
-    <p class="fail-from">${d.from}</p>
-    <p class="fail-to">${d.to}</p>`;
-}
-
-export function failSvg(id: FailId): string {
   if (id === "retry") {
-    return `<svg class="fail-svg" viewBox="0 0 360 88" aria-hidden="true">
-      <path class="w" d="M 40 24 H 180 H 300"/>
-      <path class="w alt" d="M 40 64 H 180 H 300"/>
-      <text x="40" y="18">POST /invoice</text>
-      <text x="40" y="58">POST /invoice</text>
-      <rect class="ok" x="250" y="28" width="96" height="32" rx="4"/>
-      <text x="298" y="48">#482</text>
-      <circle class="t t1" r="3.5"/><circle class="t t2" r="3.5"/>
-    </svg>`;
+    return `<p class="mono">POST /invoice</p><p class="mono mute">POST /invoice</p><p class="gate">idempotency</p><p class="big">#482</p><p class="split">CREATED &nbsp; REPLAYED</p><p class="line">${d.line}</p>`;
   }
   if (id === "race") {
-    return `<svg class="fail-svg" viewBox="0 0 360 88" aria-hidden="true">
-      <text x="24" y="18">A v=8</text>
-      <text x="24" y="62">B v=8</text>
-      <path class="w" d="M 70 20 H 180"/>
-      <path class="w alt" d="M 70 64 H 180"/>
-      <rect class="ok" x="230" y="6" width="110" height="26" rx="4"/><text x="285" y="23">200 v=9</text>
-      <rect class="bad" x="230" y="50" width="110" height="26" rx="4"/><text x="285" y="67">409</text>
-      <circle class="t t1" r="3.5"/><circle class="t t2" r="3.5"/>
-    </svg>`;
+    return `<p class="mono">version = 8</p><p class="split">WRITE A &nbsp; WRITE B</p><p class="split">200 / v9 &nbsp; 409</p><p class="line">${d.line}</p>`;
   }
   if (id === "fail") {
-    return `<svg class="fail-svg" viewBox="0 0 360 88" aria-hidden="true">
-      <path class="w" d="M 24 44 H 120 Q 180 12 240 44 H 330"/>
-      <text class="n" x="180" y="18">1s · 2s · 4s</text>
-      <rect class="bad" x="268" y="30" width="72" height="28" rx="4"/><text x="304" y="48">DLQ</text>
-      <circle class="t t1" r="3.5"/>
-    </svg>`;
+    return `<p class="mono">attempt 1</p><p class="mute">1s</p><p class="mono">attempt 2</p><p class="mute">2s</p><p class="mono">attempt 3</p><p class="big">DLQ</p><p class="line">${d.line}</p>`;
   }
-  return `<svg class="fail-svg" viewBox="0 0 360 88" aria-hidden="true">
-    <path class="w" d="M 24 44 H 140 H 230 H 330"/>
-    <text x="70" y="28">SCHEMA</text>
-    <text x="180" y="28">AUTH</text>
-    <text x="280" y="28">EXECUTE</text>
-    <rect class="bad" x="250" y="52" width="96" height="24" rx="4"/><text x="298" y="68">rejected</text>
-    <circle class="t t1" r="3.5"/>
-  </svg>`;
+  return `<p class="mono">AGENT CALL</p><p class="mute">schema → auth → execute</p><p class="big">SCHEMA REJECTED</p><p class="line">${d.line}</p>`;
 }
 
 export function bindFailures(root: HTMLElement) {
+  const stageEl = root.querySelector<HTMLElement>("#play-stage");
+  const reset = root.querySelector<HTMLButtonElement>("[data-reset]");
+  const words = [...root.querySelectorAll<HTMLButtonElement>(".play-word")];
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const stageEl = root.querySelector<HTMLElement>("#play-stage") ?? root.querySelector(".play-stage");
-  const tabs = [...root.querySelectorAll<HTMLButtonElement>(".play-tab")];
-  const play = (id: FailId) => {
-    tabs.forEach((t) => {
-      const on = t.dataset.fail === id;
-      t.classList.toggle("on", on);
-      t.setAttribute("aria-selected", String(on));
+
+  const close = () => {
+    words.forEach((w) => {
+      w.classList.remove("on", "dim");
+      w.setAttribute("aria-selected", "false");
     });
     if (stageEl) {
+      stageEl.hidden = true;
+      stageEl.innerHTML = "";
+      stageEl.classList.remove("play");
+    }
+    if (reset) reset.hidden = true;
+  };
+
+  const open = (id: FailId) => {
+    words.forEach((w) => {
+      const on = w.dataset.fail === id;
+      w.classList.toggle("on", on);
+      w.classList.toggle("dim", !on);
+      w.setAttribute("aria-selected", String(on));
+    });
+    if (stageEl) {
+      stageEl.hidden = false;
       stageEl.innerHTML = stage(id);
-      stageEl.dataset.fail = id;
       stageEl.classList.remove("play");
       void stageEl.offsetWidth;
       if (!reduce) stageEl.classList.add("play");
-      else stageEl.classList.add("play");
     }
+    if (reset) reset.hidden = false;
   };
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => play((tab.dataset.fail as FailId) ?? "retry"));
-    tab.addEventListener("pointerenter", () => {
-      if (reduce) return;
-      tab.classList.add("preview");
-    });
-    tab.addEventListener("pointerleave", () => tab.classList.remove("preview"));
-  });
-  root.querySelector("[data-reset]")?.addEventListener("click", () => play("retry"));
-  if (stageEl) {
-    stageEl.innerHTML = stage("retry");
-    stageEl.dataset.fail = "retry";
-  }
 
-  root.querySelectorAll<HTMLElement>(".fail-card").forEach((card) => {
-    const run = () => {
-      card.classList.remove("play");
-      void card.offsetWidth;
-      card.classList.add("play");
-    };
-    card.addEventListener("click", run);
-    card.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        run();
+  words.forEach((w) => w.addEventListener("click", () => open((w.dataset.fail as FailId) ?? "retry")));
+  reset?.addEventListener("click", close);
+
+  root.querySelectorAll<HTMLButtonElement>("[data-run]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const wrap = btn.closest(".case-run");
+      if (!wrap) return;
+      wrap.classList.add("play");
+      let slot = wrap.querySelector(".case-stage");
+      if (!slot) {
+        slot = document.createElement("div");
+        slot.className = "case-stage";
+        wrap.append(slot);
       }
+      slot.innerHTML = stage((btn.dataset.run as FailId) ?? "retry");
     });
   });
 }
@@ -170,13 +142,9 @@ export function bindFailures(root: HTMLElement) {
 export function caseFails(slug: string): string {
   const hits = failDemos.filter((d) => d.slugs.includes(slug));
   if (!hits.length) return "";
-  return `<div class="case-fails">${hits
-    .map(
-      (d) => `<article class="fail-card compact" data-fail="${d.id}" tabindex="0">
-    <span class="fail-kicker">${d.kicker}</span>
-    ${failSvg(d.id)}
-    <p class="fail-to">${d.to}</p>
-  </article>`,
-    )
-    .join("")}</div>`;
+  const d = hits[0];
+  return `<div class="case-run" data-fail="${d.id}">
+    <button type="button" data-run="${d.id}">Run ${d.kicker.toLowerCase()}</button>
+    <p class="line">${d.line}</p>
+  </div>`;
 }
