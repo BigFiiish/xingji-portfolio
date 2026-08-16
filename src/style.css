@@ -449,7 +449,7 @@ summary:focus-visible,
 }
 
 .systems-map.awake .topo-edge {
-  stroke: rgba(214, 220, 232, 0.42);
+  stroke: rgba(214, 220, 232, 0.62);
 }
 
 .systems-map[data-domain] .topo-edge {
