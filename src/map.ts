@@ -11,13 +11,13 @@ type Node = {
 };
 
 const nodes: Node[] = [
-  { id: "xy", x: 300, y: 252, label: "XY", hub: true },
-  { id: "clearbay", x: 458, y: 58, label: "Clearbay", domain: "reliable", href: "#clearbay" },
-  { id: "grantline", x: 86, y: 204, label: "Grantline", domain: "reliable", href: "#grantline" },
-  { id: "pulsequeue", x: 612, y: 176, label: "PulseQueue", domain: "infra", href: "#pulsequeue" },
-  { id: "durable", x: 236, y: 448, label: "Durable Brief", domain: "ai", href: "#durable-brief" },
-  { id: "dockline", x: 498, y: 492, label: "Dockline", domain: "ai", href: "#dockline" },
-  { id: "sketchsync", x: 860, y: 286, label: "SketchSync", domain: "infra", href: "#sketchsync" },
+  { id: "xy", x: 310, y: 248, label: "XY", hub: true },
+  { id: "clearbay", x: 392, y: 62, label: "Clearbay", domain: "reliable", href: "#clearbay" },
+  { id: "grantline", x: 78, y: 186, label: "Grantline", domain: "reliable", href: "#grantline" },
+  { id: "pulsequeue", x: 548, y: 158, label: "PulseQueue", domain: "infra", href: "#pulsequeue" },
+  { id: "durable", x: 168, y: 418, label: "Durable Brief", domain: "ai", href: "#durable-brief" },
+  { id: "dockline", x: 418, y: 452, label: "Dockline", domain: "ai", href: "#dockline" },
+  { id: "sketchsync", x: 600, y: 302, label: "SketchSync", domain: "infra", href: "#sketchsync" },
 ];
 
 const edges: [string, string][] = [
@@ -46,8 +46,8 @@ export function initMap(svg: SVGSVGElement) {
   const wrap = svg.closest(".hero-map");
   const readout = document.querySelector<HTMLElement>("#map-readout");
 
-  svg.setAttribute("viewBox", "0 0 920 560");
-  svg.setAttribute("preserveAspectRatio", "xMinYMid meet");
+  svg.setAttribute("viewBox", "0 0 680 520");
+  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
   const edgeMarkup = edges
     .map(([a, b]) => {
@@ -82,10 +82,10 @@ export function initMap(svg: SVGSVGElement) {
           ? "Xingji Yan"
           : `${n.label}. ${domain?.label ?? ""}`;
         return `<g class="topo-node${n.hub ? " hub" : ""}" data-id="${n.id}" data-domain="${n.domain ?? ""}" data-href="${n.href ?? ""}" tabindex="${n.hub ? -1 : 0}" role="${n.hub ? "presentation" : "link"}" aria-label="${aria}">
-          <circle class="topo-hit" cx="${n.x}" cy="${n.y}" r="${n.hub ? 22 : 16}"/>
-          <circle class="topo-dot" cx="${n.x}" cy="${n.y}" r="${n.hub ? 11 : 3.1}"/>
+          <circle class="topo-hit" cx="${n.x}" cy="${n.y}" r="${n.hub ? 26 : 18}"/>
+          <circle class="topo-dot" cx="${n.x}" cy="${n.y}" r="${n.hub ? 15 : 4}"/>
           ${n.hub ? `<text class="topo-hub" x="${n.x}" y="${n.y}" text-anchor="middle" dominant-baseline="middle">XY</text>` : ""}
-          ${n.hub ? "" : `<text class="topo-label" x="${n.x}" y="${n.y - 14}" text-anchor="${n.x > 700 ? "end" : "middle"}">${n.label}</text>`}
+          ${n.hub ? "" : `<text class="topo-label" x="${n.x}" y="${n.y - 16}" text-anchor="${n.x > 520 ? "end" : "middle"}">${n.label}</text>`}
         </g>`;
       })
       .join("")}
