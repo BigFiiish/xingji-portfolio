@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Xingji Yan — Resume</title>
+    <style>
+      @page { size: letter; margin: 0.55in; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0 auto;
+        max-width: 8.2in;
+        padding: 0.6in 0.7in;
+        font: 10.4pt/1.38 "Segoe UI", Helvetica, Arial, sans-serif;
+        color: #161616;
+      }
+      h1 { font-size: 20pt; letter-spacing: -0.03em; margin: 0; font-weight: 650; }
+      .sub { color: #444; margin: 0.15rem 0 0.45rem; font-size: 10.5pt; }
+      .meta { color: #333; font-size: 9.4pt; }
+      .meta a { color: inherit; }
+      h2 {
+        font-size: 9pt;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        border-bottom: 1px solid #222;
+        margin: 0.85rem 0 0.4rem;
+        padding-bottom: 0.18rem;
+      }
+      h3 { font-size: 10.5pt; margin: 0.45rem 0 0.1rem; }
+      .row { display: flex; justify-content: space-between; gap: 1rem; }
+      .muted { color: #555; font-size: 9.3pt; }
+      ul { margin: 0.15rem 0 0.35rem 1.05rem; padding: 0; }
+      li { margin: 0.12rem 0; }
+      p { margin: 0.2rem 0; }
+    </style>
+  </head>
+  <body>
+    <h1>Xingji Yan</h1>
+    <p class="sub">Software Engineer · M.S. Electrical &amp; Computer Engineering, Carnegie Mellon University</p>
+    <p class="meta">
+      <a href="mailto:yanxingji7@gmail.com">yanxingji7@gmail.com</a> ·
+      321-367-0900 ·
+      <a href="https://www.xingjiyan.com">xingjiyan.com</a> ·
+      <a href="https://github.com/BigFiiish">github.com/BigFiiish</a> ·
+      <a href="https://www.linkedin.com/in/xingji-yan">linkedin.com/in/xingji-yan</a>
+    </p>
+
+    <h2>Experience</h2>
+    <div class="row">
+      <h3>JASCI Software — Software Engineer</h3>
+      <span class="muted">Melbourne, FL · 2023 — 2026</span>
+    </div>
+    <p class="muted">Smart Warehouse Management. Multi-tenant SaaS for 20+ 3PL customers and 500+ concurrent users. Production on-call.</p>
+    <ul>
+      <li>Shipped an AI action layer (MCP tools, JSON Schema contracts, audit logging) that collapsed multi-screen warehouse workflows into single requests.</li>
+      <li>Cut inventory search from 10+ seconds to sub-second on million-record tables by removing N+1 access (~95% fewer round trips).</li>
+      <li>Designed tenant-scoped OAuth 2.1 isolation (tenant from the token, never a client header) and a configurable 3PL billing engine with idempotent reruns (~10 hours of recon saved per customer / month).</li>
+      <li>Moved long-running work onto async jobs after commit; carried on-call across 20+ sites.</li>
+    </ul>
+    <div class="row">
+      <h3>Sonos — Software Engineer Intern, Universal Search</h3>
+      <span class="muted">2022</span>
+    </div>
+    <ul>
+      <li>Kafka change-event pipeline into the search index plus a Redis query cache — search speed +30%.</li>
+    </ul>
+    <div class="row">
+      <h3>Tencent — Software Engineer Assistant, WeChat identity &amp; payments</h3>
+      <span class="muted">2020</span>
+    </div>
+    <ul>
+      <li>Spring Boot APIs with Redis caching (−30% database load). JMeter at 8,000 concurrent users, P99 −30%.</li>
+    </ul>
+
+    <h2>Selected systems</h2>
+    <p><strong>Clearbay</strong> — Multi-tenant 3PL API: JWT tenant isolation, idempotent billing, optimistic concurrency, MCP guardrails. Java / Spring Boot. Live: clearbay.onrender.com</p>
+    <p><strong>Grantline</strong> — Passwordless Go access broker: ed25519 grants for humans, machines, and agents; policy-checked sessions; server-side pagination. Live: grantline.onrender.com</p>
+    <p><strong>Dockline</strong> — Eval-first agent over Clearbay MCP. 40 deterministic cases; the model is never the judge. Live: dockline.onrender.com</p>
+    <p><strong>Durable Brief</strong> — Vercel Workflows desk: parallel research, evaluator loop, human approval hook. Live: durable-brief.vercel.app</p>
+    <p><strong>PulseQueue</strong> — TypeScript queue with lease exclusivity, exponential backoff, DLQ, live SSE dashboard. Live: pulsequeue-wokz.onrender.com</p>
+
+    <h2>Education</h2>
+    <div class="row"><h3>Carnegie Mellon University — M.S. Electrical &amp; Computer Engineering</h3><span class="muted">2022 · Pittsburgh, PA</span></div>
+    <div class="row"><h3>Florida Institute of Technology — B.S. Electrical &amp; Computer Engineering</h3><span class="muted">2021 · Melbourne, FL</span></div>
+
+    <h2>Skills</h2>
+    <p>Java, Go, TypeScript, Python, SQL · Spring Boot, React, PostgreSQL, Redis, Kafka, OAuth 2.1, MCP · AWS, GCP, Docker, Kubernetes</p>
+
+    <h2>Credentials</h2>
+    <p>Google Cloud Professional Cloud Architect · Inventor, CN205178942U (flexible-solar emergency power)</p>
+  </body>
+</html>

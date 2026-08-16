@@ -3,192 +3,150 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Xingji Yan — Software Engineer</title>
+    <title>Xingji Yan — Software Engineer · Carnegie Mellon ECE</title>
     <meta
       name="description"
-      content="Xingji Yan. Software engineer. Agentic AI, multi-tenant SaaS, and high-performance backends. M.S. ECE, Carnegie Mellon. The job keeps swimming."
+      content="Xingji Yan, M.S. ECE Carnegie Mellon. Full-stack software engineer. Clearbay, Grantline, Durable Brief, PulseQueue — systems that stay correct under retries."
     />
-    <meta property="og:title" content="Xingji Yan — Software Engineer" />
+    <meta property="og:title" content="Xingji Yan — Software Engineer · Carnegie Mellon" />
     <meta
       property="og:description"
-      content="Agentic AI, multi-tenant SaaS, high-performance backends. Carnegie Mellon ECE."
+      content="I build systems people actually use. Carnegie Mellon ECE. Selected work: Clearbay, Grantline, Durable Brief, PulseQueue."
     />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600&family=Syne:wght@500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@1&family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap"
       rel="stylesheet"
     />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Xingji Yan",
+        "jobTitle": "Software Engineer",
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "Carnegie Mellon University" },
+        "url": "https://www.xingjiyan.com",
+        "sameAs": ["https://github.com/BigFiiish", "https://www.linkedin.com/in/xingji-yan"],
+        "knowsAbout": ["Clearbay", "Grantline", "Durable Brief", "PulseQueue", "Go", "Spring Boot"]
+      }
+    </script>
+    <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
   </head>
   <body>
-    <canvas id="fluid" aria-hidden="true"></canvas>
     <div class="grain" aria-hidden="true"></div>
-    <div class="cursor" id="cursor" aria-hidden="true">
-      <span class="cursor-dot"></span>
-      <span class="cursor-ring"></span>
-    </div>
+    <svg id="page-flow" class="page-flow" aria-hidden="true">
+      <path id="flow-path" fill="none" />
+      <circle id="flow-head" r="2.2" />
+    </svg>
+    <p id="flow-cap" class="flow-cap" aria-hidden="true"></p>
 
-    <div class="loader" id="loader">
-      <p class="loader-kicker">Entering the current</p>
-      <h1 class="loader-name">XINGJI</h1>
-      <div class="loader-bar"><span></span></div>
-    </div>
+    <div class="loader" id="loader"><span>XY</span></div>
 
     <header class="nav">
-      <a class="nav-mark magnetic" href="#top">XY</a>
+      <a class="nav-mark" href="#top">XY</a>
       <nav>
-        <a class="magnetic" href="#work">Work</a>
-        <a class="magnetic" href="#projects">Projects</a>
-        <a class="magnetic" href="#resume">Resume</a>
-        <a class="magnetic" href="#contact">Contact</a>
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
       </nav>
+      <div class="nav-end">
+        <button class="cmd-hint" id="cmd-open" type="button" aria-label="Open command palette" aria-haspopup="dialog">⌘K</button>
+        <a class="nav-resume" href="/Xingji-Yan-Resume.pdf" download>Resume ↓</a>
+      </div>
     </header>
 
     <main id="top">
       <section class="hero">
-        <p class="eyebrow reveal">Software Engineer · Carnegie Mellon ECE</p>
-        <h1 class="hero-title">
-          <span class="hero-line reveal">Xingji</span>
-          <span class="hero-line reveal delay-1">Yan</span>
-        </h1>
-        <p class="hero-tag reveal delay-2">
-          <em>The job keeps swimming.</em>
-          Agentic systems, multi-tenant SaaS, and backends that stay fast when
-          the warehouse is on fire.
-        </p>
-        <div class="hero-cta reveal delay-3">
-          <a class="btn magnetic" href="#projects">Selected work</a>
-          <a class="btn ghost magnetic" href="https://github.com/BigFiiish" target="_blank" rel="noreferrer">GitHub</a>
-        </div>
-        <div class="scroll-hint reveal delay-4">
-          <span class="drop"></span>
-          Drag the water · scroll the story
-        </div>
-      </section>
-
-      <div class="marquee" aria-hidden="true">
-        <div class="marquee-track">
-          <span>Java</span><span>Spring Boot</span><span>MCP</span><span>Kafka</span>
-          <span>React</span><span>TypeScript</span><span>PostgreSQL</span><span>OAuth 2.1</span>
-          <span>Redis</span><span>Kubernetes</span><span>Claude Code</span><span>Cursor</span>
-          <span>Java</span><span>Spring Boot</span><span>MCP</span><span>Kafka</span>
-          <span>React</span><span>TypeScript</span><span>PostgreSQL</span><span>OAuth 2.1</span>
-          <span>Redis</span><span>Kubernetes</span><span>Claude Code</span><span>Cursor</span>
-        </div>
-      </div>
-
-      <section class="about" id="about">
-        <div class="section-head reveal">
-          <span class="idx">01</span>
-          <h2>About</h2>
-        </div>
-        <div class="about-grid">
-          <p class="lede reveal">
-            I ship the unglamorous systems that keep operations alive — then I
-            put an agent on top of them, with guardrails, so people can talk to
-            the warehouse instead of clicking through twelve screens.
+        <div class="hero-copy">
+          <p class="hero-name reveal">Xingji Yan</p>
+          <p class="hero-school reveal">
+            M.S. Electrical &amp; Computer Engineering
+            <span>Carnegie Mellon University</span>
           </p>
-          <p class="body-copy reveal">
-            Most recently at <strong>JASCI Software</strong>: a smart WMS used
-            by 20+ 3PL customers and 500+ concurrent users. I took an LLM action
-            layer from a sketch to production — JSON Schema contracts, idempotent
-            writes, audit trails — and I still carried on-call. Before that:
-            search pipelines at <strong>Sonos</strong>, payment APIs at
-            <strong>Tencent</strong>. M.S. from Carnegie Mellon. Inventor.
-            Google Cloud Professional Cloud Architect.
+          <h1 class="hero-title">
+            <span class="reveal">I build systems</span>
+            <span class="reveal delay-1">people actually use.</span>
+          </h1>
+          <p class="hero-tag reveal delay-2">
+            Full-stack software engineer building reliable product systems, AI
+            workflows, and developer infrastructure.
           </p>
+          <div class="hero-cta reveal delay-3">
+            <a class="btn" href="#work">View selected work ↓</a>
+            <a class="btn ghost" href="https://github.com/BigFiiish" target="_blank" rel="noreferrer">GitHub ↗</a>
+          </div>
         </div>
-        <ul class="stats">
-          <li class="reveal"><b>4+</b><span>Years shipping</span></li>
-          <li class="reveal delay-1"><b>20+</b><span>Live customer sites</span></li>
-          <li class="reveal delay-2"><b>&lt;1s</b><span>Search, from 10s+</span></li>
-          <li class="reveal delay-3"><b>CMU</b><span>M.S. ECE</span></li>
+        <div class="hero-map reveal delay-2">
+          <svg id="systems-map" class="systems-map" role="img" aria-label="Systems map: reliable systems, AI workflows, developer infrastructure"></svg>
+          <p class="map-readout" id="map-readout">Correctness · state · failure · humans</p>
+        </div>
+        <ul class="impact-strip" aria-label="Impact">
+          <li class="reveal"><b>20+</b><span>Production customer organizations</span></li>
+          <li class="reveal"><b>10s → &lt;1s</b><span>Search latency</span></li>
+          <li class="reveal"><b>~95%</b><span>Fewer DB round trips</span></li>
+          <li class="reveal"><b>CMU</b><span>M.S. ECE</span></li>
         </ul>
       </section>
 
       <section class="work" id="work">
         <div class="section-head reveal">
+          <span class="idx">01</span>
+          <h2>Selected work</h2>
+        </div>
+        <div class="work-list" id="work-list"></div>
+        <div class="more" id="more"></div>
+      </section>
+
+      <section class="about" id="about">
+        <div class="section-head reveal">
           <span class="idx">02</span>
-          <h2>Experience</h2>
-        </div>
-        <div class="track-switch" id="tracks" role="tablist" aria-label="Resume lens">
-          <button class="track on magnetic" data-track="ai" role="tab" aria-selected="true">
-            Agentic AI
-          </button>
-          <button class="track magnetic" data-track="fullstack" role="tab" aria-selected="false">
-            Full-Stack
-          </button>
-          <button class="track magnetic" data-track="backend" role="tab" aria-selected="false">
-            Backend
-          </button>
-        </div>
-        <p class="track-kicker" id="track-kicker">MCP · guardrails · production agents</p>
-        <div class="timeline" id="timeline"></div>
-      </section>
-
-      <section class="projects" id="projects">
-        <div class="section-head reveal">
-          <span class="idx">03</span>
-          <h2>Projects</h2>
+          <h2>About</h2>
         </div>
         <p class="lede reveal">
-          Public systems I built to prove the same muscles: tenant isolation,
-          evals before agents, durable workflows, live queues.
+          I ship the unglamorous systems that keep operations alive — then I
+          put an agent on top of them, with guardrails, so people can talk to
+          the warehouse instead of clicking through twelve screens.
         </p>
-        <div class="project-grid" id="project-grid"></div>
-      </section>
-
-      <section class="skills" id="skills">
-        <div class="section-head reveal">
-          <span class="idx">04</span>
-          <h2>Stack</h2>
-        </div>
-        <div class="skill-board" id="skills-board"></div>
-      </section>
-
-      <section class="resume" id="resume">
-        <div class="section-head reveal">
-          <span class="idx">05</span>
-          <h2>Resume</h2>
-        </div>
-        <p class="lede reveal">
-          One career, three lenses — the same story I send when a role leans AI,
-          product, or systems. Switch the track above, then print or save as PDF.
+        <p class="body-copy reveal delay-1">
+          Most recently at JASCI Software: a smart WMS used by 20+ 3PL customers
+          and 500+ concurrent users. I took an LLM action layer from a sketch to
+          production — JSON Schema contracts, idempotent writes, audit trails —
+          and I still carried on-call. Before that: search pipelines at Sonos,
+          payment APIs at Tencent. M.S. ECE, Carnegie Mellon.
         </p>
-        <div class="resume-card reveal">
-          <div class="resume-top">
-            <div>
-              <h3>Xingji Yan</h3>
-              <p>Software Engineer · M.S. ECE, Carnegie Mellon</p>
-            </div>
-            <button class="btn magnetic" id="print-resume" type="button">Print / PDF</button>
-          </div>
-          <dl class="resume-meta">
-            <div><dt>Email</dt><dd><a href="mailto:yanxingji7@gmail.com">yanxingji7@gmail.com</a></dd></div>
-            <div><dt>Phone</dt><dd><a href="tel:+13213670900">321-367-0900</a></dd></div>
-            <div><dt>GitHub</dt><dd><a href="https://github.com/BigFiiish" target="_blank" rel="noreferrer">github.com/BigFiiish</a></dd></div>
-            <div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/xingji-yan" target="_blank" rel="noreferrer">xingji-yan</a></dd></div>
-          </dl>
-          <div id="resume-body"></div>
-        </div>
+        <ul class="jobs" id="jobs"></ul>
+        <p class="stack-line reveal">Java · Go · Spring Boot · React · TypeScript · PostgreSQL · MCP · Kafka · OAuth 2.1</p>
       </section>
 
       <section class="contact" id="contact">
         <div class="section-head reveal">
-          <span class="idx">06</span>
+          <span class="idx">03</span>
           <h2>Contact</h2>
         </div>
-        <a class="contact-mail magnetic" href="mailto:yanxingji7@gmail.com">yanxingji7@gmail.com</a>
-        <div class="contact-row">
-          <a class="btn magnetic" href="https://github.com/BigFiiish" target="_blank" rel="noreferrer">GitHub</a>
-          <a class="btn ghost magnetic" href="https://www.linkedin.com/in/xingji-yan" target="_blank" rel="noreferrer">LinkedIn</a>
-          <a class="btn ghost magnetic" href="tel:+13213670900">Call</a>
+        <p class="contact-line reveal">Let's build something useful.</p>
+        <a class="contact-mail reveal delay-1" id="mail" href="mailto:yanxingji7@gmail.com">yanxingji7@gmail.com</a>
+        <div class="contact-row reveal delay-2">
+          <a href="https://github.com/BigFiiish" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/xingji-yan" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a href="mailto:yanxingji7@gmail.com">Email</a>
         </div>
-        <p class="footer-note">© 2026 Xingji Yan · Close the tab. The water keeps moving.</p>
+        <p class="resolve-line reveal">Build → Measure → Improve.</p>
+        <p class="footer-note">© 2026 Xingji Yan · M.S. ECE, Carnegie Mellon University</p>
       </section>
     </main>
+
+    <dialog class="case" id="case" aria-modal="true" aria-labelledby="case-body">
+      <button class="case-close" id="case-close" type="button" aria-label="Close case study">Close</button>
+      <div class="case-body" id="case-body" tabindex="-1"></div>
+    </dialog>
+
+    <dialog class="cmd" id="cmd" aria-modal="true" aria-label="Command palette">
+      <input id="cmd-input" type="search" placeholder="Go to, open, copy…" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="cmd-list" />
+      <div id="cmd-list" role="listbox"></div>
+    </dialog>
 
     <script type="module" src="/src/main.ts"></script>
   </body>

@@ -1,12 +1,8 @@
 # Xingji Yan — Portfolio
 
-Interactive water portfolio: GPU fluid simulation, mouse-follow cursor, and a three-lens resume (Agentic AI / Full-Stack / Backend).
+**Live:** [www.xingjiyan.com](https://www.xingjiyan.com)
 
-**Live:** [xingji-portfolio.vercel.app](https://xingji-portfolio.vercel.app)
-
-## Stack
-
-Vite · TypeScript · WebGL (Navier–Stokes dye advection)
+Selected systems, case studies, a command palette, and a short-lived architecture x-ray. M.S. ECE, Carnegie Mellon.
 
 ## Local
 
@@ -14,8 +10,3 @@ Vite · TypeScript · WebGL (Navier–Stokes dye advection)
 npm install
 npm run dev
 ```
-
-## Links
-
-- Site: https://xingji-portfolio.vercel.app
-- GitHub: https://github.com/BigFiiish/xingji-portfolio

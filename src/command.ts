@@ -1,0 +1,162 @@
+import { person, projects } from "./content";
+
+type Item = { group: string; label: string; run: () => void; keywords: string };
+
+function fuzzy(q: string, text: string): number {
+  const needle = q.trim().toLowerCase();
+  const hay = text.toLowerCase();
+  if (!needle) return 1;
+  const hit = hay.indexOf(needle);
+  if (hit >= 0) return 200 - hit;
+  let ti = 0;
+  let score = 0;
+  let run = 0;
+  for (const ch of needle) {
+    const found = hay.indexOf(ch, ti);
+    if (found < 0) return 0;
+    run = found === ti ? run + 2 : 1;
+    score += run;
+    ti = found + 1;
+  }
+  return score;
+}
+
+export function initCommand() {
+  const dlg = document.querySelector<HTMLDialogElement>("#cmd");
+  const input = document.querySelector<HTMLInputElement>("#cmd-input");
+  const list = document.querySelector<HTMLElement>("#cmd-list");
+  const openBtn = document.querySelector<HTMLButtonElement>("#cmd-open");
+  if (!dlg || !input || !list) return;
+
+  dlg.setAttribute("aria-modal", "true");
+  input.setAttribute("aria-controls", "cmd-list");
+
+  const go = (sel: string) => {
+    document.querySelector(sel)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const items: Item[] = [
+    { group: "Navigation", label: "Selected Work", keywords: "work projects", run: () => go("#work") },
+    { group: "Navigation", label: "About", keywords: "about bio", run: () => go("#about") },
+    { group: "Navigation", label: "Contact", keywords: "email", run: () => go("#contact") },
+    ...projects.map((p) => ({
+      group: "Projects",
+      label: `Open ${p.name}`,
+      keywords: `${p.name} ${p.slug} ${p.stack.join(" ")} case study`,
+      run: () => {
+        location.hash = `#project/${p.slug}`;
+      },
+    })),
+    {
+      group: "Actions",
+      label: "View Resume",
+      keywords: "resume cv pdf cmu",
+      run: () => {
+        window.open(person.resume, "_blank");
+      },
+    },
+    {
+      group: "Actions",
+      label: "Copy Email",
+      keywords: "email mail copy",
+      run: async () => {
+        await navigator.clipboard.writeText(person.email);
+      },
+    },
+    {
+      group: "Actions",
+      label: "Open GitHub",
+      keywords: "github",
+      run: () => window.open(person.github, "_blank"),
+    },
+    {
+      group: "Actions",
+      label: "Open LinkedIn",
+      keywords: "linkedin",
+      run: () => window.open(person.linkedin, "_blank"),
+    },
+    {
+      group: "Special",
+      label: "> system",
+      keywords: "system systems xingji",
+      run: () => {
+        list.innerHTML = `<p class="cmd-system">${person.systemLine}</p>`;
+      },
+    },
+  ];
+
+  let shown: Item[] = items;
+  let active = 0;
+
+  const paint = () => {
+    let html = "";
+    let last = "";
+    shown.forEach((it, i) => {
+      if (it.group !== last) {
+        html += `<p class="cmd-group">${it.group}</p>`;
+        last = it.group;
+      }
+      html += `<button class="cmd-item${i === active ? " on" : ""}" type="button" id="cmd-opt-${i}" data-i="${i}" role="option" aria-selected="${i === active}">${it.label}</button>`;
+    });
+    list.innerHTML = html || `<p class="cmd-empty">No match</p>`;
+    input.setAttribute("aria-activedescendant", shown.length ? `cmd-opt-${active}` : "");
+  };
+
+  const filter = (q: string) => {
+    const ranked = items
+      .map((it) => ({ it, n: fuzzy(q, `${it.label} ${it.keywords}`) }))
+      .filter((x) => x.n > 0)
+      .sort((a, b) => b.n - a.n);
+    shown = ranked.map((x) => x.it);
+    active = 0;
+    paint();
+  };
+
+  const open = () => {
+    if (!dlg.open) dlg.showModal();
+    input.value = "";
+    filter("");
+    input.focus();
+  };
+  const close = () => dlg.close();
+
+  openBtn?.addEventListener("click", open);
+  dlg.addEventListener("click", (e) => {
+    if (e.target === dlg) close();
+  });
+  input.addEventListener("input", () => filter(input.value));
+  list.addEventListener("click", (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(".cmd-item");
+    if (!btn) return;
+    const it = shown[Number(btn.dataset.i)];
+    it?.run();
+    if (it && it.label !== "> system") close();
+  });
+
+  window.addEventListener("keydown", (e) => {
+    const pal = e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey);
+    if (pal) {
+      e.preventDefault();
+      dlg.open ? close() : open();
+      return;
+    }
+    if (!dlg.open) return;
+    if (e.key === "Escape") close();
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      active = Math.min(shown.length - 1, active + 1);
+      paint();
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      active = Math.max(0, active - 1);
+      paint();
+    }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const it = shown[active];
+      it?.run();
+      if (it && it.label !== "> system") close();
+    }
+  });
+}
