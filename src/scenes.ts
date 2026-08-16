@@ -18,15 +18,19 @@ export function sceneMarkup(p: Project): string {
 function clearbay(): string {
   return `
     <div class="scene scene-cb" data-scene="clearbay" data-mode="retry">
-      <p class="scene-k">POST /invoice</p>
-      <p class="scene-k mute">POST /invoice</p>
-      <p class="scene-mid">idempotency key</p>
-      <p class="scene-hero" data-inv>#482</p>
-      <p class="scene-split"><span data-a>created</span><span data-b>replayed</span></p>
-      <p class="scene-end" data-end></p>
+      <div class="cb-stack">
+        <p class="scene-k" data-post="1">POST /invoice</p>
+        <p class="scene-k mute" data-post="2">POST /invoice</p>
+        <span class="cb-spine" aria-hidden="true"></span>
+        <p class="scene-mid">idempotency key</p>
+        <p class="scene-hero" data-inv>#482</p>
+        <p class="scene-split"><span data-a>created</span><span data-b>replayed</span></p>
+        <p class="scene-end" data-end></p>
+      </div>
       <div class="scene-ops">
         <button type="button" data-act="retry">Run retry</button>
-        <button type="button" class="text" data-act="spoof">Tenant spoof</button>
+        <button type="button" class="text" data-act="spoof" hidden>Tenant spoof</button>
+        <button type="button" class="text" data-act="retry-mode" hidden>Idempotency</button>
       </div>
     </div>`;
 }
@@ -35,6 +39,7 @@ function grantline(): string {
   return `
     <div class="scene scene-gl" data-scene="grantline">
       <p class="scene-hero clock" data-ttl>04:59</p>
+      <p class="gl-cap">grant ttl</p>
       <ol class="vchain">
         <li data-step="0">Challenge</li>
         <li data-step="1">Proof</li>
@@ -110,34 +115,48 @@ export function bindScenes(root: HTMLElement) {
 
 function bindClearbay(el: HTMLElement) {
   let invoice: string | null = null;
+  let replayed = false;
   const end = el.querySelector("[data-end]");
   const a = el.querySelector("[data-a]");
   const b = el.querySelector("[data-b]");
   const inv = el.querySelector("[data-inv]");
-  el.querySelector("[data-act='retry']")?.addEventListener("click", () => {
+  const spoofBtn = el.querySelector<HTMLButtonElement>("[data-act='spoof']");
+  const backBtn = el.querySelector<HTMLButtonElement>("[data-act='retry-mode']");
+  const retryBtn = el.querySelector<HTMLButtonElement>("[data-act='retry']");
+
+  const paintRetry = () => {
     el.dataset.mode = "retry";
-    if (!invoice) {
-      invoice = "#482";
-      if (inv) inv.textContent = invoice;
-      if (a) a.classList.add("on");
-      if (b) b.classList.remove("on");
-      if (end) end.textContent = "";
-      el.dataset.step = "create";
-    } else {
-      if (b) b.classList.add("on");
-      if (end) end.textContent = "ONE INVOICE.";
-      el.dataset.step = "replay";
-    }
+    if (inv) inv.textContent = "#482";
+    if (a) a.textContent = "created";
+    if (b) b.textContent = "replayed";
+    a?.classList.toggle("on", Boolean(invoice));
+    b?.classList.toggle("on", replayed);
+    if (end) end.textContent = replayed ? "ONE INVOICE." : "";
+    el.dataset.step = replayed ? "replay" : invoice ? "create" : "";
+    if (retryBtn) retryBtn.hidden = false;
+    if (spoofBtn) spoofBtn.hidden = !invoice;
+    if (backBtn) backBtn.hidden = true;
+  };
+
+  retryBtn?.addEventListener("click", () => {
+    if (!invoice) invoice = "#482";
+    else replayed = true;
+    paintRetry();
   });
-  el.querySelector("[data-act='spoof']")?.addEventListener("click", () => {
+  spoofBtn?.addEventListener("click", () => {
     el.dataset.mode = "spoof";
+    el.dataset.step = "spoof";
     if (inv) inv.textContent = "ACME";
     if (a) a.textContent = "header ignored";
     if (b) b.textContent = "jwt bound";
     a?.classList.add("on");
     b?.classList.add("on");
     if (end) end.textContent = "X-Tenant-Id: globex never wins.";
+    if (retryBtn) retryBtn.hidden = true;
+    if (spoofBtn) spoofBtn.hidden = true;
+    if (backBtn) backBtn.hidden = false;
   });
+  backBtn?.addEventListener("click", paintRetry);
 }
 
 function bindGrantline(el: HTMLElement, reduce: boolean) {
@@ -145,6 +164,7 @@ function bindGrantline(el: HTMLElement, reduce: boolean) {
   const log = el.querySelector("[data-log]");
   const steps = [...el.querySelectorAll("[data-step]")];
   let left = 299;
+  let playing = false;
   const tick = () => {
     if (left <= 0) {
       if (ttl) ttl.textContent = "00:00";
@@ -155,18 +175,36 @@ function bindGrantline(el: HTMLElement, reduce: boolean) {
   };
   if (!reduce) window.setInterval(tick, 1000);
   const light = (n: number) => steps.forEach((s, i) => s.classList.toggle("on", i <= n));
+  const setLog = (t: string) => {
+    if (log) log.textContent = t;
+  };
   el.querySelector("[data-act='open']")?.addEventListener("click", () => {
+    if (playing) return;
     if (left <= 0) {
       light(2);
-      if (log) log.textContent = "EXPIRED";
+      setLog("EXPIRED");
       return;
     }
-    light(4);
-    if (log) log.textContent = "SESSION OPEN";
+    playing = true;
+    light(-1);
+    setLog("");
+    let n = 0;
+    const step = () => {
+      light(n);
+      if (n >= 4) {
+        setLog("SESSION OPEN");
+        playing = false;
+        return;
+      }
+      n += 1;
+      window.setTimeout(step, reduce ? 0 : 160);
+    };
+    step();
   });
   el.querySelector("[data-act='badkey']")?.addEventListener("click", () => {
+    if (playing) return;
     light(1);
-    if (log) log.textContent = "SIGNATURE INVALID";
+    setLog("SIGNATURE INVALID");
   });
 }
 

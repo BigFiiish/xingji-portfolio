@@ -624,16 +624,22 @@ section {
 }
 
 .work-row.scene-clearbay {
-  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
-  min-height: 92vh;
+  grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.32fr);
+  min-height: 100svh;
 }
 
 .work-row.scene-grantline {
-  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.82fr);
+  min-height: 92svh;
 }
 
 .work-row.scene-grantline .work-copy {
   order: 2;
+}
+
+.work-row.scene-clearbay .stage,
+.work-row.scene-grantline .stage {
+  min-height: min(42rem, 72vh);
 }
 
 .work-row.scene-durable-brief {
@@ -1792,9 +1798,86 @@ th {
   font-family: "Inter Tight", system-ui, sans-serif;
 }
 
+.scene-cb {
+  min-height: min(36rem, 68vh);
+}
+
+.cb-stack {
+  position: relative;
+}
+
+.cb-spine {
+  display: block;
+  width: 1px;
+  height: 2.8rem;
+  margin: 0.85rem 0 0.15rem 0.55rem;
+  background: rgba(247, 246, 241, 0.16);
+  transform-origin: top;
+}
+
+.scene-cb[data-step="create"] .cb-spine,
+.scene-cb[data-step="replay"] .cb-spine {
+  background: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.scene-cb[data-step="create"] [data-post="1"],
+.scene-cb[data-step="replay"] [data-post="1"],
+.scene-cb[data-step="replay"] [data-post="2"] {
+  color: var(--ink);
+}
+
+.scene-cb[data-mode="spoof"] .cb-spine {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
 .scene-hero.clock {
   color: color-mix(in srgb, var(--accent) 70%, var(--ink));
   text-align: center;
+  font-size: clamp(4.2rem, 10vw, 7.4rem);
+  margin-top: 0;
+}
+
+.gl-cap {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+  text-align: center;
+  margin-top: 0.35rem;
+}
+
+.scene-gl {
+  align-items: center;
+  text-align: center;
+  min-height: min(34rem, 64vh);
+}
+
+.vchain {
+  list-style: none;
+  margin: 1.8rem 0 0;
+  display: grid;
+  gap: 0.55rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  position: relative;
+}
+
+.vchain::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0.2rem;
+  bottom: 0.2rem;
+  width: 1px;
+  background: rgba(247, 246, 241, 0.12);
+  transform: translateX(-50%);
+}
+
+.vchain .on {
+  color: var(--ink);
 }
 
 .scene-hero.job {
@@ -1871,6 +1954,11 @@ th {
   color: var(--ink);
 }
 
+.scene-ops button[hidden],
+.scene button[hidden] {
+  display: none;
+}
+
 .scene-ops button:disabled,
 .scene button:disabled {
   opacity: 0.35;
@@ -1879,26 +1967,6 @@ th {
 
 .scene-cb[data-step="replay"] .scene-hero {
   color: color-mix(in srgb, var(--accent) 55%, var(--ink));
-}
-
-.scene-gl {
-  align-items: center;
-  text-align: center;
-}
-
-.vchain {
-  list-style: none;
-  margin: 1.4rem 0 0;
-  display: grid;
-  gap: 0.45rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--faint);
-}
-
-.vchain .on {
-  color: var(--ink);
 }
 
 .flowline {
