@@ -1,6 +1,12 @@
 import type { Project } from "./content";
+import { lifeMarkup } from "./life";
 
 export function productMarkup(p: Project): string {
+  const life = lifeMarkup(p.preview);
+  return `${life ? `<div class="life-wrap" data-kind="${p.preview}">${life}</div>` : ""}${chrome(p)}`;
+}
+
+function chrome(p: Project): string {
   switch (p.preview) {
     case "clearbay":
       return `

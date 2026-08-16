@@ -34,6 +34,10 @@ export const domains = [
     label: "Reliable systems",
     detail: "Correctness · retries · concurrency · isolation",
     href: "#clearbay",
+    related: [
+      { name: "Clearbay", href: "#clearbay" },
+      { name: "Grantline", href: "#grantline" },
+    ],
     accent: "#3ecf8e",
   },
   {
@@ -41,6 +45,10 @@ export const domains = [
     label: "AI workflows",
     detail: "Agents · evaluation · durable execution",
     href: "#durable-brief",
+    related: [
+      { name: "Durable Brief", href: "#durable-brief" },
+      { name: "Dockline", href: "#dockline" },
+    ],
     accent: "#8b9cff",
   },
   {
@@ -48,6 +56,10 @@ export const domains = [
     label: "Dev infrastructure",
     detail: "Queues · real-time · observability",
     href: "#pulsequeue",
+    related: [
+      { name: "PulseQueue", href: "#pulsequeue" },
+      { name: "SketchSync", href: "#sketchsync" },
+    ],
     accent: "#5ec8ff",
   },
 ] as const;

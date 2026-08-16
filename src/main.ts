@@ -1,6 +1,7 @@
 import "./style.css";
 import { experience, person } from "./content";
 import { initCommand } from "./command";
+import { bindFailures, failSection } from "./failures";
 import { initFlow } from "./flow";
 import { initMap } from "./map";
 import { initPanel } from "./panel";
@@ -27,6 +28,13 @@ if (work) {
   work.querySelectorAll(".reveal").forEach((n) => io.observe(n));
 }
 if (more) renderMore(more);
+
+const fails = document.querySelector<HTMLElement>("#fail-grid");
+if (fails) {
+  fails.innerHTML = failSection();
+  bindFailures(fails);
+  fails.querySelectorAll(".reveal").forEach((n) => io.observe(n));
+}
 
 const jobs = document.querySelector("#jobs");
 if (jobs) {

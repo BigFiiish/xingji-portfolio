@@ -1,4 +1,5 @@
 import { projects } from "./content";
+import { bindFailures } from "./failures";
 import { caseHtml } from "./work";
 
 export function initPanel() {
@@ -11,6 +12,7 @@ export function initPanel() {
     const p = projects.find((x) => x.slug === slug);
     if (!p) return;
     body.innerHTML = caseHtml(p);
+    bindFailures(body);
     body.dataset.slug = slug;
     if (!dlg.open) dlg.showModal();
     body.focus();
