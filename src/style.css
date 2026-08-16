@@ -236,9 +236,15 @@ section.hero {
   grid-row: 1;
   align-self: center;
   justify-self: stretch;
-  height: min(62vh, 36rem);
-  min-height: 20rem;
+  height: min(68vh, 39rem);
+  min-height: 21rem;
   overflow: hidden;
+}
+
+@media (min-width: 981px) {
+  .hero-map {
+    margin-top: -2.25rem;
+  }
 }
 
 .hero-map::before {
@@ -2184,6 +2190,7 @@ th {
     grid-row: 2;
     height: min(42vh, 22rem);
     min-height: 14rem;
+    margin-top: 0;
     margin-bottom: 1.5rem;
   }
   .impact-strip {
