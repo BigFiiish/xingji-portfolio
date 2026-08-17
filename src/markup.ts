@@ -1,4 +1,4 @@
-import { person, principles, projects, type Project } from "./content";
+import { experience, person, principles, projects, type Project } from "./content";
 import { failDemos } from "./failures";
 
 export const shorts: Record<string, string> = {
@@ -119,6 +119,22 @@ export function staticPrinciplesHtml(): string {
     .join("");
 }
 
+export function staticExperienceHtml(): string {
+  return experience
+    .map(
+      (job) => `
+    <li class="reveal" id="${esc(job.id)}">
+      <div class="job-who">
+        <strong>${esc(job.company)}</strong>
+        <span>${esc(job.role)}</span>
+      </div>
+      <p>${esc(job.line)}</p>
+      <em>${esc(job.dates)}</em>
+    </li>`,
+    )
+    .join("");
+}
+
 export function staticFailHtml(): string {
   return `<ul class="fail-static-list">
       ${failDemos
@@ -145,6 +161,7 @@ export function jsonLd(): string {
     name: person.name,
     jobTitle: person.title,
     alumniOf: { "@type": "CollegeOrUniversity", name: person.university },
+    worksFor: { "@type": "Organization", name: "JASCI Software" },
     url: person.site,
     sameAs: [person.github, person.linkedin],
     knowsAbout: ["Reliable systems", "AI workflows", "Developer infrastructure", "Java", "TypeScript"],
@@ -157,6 +174,7 @@ export function injectStatic(html: string): string {
     .replace("<!--inject:work-->", staticFeaturedHtml())
     .replace("<!--inject:more-->", staticMoreHtml())
     .replace("<!--inject:principles-->", staticPrinciplesHtml())
+    .replace("<!--inject:experience-->", staticExperienceHtml())
     .replace("<!--inject:fail-->", staticFailHtml())
     .replace("<!--inject:jsonld-->", jsonLd());
 }

@@ -23,7 +23,7 @@ export const person = {
 };
 
 export const impact = [
-  { value: "20+", label: "Production customer organizations" },
+  { value: "20+", label: "JASCI · production customer organizations" },
   { value: "10s → <1s", label: "Search latency" },
   { value: "~95%", label: "Fewer DB round trips" },
   { value: "CMU", label: "M.S. ECE" },
@@ -446,18 +446,21 @@ export const projects: Project[] = [
 
 export const experience = [
   {
+    id: "jasci",
     company: "JASCI Software",
     role: "Software Engineer",
     dates: "2023 — 2026",
     line: "Multi-tenant warehouse SaaS. Agentic action layer, sub-second search, billing engine, production on-call.",
   },
   {
+    id: "sonos",
     company: "Sonos",
     role: "Software Engineer Intern",
     dates: "2022",
     line: "Universal Search — Kafka indexing, Redis query cache, search speed +30%.",
   },
   {
+    id: "tencent",
     company: "Tencent",
     role: "Software Engineer Assistant",
     dates: "2020",

@@ -1360,6 +1360,14 @@ th {
   font-size: 1.02rem;
 }
 
+.experience {
+  scroll-margin-top: 4.5rem;
+}
+
+.experience .jobs {
+  margin-top: 0;
+}
+
 .jobs {
   list-style: none;
   margin-top: 3.2rem;
@@ -1373,6 +1381,7 @@ th {
   padding: 1.25rem 0;
   border-bottom: 1px solid var(--line);
   align-items: baseline;
+  scroll-margin-top: 5.5rem;
 }
 
 .job-who strong {

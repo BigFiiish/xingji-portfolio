@@ -1,4 +1,4 @@
-import { person, projects } from "./content";
+import { experience, person, projects } from "./content";
 import { openCase } from "./panel";
 
 type Item = { group: string; label: string; run: () => void; keywords: string };
@@ -40,8 +40,15 @@ export function initCommand() {
   const items: Item[] = [
     { group: "Navigation", label: "Selected Work", keywords: "work projects", run: () => go("#work") },
     { group: "Navigation", label: "Failure Modes", keywords: "race expire fail hallucinate playground", run: () => go("#failures") },
+    { group: "Navigation", label: "Experience", keywords: "jobs career jasci sonos tencent", run: () => go("#experience") },
     { group: "Navigation", label: "About", keywords: "about bio", run: () => go("#about") },
     { group: "Navigation", label: "Contact", keywords: "email", run: () => go("#contact") },
+    ...experience.map((job) => ({
+      group: "Experience",
+      label: `${job.company} · ${job.role}`,
+      keywords: `${job.company} ${job.role} ${job.line} ${job.id}`,
+      run: () => go(`#${job.id}`),
+    })),
     ...projects.map((p) => ({
       group: "Projects",
       label: `Open ${p.name}`,
