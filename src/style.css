@@ -47,6 +47,53 @@ body::before {
   transition: background 1.2s var(--ease);
 }
 
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(22rem 16rem at var(--lx, 68%) var(--ly, 30%), rgba(72, 98, 158, 0.18), transparent 72%);
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+
+html.has-pointer body::after {
+  opacity: 1;
+}
+
+.comet {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+  height: 1.5px;
+  width: 48px;
+  transform-origin: 100% 50%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(168, 190, 230, 0.02) 40%,
+    rgba(214, 226, 248, 0.28) 82%,
+    rgba(247, 246, 241, 0.62) 100%
+  );
+  opacity: 0;
+  will-change: transform, opacity, width;
+}
+
+.comet::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(247, 246, 241, 0.75) 0%, rgba(176, 198, 235, 0.2) 48%, transparent 72%);
+}
+
 .nav.dense {
   background: rgba(7, 8, 12, 0.92);
 }
@@ -3958,5 +4005,9 @@ html:has(#case[open]) {
   }
   .case .xray-svg path {
     stroke-dasharray: none;
+  }
+  .comet,
+  html.has-pointer body::after {
+    display: none;
   }
 }

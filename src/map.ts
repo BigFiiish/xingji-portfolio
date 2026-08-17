@@ -43,7 +43,7 @@ function pathD(a: string, b: string): string {
 
 export function initMap(svg: SVGSVGElement) {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const wrap = svg.closest(".hero-map");
+  const wrap = svg.closest<HTMLElement>(".hero-map");
   const readout = document.querySelector<HTMLElement>("#map-readout");
 
   svg.setAttribute("viewBox", "0 0 680 520");
@@ -152,20 +152,39 @@ export function initMap(svg: SVGSVGElement) {
     svg.classList.remove("awake");
     clearHot();
   });
+  wrap?.addEventListener(
+    "pointermove",
+    (e: PointerEvent) => {
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return;
+      const pt = svg.createSVGPoint();
+      pt.x = e.clientX;
+      pt.y = e.clientY;
+      const p = pt.matrixTransform(ctm.inverse());
+      let best = "";
+      let near = 92;
+      for (const n of nodes) {
+        if (n.hub) continue;
+        const d = Math.hypot(n.x - p.x, n.y - p.y);
+        if (d < near) {
+          near = d;
+          best = n.id;
+        }
+      }
+      if (best) setHot(best);
+      else clearHot();
+    },
+    { passive: true },
+  );
 
   svg.querySelectorAll<SVGGElement>(".topo-node").forEach((g) => {
     const href = g.dataset.href;
-    const id = g.dataset.id ?? "";
-    if (href) {
-      g.addEventListener("click", () => go(href));
-      g.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          go(href);
-        }
-      });
-    }
-    g.addEventListener("pointerenter", () => setHot(id));
-    g.addEventListener("pointerleave", clearHot);
+    if (!href) return;
+    g.addEventListener("click", () => go(href));
+    g.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      e.preventDefault();
+      go(href);
+    });
   });
 }

@@ -5,6 +5,7 @@ import { bindFailures, failSection } from "./failures";
 import { initMap } from "./map";
 import { initPanel } from "./panel";
 import { bindSecondary } from "./secondary";
+import { initPointer } from "./pointer";
 import { bindXray, renderMore, renderPrinciples, renderWork } from "./work";
 
 document.documentElement.classList.add("js");
@@ -50,6 +51,7 @@ if (map) initMap(map);
 
 initPanel();
 initCommand();
+initPointer();
 
 document.querySelector("#mail")?.setAttribute("href", `mailto:${person.email}`);
 
