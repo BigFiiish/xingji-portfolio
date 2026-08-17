@@ -3074,6 +3074,35 @@ html:has(#case[open]) {
 .play-word.on {
   opacity: 1;
   color: var(--ink);
+  animation: none;
+}
+
+.play-word.is-hint {
+  color: color-mix(in srgb, var(--ink) 82%, var(--faint));
+  box-shadow: 0 1px 0 currentColor;
+}
+
+.js .play-word.is-hint {
+  animation: fp-hint-pulse 2.4s var(--ease) infinite;
+}
+
+@keyframes fp-hint-pulse {
+  50% {
+    opacity: 0.58;
+  }
+}
+
+.fp-hint {
+  margin-top: 1.05rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.fp-hint[hidden] {
+  display: none;
 }
 
 .play-stage {
@@ -3122,8 +3151,12 @@ html:has(#case[open]) {
   opacity: 1;
 }
 
+.play-stage[data-phase="read"] [data-node="ver"],
+.play-stage[data-phase="run"] [data-node="ver"],
 .play-stage[data-phase="win"] [data-node="ok"],
 .play-stage[data-phase="win"] [data-node="ver"],
+.play-stage[data-phase="stale"] [data-node="ok"],
+.play-stage[data-phase="stale"] [data-node="ver"],
 .play-stage[data-phase="conflict"] [data-node="ok"],
 .play-stage[data-phase="conflict"] [data-node="ver"],
 .play-stage[data-phase="conflict"] [data-node="bad"] {

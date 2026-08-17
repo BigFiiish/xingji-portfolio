@@ -24,8 +24,8 @@ export const failDemos: {
     id: "expire",
     kicker: "Expire",
     title: "Grant past TTL",
-    from: "TTL reaches 00:00.",
-    to: "EXPIRED",
+    from: "TTL 00:03.",
+    to: "EXPIRED  /  DENIED",
     project: "Grantline",
     slugs: ["grantline"],
     line: "Expired authority does not open a session.",
@@ -62,6 +62,7 @@ export function failSection(): string {
         )
         .join("")}
     </div>
+    <p class="fp-hint" hidden>Click Race.</p>
     <div class="play-stage" id="play-stage" role="tabpanel" hidden></div>
     <p class="fp-live" aria-live="polite"></p>
     <button type="button" class="play-reset" data-reset hidden>Reset</button>`;
@@ -118,14 +119,14 @@ function simMarkup(id: FailId): string {
         <circle data-dot="g" cx="150" cy="110" r="2.6"/>
         <circle data-dot="s" cx="460" cy="110" r="2.6"/>
         <text data-node="grant" x="150" y="48" text-anchor="middle">Grant</text>
-        <text data-node="ttl" x="150" y="168" text-anchor="middle">00:02</text>
+        <text data-node="ttl" x="150" y="168" text-anchor="middle">00:03</text>
         <text data-node="sess" x="460" y="48" text-anchor="middle">Session</text>
         <circle class="fp-sig" data-sig="s" r="3.4" cx="150" cy="110"/>
       </svg>
       <svg class="fp-svg fp-hand" viewBox="0 0 320 340" aria-hidden="true">
         <path data-wire="s" d="M 160 80 V 150"/>
         <text data-node="grant" x="24" y="48">Grant</text>
-        <text data-node="ttl" x="24" y="120">00:02</text>
+        <text data-node="ttl" x="24" y="120">00:03</text>
         <text data-node="sess" x="24" y="240">Session</text>
         <circle class="fp-sig" data-sig="s" r="3.4" cx="160" cy="80"/>
       </svg>
@@ -261,16 +262,23 @@ export function bindFailures(root: HTMLElement) {
         say("409 CONFLICT");
         return;
       }
+      wrap.dataset.phase = "read";
+      wrap.querySelectorAll(".fp-sig").forEach((n) => n.classList.add("on"));
+      say("BOTH READ VERSION 8");
+      await hold(720, token);
+      if (token !== gen) return;
       wrap.dataset.phase = "run";
-      const a = travel(wrap, "a", "a", 700, token);
-      const b = travel(wrap, "b", "b", 980, token);
-      await a;
+      await travel(wrap, "a", "a", 760, token);
       if (token !== gen) return;
       wrap.dataset.phase = "win";
       wrap.querySelectorAll("[data-node='ver']").forEach((n) => {
         n.textContent = "version 9";
       });
-      await b;
+      say("WRITE A · 200");
+      await hold(520, token);
+      if (token !== gen) return;
+      wrap.dataset.phase = "stale";
+      await travel(wrap, "b", "b", 820, token);
       if (token !== gen) return;
       wrap.dataset.phase = "conflict";
       say("409 CONFLICT");
@@ -282,23 +290,25 @@ export function bindFailures(root: HTMLElement) {
           n.textContent = "00:00";
         });
         canvas(wrap)?.querySelector<SVGCircleElement>("[data-sig='s']")?.classList.remove("on");
-        say("EXPIRED");
+        say("DENIED");
       };
       if (reduce) {
         deny();
         return;
       }
-      const ticks = ["00:02", "00:01", "00:00"];
+      wrap.dataset.phase = "tick";
+      const ticks = ["00:03", "00:02", "00:01", "00:00"];
       for (const t of ticks) {
         if (token !== gen) return;
         ttl.forEach((n) => {
           n.textContent = t;
         });
         wrap.dataset.phase = t === "00:00" ? "zero" : "tick";
-        await hold(t === "00:00" ? 220 : 520, token);
+        if (t === "00:00") say("EXPIRED");
+        await hold(t === "00:00" ? 680 : 740, token);
       }
       if (token !== gen) return;
-      await travel(wrap, "s", "s", 500, token);
+      await travel(wrap, "s", "s", 560, token);
       if (token !== gen) return;
       deny();
     } else if (id === "fail") {
@@ -306,13 +316,13 @@ export function bindFailures(root: HTMLElement) {
       await travel(wrap, "s", "a", 380, token);
       if (token !== gen) return;
       wrap.dataset.phase = "w1";
-      await hold(620, token);
+      await hold(820, token);
       if (token !== gen) return;
       wrap.dataset.phase = "a2";
       await travel(wrap, "s", "b", 380, token);
       if (token !== gen) return;
       wrap.dataset.phase = "w2";
-      await hold(900, token);
+      await hold(1100, token);
       if (token !== gen) return;
       wrap.dataset.phase = "a3";
       await travel(wrap, "s", "c", 420, token);
@@ -327,6 +337,8 @@ export function bindFailures(root: HTMLElement) {
       }
       wrap.dataset.phase = "call";
       await travel(wrap, "s", "a", 520, token);
+      if (token !== gen) return;
+      await hold(320, token);
       if (token !== gen) return;
       wrap.dataset.phase = "reject";
       canvas(wrap)?.querySelector<SVGCircleElement>("[data-sig='s']")?.classList.remove("on");
@@ -353,6 +365,27 @@ export function bindFailures(root: HTMLElement) {
     if (reset) reset.hidden = true;
   };
 
+  const hint = root.querySelector<HTMLElement>(".fp-hint");
+  const raceBtn = words.find((w) => w.dataset.fail === "race");
+  let hintIO: IntersectionObserver | null = null;
+  const hinted = () => {
+    try {
+      return sessionStorage.getItem("fp-hint") === "1";
+    } catch {
+      return true;
+    }
+  };
+  const dismissHint = () => {
+    try {
+      sessionStorage.setItem("fp-hint", "1");
+    } catch {
+      /* ignore */
+    }
+    if (hint) hint.hidden = true;
+    raceBtn?.classList.remove("is-hint");
+    hintIO?.disconnect();
+  };
+
   const open = (id: FailId) => {
     const token = ++gen;
     words.forEach((w) => {
@@ -372,10 +405,23 @@ export function bindFailures(root: HTMLElement) {
     }
     if (live) live.textContent = "";
     if (reset) reset.hidden = false;
+    dismissHint();
     void run(id, token);
   };
 
   play = open;
+
+  if (!hinted() && hint && raceBtn) {
+    hintIO = new IntersectionObserver(
+      (entries) => {
+        if (hinted() || !entries.some((e) => e.isIntersecting)) return;
+        hint.hidden = false;
+        raceBtn.classList.add("is-hint");
+      },
+      { threshold: 0.35 },
+    );
+    hintIO.observe(chapter);
+  }
 
   words.forEach((w) =>
     w.addEventListener("click", () => {
