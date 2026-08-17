@@ -13,7 +13,26 @@ const shorts: Record<string, string> = {
   resumatch: "Deterministic resume/JD scoring with an optional grounded LLM layer.",
 };
 
-const shots: Partial<Record<string, { src: string; alt: string }>> = {};
+const shots: Partial<Record<string, { src: string; alt: string; w: number; h: number }>> = {
+  "durable-brief": {
+    src: "/proof/durable-brief.webp",
+    alt: "Durable Brief desk paused on the human approval hook, with research, draft, and evaluator complete",
+    w: 1600,
+    h: 1002,
+  },
+  pulsequeue: {
+    src: "/proof/pulsequeue.webp",
+    alt: "PulseQueue dashboard showing workers, job statuses, retries, dead letters, and live throughput",
+    w: 1600,
+    h: 1002,
+  },
+  sketchsync: {
+    src: "/proof/sketchsync.webp",
+    alt: "SketchSync shared canvas with Ada's live cursor and two connected users",
+    w: 1280,
+    h: 720,
+  },
+};
 
 export function renderWork(root: HTMLElement) {
   root.innerHTML = featured()
@@ -48,13 +67,20 @@ export function renderWork(root: HTMLElement) {
   bindScenes(root);
 }
 
-function shot(p: Project): string {
+function shot(p: Project, compact = false): string {
   const s = shots[p.slug];
   if (!s) return "";
+  const href = p.live ?? p.repo;
   const see = p.live
     ? `<a class="shot-link" href="${p.live}" target="_blank" rel="noreferrer">See the product ↗</a>`
     : "";
-  return `<figure class="shot">${see}<img src="${s.src}" alt="${s.alt}" width="1280" height="720" loading="lazy" /></figure>`;
+  return `<figure class="shot${compact ? " shot-compact" : ""}">
+    <p class="shot-k">Product view</p>
+    ${see}
+    <a class="shot-frame" href="${href}" target="_blank" rel="noreferrer">
+      <img src="${s.src}" alt="${s.alt}" width="${s.w}" height="${s.h}" loading="lazy" decoding="async" />
+    </a>
+  </figure>`;
 }
 
 export function renderMore(root: HTMLElement) {
@@ -69,7 +95,7 @@ export function renderMore(root: HTMLElement) {
           <span>${shorts[p.slug] ?? p.headline}</span>
           ${p.slug === "dockline" ? `<p class="more-aside">The model is never the judge.</p>` : ""}
         </div>
-        <div class="more-preview">${secondaryPreview(p.slug)}</div>
+        <div class="more-preview">${secondaryPreview(p.slug)}${p.slug === "sketchsync" ? shot(p, true) : ""}</div>
         <div class="more-foot">
           <em>${p.stack.join(" · ")}</em>
           <p class="more-links">

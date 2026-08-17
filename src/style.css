@@ -812,29 +812,57 @@ section {
   position: relative;
 }
 
-.work-row.scene-clearbay .shot,
-.work-row.scene-grantline .shot {
+.work-visual .shot {
   display: grid;
-  gap: 0.65rem;
-  margin: 1.5rem 0 0;
+  gap: 0.45rem;
+  margin: 1.35rem 0 0;
+  max-width: 38rem;
 }
 
-.work-row.scene-clearbay .shot img,
-.work-row.scene-grantline .shot img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.work-row.scene-clearbay .shot-link,
-.work-row.scene-grantline .shot-link {
-  font-size: 0.8rem;
+.shot-k {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--faint);
 }
 
-.work-row.scene-clearbay .shot-link:hover,
-.work-row.scene-grantline .shot-link:hover {
+.work-visual .shot-link {
+  font-size: 0.78rem;
+  color: var(--faint);
+}
+
+.work-visual .shot-link:hover,
+.work-visual .shot-link:focus-visible {
   color: var(--ink);
+}
+
+.shot-frame {
+  display: block;
+}
+
+.work-visual .shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  opacity: 0.9;
+}
+
+.more-row .shot-compact {
+  margin-top: 0.7rem;
+}
+
+.more-row .shot-compact .shot-k {
+  margin-bottom: 0.25rem;
+}
+
+.more-row .shot-compact img {
+  display: block;
+  width: min(16rem, 100%);
+  height: auto;
+  border: 1px solid var(--line);
+  opacity: 0.82;
 }
 
 .xray-pill {
@@ -3309,6 +3337,13 @@ th {
   }
   .more-aside {
     opacity: 0.75;
+  }
+  .work-visual .shot {
+    max-width: 100%;
+  }
+  .more-row .shot-compact img {
+    width: 100%;
+    max-width: 20rem;
   }
   .jobs p {
     grid-column: 1 / -1;
