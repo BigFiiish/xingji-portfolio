@@ -61,13 +61,14 @@ export function initMap(svg: SVGSVGElement) {
     ? ""
     : [
         pathD("xy", "clearbay"),
+        pathD("xy", "pulsequeue"),
         pathD("grantline", "durable"),
         pathD("pulsequeue", "sketchsync"),
       ]
         .map(
           (d, i) => `
-        <circle class="topo-pulse" r="2.1">
-          <animateMotion dur="${11 + i * 2.4}s" begin="${i * 1.6}s" repeatCount="indefinite" path="${d}" />
+        <circle class="topo-pulse" r="2.55">
+          <animateMotion dur="${12 + i * 2.2}s" begin="${i * 1.8}s" repeatCount="indefinite" path="${d}" />
         </circle>`,
         )
         .join("");
@@ -83,6 +84,7 @@ export function initMap(svg: SVGSVGElement) {
           : `${n.label}. ${domain?.label ?? ""}`;
         return `<g class="topo-node${n.hub ? " hub" : ""}" data-id="${n.id}" data-domain="${n.domain ?? ""}" data-href="${n.href ?? ""}" tabindex="${n.hub ? -1 : 0}" role="${n.hub ? "presentation" : "link"}" aria-label="${aria}">
           <circle class="topo-hit" cx="${n.x}" cy="${n.y}" r="${n.hub ? 28 : 20}"/>
+          ${n.hub ? `<circle class="topo-halo" cx="${n.x}" cy="${n.y}" r="22"/>` : ""}
           <circle class="topo-dot" cx="${n.x}" cy="${n.y}" r="${n.hub ? 17 : 4.4}"/>
           ${n.hub ? `<text class="topo-hub" x="${n.x}" y="${n.y}" text-anchor="middle" dominant-baseline="middle">XY</text>` : ""}
           ${n.hub ? "" : `<text class="topo-label" x="${n.x}" y="${n.y - 16}" text-anchor="${n.x > 520 ? "end" : "middle"}">${n.label}</text>`}
