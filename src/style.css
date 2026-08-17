@@ -452,16 +452,16 @@ summary:focus-visible,
 
 .impact-strip b {
   display: block;
-  font-size: clamp(0.95rem, 1.4vw, 1.2rem);
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
   font-weight: 500;
   letter-spacing: -0.03em;
-  color: #a7a59e;
+  color: var(--ink);
 }
 
 .impact-strip span {
   display: block;
   margin-top: 0.4rem;
-  color: #6a6964;
+  color: var(--faint);
   font-size: 0.72rem;
   line-height: 1.4;
   letter-spacing: 0.02em;
@@ -780,7 +780,7 @@ html:not(.js) .more-row:not(:has(figure)) {
 .tags span {
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.68rem;
-  color: var(--faint);
+  color: var(--muted);
 }
 
 .work-links {
@@ -830,13 +830,13 @@ html:not(.js) .more-row:not(:has(figure)) {
 
 .work-row.scene-clearbay .work-body,
 .work-row.scene-grantline .work-body {
-  color: var(--faint);
+  color: var(--muted);
   font-size: 0.9rem;
 }
 
 .work-row.scene-clearbay .tags,
 .work-row.scene-grantline .tags {
-  opacity: 0.55;
+  opacity: 0.88;
 }
 
 .work-row.scene-clearbay .work-links a:not(.btn),
@@ -953,12 +953,6 @@ html:not(.js) .more-row:not(:has(figure)) {
 .view-tab[aria-selected="true"] {
   color: var(--ink);
   border-bottom-color: color-mix(in srgb, var(--accent) 45%, transparent);
-}
-
-.view-tab kbd {
-  font: inherit;
-  margin-left: 0.3rem;
-  color: var(--faint);
 }
 
 .stage {
@@ -1452,7 +1446,7 @@ th {
 
 .stack-line {
   margin-top: 2.4rem;
-  color: var(--faint);
+  color: var(--muted);
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.72rem;
 }
@@ -2325,7 +2319,7 @@ html:has(#case[open]) {
 }
 
 .scene-cb[data-step="idle"] [data-post="2"] {
-  opacity: 0.1;
+  opacity: 0.38;
 }
 
 .scene-cb[data-step="create"] [data-post="2"] {
@@ -2342,6 +2336,15 @@ html:has(#case[open]) {
 .scene-cb .scene-end {
   opacity: 0;
   transition: opacity 0.32s var(--ease);
+}
+
+.scene-cb[data-step="idle"] .scene-hero {
+  opacity: 0.92;
+}
+
+.scene-cb[data-step="idle"] .scene-mid,
+.scene-cb[data-step="idle"] .scene-split {
+  opacity: 0.48;
 }
 
 .scene-cb[data-step="create"] .scene-mid,
@@ -2469,7 +2472,7 @@ html:has(#case[open]) {
   font-size: 0.78rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(247, 246, 241, 0.28);
+  color: rgba(247, 246, 241, 0.4);
   position: relative;
 }
 
@@ -2584,6 +2587,17 @@ html:has(#case[open]) {
   border-radius: 0;
 }
 
+.scene-ops > button:not(.text) {
+  min-height: 48px;
+  font-size: 0.98rem;
+  letter-spacing: 0.04em;
+  border-bottom-color: rgba(247, 246, 241, 0.42);
+}
+
+.scene-ops > button:not(.text):hover {
+  border-bottom-color: rgba(247, 246, 241, 0.7);
+}
+
 .scene-ops button.text,
 .scene-ops button.ghost {
   border-bottom-color: transparent;
@@ -2614,6 +2628,11 @@ html:has(#case[open]) {
   font-size: 0.88rem;
   letter-spacing: -0.015em;
   text-transform: none;
+}
+
+.scene-cb .scene-ops > button:not(.text),
+.scene-gl .scene-ops > button:not(.text) {
+  font-size: 0.98rem;
 }
 
 .scene-cb .scene-end,
@@ -2702,8 +2721,8 @@ html:has(#case[open]) {
 
 .db-flow path {
   fill: none;
-  stroke: rgba(210, 220, 235, 0.18);
-  stroke-width: 1;
+  stroke: rgba(210, 220, 235, 0.3);
+  stroke-width: 1.2;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
@@ -2714,7 +2733,7 @@ html:has(#case[open]) {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-family: "IBM Plex Mono", monospace;
-  opacity: 0.4;
+  opacity: 0.58;
 }
 
 .db-flow circle[data-dot] {
@@ -2740,7 +2759,7 @@ html:has(#case[open]) {
 .scene-db[data-on~="eval2"] [data-wire="eval2"],
 .scene-db[data-on~="gate"] [data-wire="gate"],
 .scene-db[data-on~="pub"] [data-wire="pub"] {
-  stroke: rgba(210, 220, 235, 0.42);
+  stroke: rgba(210, 220, 235, 0.62);
 }
 
 .scene-db[data-on~="a"] [data-node="a"],
@@ -2813,6 +2832,10 @@ html:has(#case[open]) {
   text-transform: none;
 }
 
+.scene-db .scene-ops > button:not(.text) {
+  font-size: 0.98rem;
+}
+
 .scene-pq {
   min-height: 0;
   justify-content: flex-start;
@@ -2870,14 +2893,14 @@ html:has(#case[open]) {
 .pq-flow path,
 .pq-flow line {
   fill: none;
-  stroke: rgba(210, 220, 235, 0.16);
-  stroke-width: 1;
+  stroke: rgba(210, 220, 235, 0.28);
+  stroke-width: 1.15;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
 
 .pq-flow .pq-lane {
-  stroke: rgba(210, 220, 235, 0.1);
+  stroke: rgba(210, 220, 235, 0.16);
   stroke-dasharray: 3 5;
 }
 
@@ -2888,7 +2911,7 @@ html:has(#case[open]) {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-family: "IBM Plex Mono", monospace;
-  opacity: 0.42;
+  opacity: 0.58;
 }
 
 .pq-flow circle[data-dot],
@@ -2972,6 +2995,10 @@ html:has(#case[open]) {
   font-size: 0.88rem;
   letter-spacing: -0.015em;
   text-transform: none;
+}
+
+.scene-pq .scene-ops > button:not(.text) {
+  font-size: 0.98rem;
 }
 
 .pq {
@@ -3755,9 +3782,6 @@ html:has(#case[open]) {
   .principle-copy {
     grid-column: 1 / -1;
   }
-  .view-tab kbd {
-    display: none;
-  }
   .work-row.scene-clearbay,
   .work-row.scene-grantline,
   .work-row.scene-pulsequeue,
@@ -3911,12 +3935,6 @@ html:has(#case[open]) {
   }
   .pq {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (pointer: coarse) {
-  .view-tab kbd {
-    display: none;
   }
 }
 

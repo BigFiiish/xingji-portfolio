@@ -17,7 +17,7 @@ export function renderWork(root: HTMLElement) {
         <div class="work-visual">
           <div class="view-tabs" role="tablist" aria-label="Product or architecture">
             <button type="button" class="view-tab on" role="tab" data-view="product" aria-selected="true">Product</button>
-            <button type="button" class="view-tab" role="tab" data-view="xray" aria-selected="false">Architecture <kbd>⇧</kbd></button>
+            <button type="button" class="view-tab" role="tab" data-view="xray" aria-selected="false" title="Hold Shift while hovering to preview">Architecture</button>
           </div>
           <div class="stage">
             <div class="scan" aria-hidden="true"></div>

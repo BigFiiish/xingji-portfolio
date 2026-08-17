@@ -47,7 +47,7 @@ export function workCopy(p: Project, i: number, extra = ""): string {
           <p class="tags">${p.stack.map((s) => `<span>${esc(s)}</span>`).join("")}</p>
           <p class="work-body">${esc(p.blurb)}</p>
           <p class="work-links">
-            ${p.live ? `<a class="btn" href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a>` : ""}
+            ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a>` : ""}
             <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
             ${extra}
           </p>
