@@ -1,5 +1,4 @@
 import { principles, projects, type Project } from "./content";
-import { caseFails } from "./failures";
 import { xrayMarkup } from "./mockups";
 import { bindScenes, sceneMarkup, type PulseCtl } from "./scenes";
 import { secondaryPreview } from "./secondary";
@@ -197,50 +196,4 @@ export function renderPrinciples(root: HTMLElement) {
     </li>`,
     )
     .join("");
-}
-
-export function caseHtml(p: Project): string {
-  const c = p.caseStudy;
-  return `
-    <header class="case-top">
-      <p class="case-anno">01 / Problem</p>
-      <h2 class="case-problem">${c.problem}</h2>
-    </header>
-    <section>
-      <h3><span>02</span> Constraints</h3>
-      <ul class="case-list mono">${c.constraints.map((x) => `<li>${x}</li>`).join("")}</ul>
-    </section>
-    <section>
-      <h3><span>03</span> Architecture</h3>
-      ${xrayMarkup(p)}
-    </section>
-    <section>
-      <h3><span>04</span> Decisions</h3>
-      <div class="decisions">
-        ${c.decisions
-          .map(
-            (d) => `
-          <details>
-            <summary>${d.decision}</summary>
-            <p><b>Why.</b> ${d.why}</p>
-            <p><b>Tradeoff.</b> ${d.tradeoff}</p>
-          </details>`
-          )
-          .join("")}
-      </div>
-    </section>
-    <section>
-      <h3><span>05</span> Failure</h3>
-      ${caseFails(p.slug)}
-      <ul class="fail-list">
-        ${c.failures.map((f) => `<li><b>${f.fail}</b><span>${f.handle}</span></li>`).join("")}
-      </ul>
-    </section>
-    <section>
-      <h3><span>06</span> Demo</h3>
-      <p class="work-links">
-        ${p.live ? `<a class="btn" href="${p.live}" target="_blank" rel="noreferrer">Live demo ↗</a>` : ""}
-        <a class="btn ghost" href="${p.repo}" target="_blank" rel="noreferrer">GitHub ↗</a>
-      </p>
-    </section>`;
 }

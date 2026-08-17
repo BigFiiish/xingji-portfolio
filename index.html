@@ -125,8 +125,11 @@
       </section>
     </main>
 
-    <dialog class="case" id="case" aria-modal="true" aria-labelledby="case-body">
-      <button class="case-close" id="case-close" type="button" aria-label="Close case study">Close</button>
+    <dialog class="case" id="case" aria-modal="true">
+      <div class="case-chrome">
+        <p class="case-chrome-name" id="case-chrome-name" hidden></p>
+        <button class="case-close" id="case-close" type="button" aria-label="Close case study">Close ×</button>
+      </div>
       <div class="case-body" id="case-body" tabindex="-1"></div>
     </dialog>
 
