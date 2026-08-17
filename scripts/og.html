@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>OG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@1&family=Inter+Tight:ital,wght@0,500;0,600;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: #07080c;
+        color: #f7f6f1;
+        font-family: "Inter Tight", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .frame {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        background:
+          radial-gradient(ellipse at 78% 46%, rgba(72, 98, 158, 0.28), transparent 44%),
+          radial-gradient(ellipse at 82% 52%, rgba(28, 40, 74, 0.62), transparent 72%),
+          radial-gradient(36rem 22rem at 8% 0%, rgba(16, 28, 52, 0.28), transparent 65%),
+          #07080c;
+      }
+      .copy {
+        position: absolute;
+        left: 72px;
+        top: 78px;
+        width: 560px;
+      }
+      .mark {
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        margin-bottom: 48px;
+      }
+      .who {
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #a3a29c;
+        margin-bottom: 22px;
+      }
+      h1 {
+        font-weight: 500;
+        font-size: 72px;
+        line-height: 0.98;
+        letter-spacing: -0.048em;
+        color: #d8d6d0;
+      }
+      h1 span {
+        display: block;
+      }
+      .sig {
+        font-family: "Instrument Serif", Georgia, serif;
+        font-style: italic;
+        font-weight: 400;
+        letter-spacing: -0.018em;
+        color: #f7f6f1;
+      }
+      .tag {
+        margin-top: 28px;
+        font-size: 18px;
+        color: #a3a29c;
+      }
+      .url {
+        position: absolute;
+        left: 72px;
+        bottom: 48px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 14px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #6e6d68;
+      }
+      .map {
+        position: absolute;
+        right: 36px;
+        top: 48px;
+        width: 560px;
+        height: 520px;
+      }
+      .map svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .edge {
+        fill: none;
+        stroke: rgba(220, 226, 238, 0.72);
+        stroke-width: 1.2;
+      }
+      .dot {
+        fill: #e4e8f0;
+      }
+      .hub-ring {
+        fill: #0c1018;
+        stroke: rgba(236, 238, 246, 0.78);
+        stroke-width: 1.15;
+      }
+      .hub-text {
+        fill: #f7f6f1;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        font-family: "Inter Tight", system-ui, sans-serif;
+      }
+      .label {
+        fill: rgba(236, 238, 244, 0.78);
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-family: "IBM Plex Mono", monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="copy">
+        <p class="mark">XY</p>
+        <p class="who">Xingji Yan — Software Engineer</p>
+        <h1>
+          <span>I build systems</span>
+          <span>people <em class="sig">actually use.</em></span>
+        </h1>
+        <p class="tag">Reliable systems · AI workflows · developer infrastructure</p>
+      </div>
+      <div class="map" aria-hidden="true">
+        <svg viewBox="0 0 680 520">
+          <path class="edge" d="M 78 186 Q 196.45 203.08 310 248" />
+          <path class="edge" d="M 310 248 Q 428.2 188.72 548 158" />
+          <path class="edge" d="M 310 248 Q 347.38 150.08 392 62" />
+          <path class="edge" d="M 78 186 Q 128.44 296.6 168 418" />
+          <path class="edge" d="M 548 158 Q 361.79 265.2 168 418" />
+          <path class="edge" d="M 168 418 Q 294.93 420 418 452" />
+          <path class="edge" d="M 548 158 Q 577.36 226.88 600 302" />
+          <circle class="dot" cx="392" cy="62" r="4.4" />
+          <circle class="dot" cx="78" cy="186" r="4.4" />
+          <circle class="dot" cx="548" cy="158" r="4.4" />
+          <circle class="dot" cx="168" cy="418" r="4.4" />
+          <circle class="dot" cx="418" cy="452" r="4.4" />
+          <circle class="dot" cx="600" cy="302" r="4.4" />
+          <circle class="hub-ring" cx="310" cy="248" r="17" />
+          <text class="hub-text" x="310" y="248" text-anchor="middle" dominant-baseline="middle">XY</text>
+          <text class="label" x="392" y="46" text-anchor="middle">Clearbay</text>
+          <text class="label" x="78" y="170" text-anchor="middle">Grantline</text>
+          <text class="label" x="548" y="142" text-anchor="middle">PulseQueue</text>
+          <text class="label" x="168" y="402" text-anchor="middle">Durable Brief</text>
+          <text class="label" x="418" y="436" text-anchor="middle">Dockline</text>
+          <text class="label" x="600" y="286" text-anchor="end">SketchSync</text>
+        </svg>
+      </div>
+      <p class="url">xingjiyan.com</p>
+    </div>
+  </body>
+</html>
