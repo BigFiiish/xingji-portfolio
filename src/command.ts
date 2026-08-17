@@ -30,6 +30,12 @@ export function initCommand() {
   const openBtn = document.querySelector<HTMLButtonElement>("#cmd-open");
   if (!dlg || !input || !list) return;
 
+  const apple = /Mac|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (openBtn) {
+    openBtn.textContent = apple ? "⌘K" : "Ctrl K";
+    openBtn.setAttribute("aria-label", apple ? "Open command palette, Command K" : "Open command palette, Control K");
+  }
+
   dlg.setAttribute("aria-modal", "true");
   input.setAttribute("aria-controls", "cmd-list");
 
@@ -56,7 +62,7 @@ export function initCommand() {
     { group: "Navigation", label: "Selected Work", keywords: "work projects", run: () => go("#work") },
     { group: "Navigation", label: "Failure Modes", keywords: "race expire fail hallucinate playground", run: () => go("#failures") },
     { group: "Navigation", label: "Experience", keywords: "jobs career jasci sonos tencent", run: () => go("#experience") },
-    { group: "Navigation", label: "About", keywords: "about bio", run: () => go("#about") },
+    { group: "Navigation", label: "Principles", keywords: "about bio principles correctness", run: () => go("#about") },
     { group: "Navigation", label: "Contact", keywords: "email", run: () => go("#contact") },
     ...failDemos.map((d) => ({
       group: "Failure modes",

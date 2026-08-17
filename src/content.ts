@@ -86,6 +86,7 @@ export type Project = {
   headline: string;
   blurb: string;
   stack: string[];
+  proof?: string[];
   live: string | null;
   repo: string;
   accent: string;
@@ -104,6 +105,7 @@ export const projects: Project[] = [
     blurb:
       "Multi-tenant Java/Spring platform demonstrating tenant isolation, idempotent billing, optimistic concurrency, async jobs, MCP guardrails, and production-style observability.",
     stack: ["Java 21", "Spring Boot", "PostgreSQL", "Redis", "MCP"],
+    proof: ["Idempotent", "Multi-tenant", "Retry-safe"],
     live: "https://clearbay.onrender.com",
     repo: "https://github.com/BigFiiish/clearbay",
     accent: "#3ECF8E",
@@ -168,6 +170,7 @@ export const projects: Project[] = [
     blurb:
       "Passwordless Go broker: humans, machines, and AI agents prove an ed25519 key, receive a five-minute grant, then open policy-checked sessions. Tenant isolation and server-side pagination included.",
     stack: ["Go", "React", "TypeScript", "ed25519"],
+    proof: ["Signed grant", "Five-minute TTL", "Policy"],
     live: "https://grantline.onrender.com",
     repo: "https://github.com/BigFiiish/grantline",
     accent: "#5B8CFF",
@@ -223,6 +226,7 @@ export const projects: Project[] = [
     blurb:
       "A durable TypeScript workflow with parallel research, sequential drafting, evaluator-optimizer loops, and human approval.",
     stack: ["TypeScript", "Next.js", "Vercel Workflows"],
+    proof: ["Pause", "Resume", "Human approval"],
     live: "https://durable-brief.vercel.app",
     repo: "https://github.com/BigFiiish/durable-brief",
     accent: "#8F7BFF",
@@ -283,6 +287,7 @@ export const projects: Project[] = [
     blurb:
       "A TypeScript queue engine with lease exclusivity, exponential backoff, dead-lettering, worker state, and real-time SSE visualization.",
     stack: ["TypeScript", "React", "SSE", "Node.js"],
+    proof: ["Lease", "Backoff", "Dead letter"],
     live: "https://pulsequeue-wokz.onrender.com",
     repo: "https://github.com/BigFiiish/pulsequeue",
     accent: "#E0A657",
@@ -491,20 +496,24 @@ export const principles = [
     idx: "01",
     title: "Correctness",
     line: "Retries should not double-write. Tenant boundaries should not depend on client input.",
+    seen: { name: "Clearbay", href: "#clearbay" },
   },
   {
     idx: "02",
     title: "State",
     line: "Processes should survive the request that started them.",
+    seen: { name: "Durable Brief", href: "#durable-brief" },
   },
   {
     idx: "03",
     title: "Failure",
     line: "Failures should be visible, bounded, and recoverable.",
+    seen: { name: "PulseQueue", href: "#pulsequeue" },
   },
   {
     idx: "04",
     title: "Humans",
     line: "Automation should know where its authority ends.",
+    seen: { name: "Dockline", href: "#dockline" },
   },
 ];

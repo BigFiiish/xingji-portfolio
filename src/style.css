@@ -195,6 +195,7 @@ button {
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.68rem;
   color: var(--faint);
+  white-space: nowrap;
 }
 
 main,
@@ -744,6 +745,23 @@ html:not(.js) .more-row:not(:has(figure)) {
   max-width: 16ch;
 }
 
+.proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.95rem;
+  margin-top: 1.05rem;
+}
+
+.proof span {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
+  padding-bottom: 0.12rem;
+}
+
 .work-body {
   margin-top: 1.1rem;
   color: var(--muted);
@@ -756,7 +774,7 @@ html:not(.js) .more-row:not(:has(figure)) {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem 0.7rem;
-  margin-top: 1.1rem;
+  margin-top: 0.7rem;
 }
 
 .tags span {
@@ -912,6 +930,35 @@ html:not(.js) .more-row:not(:has(figure)) {
   color: var(--muted);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.view-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.15rem;
+  margin-bottom: 0.75rem;
+}
+
+.view-tab {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  padding: 0.2rem 0;
+  border-bottom: 1px solid transparent;
+}
+
+.view-tab.on,
+.view-tab[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.view-tab kbd {
+  font: inherit;
+  margin-left: 0.3rem;
+  color: var(--faint);
 }
 
 .stage {
@@ -3300,6 +3347,22 @@ html:has(#case[open]) {
   line-height: 1.5;
 }
 
+.seen {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--faint);
+}
+
+.seen a {
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+
+.seen a:hover,
+.seen a:focus-visible {
+  color: var(--ink);
+}
+
 .more-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(12rem, 17rem);
@@ -3396,19 +3459,15 @@ html:has(#case[open]) {
 
 .more-aside {
   margin-top: 0.55rem;
-  font-family: "Instrument Serif", serif;
-  font-style: italic;
-  font-size: 0.98rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
   color: var(--muted);
-  opacity: 0;
   max-width: 28rem;
-  min-height: 1.2em;
-  transition: opacity 0.35s var(--ease);
 }
 
-.more-row[data-more="dockline"]:is(:hover, :focus-within) .more-aside,
-.more-row[data-more="dockline"][data-phase="done"] .more-aside {
-  opacity: 0.8;
+.more-row[data-more="dockline"] .more-aside {
+  opacity: 1;
 }
 
 .more-row[data-phase="case"] [data-n="case"],
@@ -3660,8 +3719,11 @@ html:has(#case[open]) {
   .principles li {
     grid-template-columns: 2.4rem 1fr;
   }
-  .principles p {
+  .principle-copy {
     grid-column: 1 / -1;
+  }
+  .view-tab kbd {
+    display: none;
   }
   .work-row.scene-clearbay,
   .work-row.scene-grantline,
@@ -3734,10 +3796,10 @@ html:has(#case[open]) {
   .scene-gl .scene-ops button:not([hidden]),
   .scene-db .scene-ops button:not([hidden]),
   .scene-pq .scene-ops button:not([hidden]),
-  .work-row.scene-clearbay .xray-toggle,
-  .work-row.scene-grantline .xray-toggle,
-  .work-row.scene-durable-brief .xray-toggle,
-  .work-row.scene-pulsequeue .xray-toggle,
+  .work-row.scene-clearbay .view-tab,
+  .work-row.scene-grantline .view-tab,
+  .work-row.scene-durable-brief .view-tab,
+  .work-row.scene-pulsequeue .view-tab,
   .work-row.scene-clearbay .work-links a,
   .work-row.scene-clearbay .work-links button,
   .work-row.scene-grantline .work-links a,
@@ -3816,6 +3878,12 @@ html:has(#case[open]) {
   }
   .pq {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (pointer: coarse) {
+  .view-tab kbd {
+    display: none;
   }
 }
 

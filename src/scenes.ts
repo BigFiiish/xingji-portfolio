@@ -58,6 +58,7 @@ function grantline(): string {
       <p class="scene-end" data-log></p>
       <div class="scene-ops">
         <button type="button" data-act="open">Open session</button>
+        <button type="button" class="text" data-act="expire">Expire grant</button>
         <button type="button" class="text" data-act="badkey">Wrong key</button>
       </div>
     </div>`;
@@ -337,16 +338,18 @@ function bindGrantline(el: HTMLElement, reduce: boolean) {
     if (ttl) ttl.textContent = `${String(Math.floor(left / 60)).padStart(2, "0")}:${String(left % 60).padStart(2, "0")}`;
   };
   let ttlTimer = 0;
+  const stopTtl = () => {
+    if (!ttlTimer) return;
+    window.clearInterval(ttlTimer);
+    ttlTimer = 0;
+    ticking = false;
+  };
   const startTtl = () => {
     if (ticking) return;
     ticking = true;
     ttlTimer = window.setInterval(() => {
       tick();
-      if (left <= 0) {
-        window.clearInterval(ttlTimer);
-        ttlTimer = 0;
-        ticking = false;
-      }
+      if (left <= 0) stopTtl();
     }, 1000);
   };
   const io = new IntersectionObserver(
@@ -396,19 +399,28 @@ function bindGrantline(el: HTMLElement, reduce: boolean) {
   };
   const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-  el.querySelector("[data-act='open']")?.addEventListener("click", async () => {
-    if (playing) return;
+  const runExpired = async () => {
     playing = true;
     reset();
+    left = 0;
+    stopTtl();
+    if (ttl) ttl.textContent = "00:00";
+    el.dataset.run = "expired";
+    light(0, true);
+    if (!reduce) await wait(pace);
+    el.dataset.fail = "exp";
+    setLog("EXPIRED");
+    playing = false;
+  };
+
+  el.querySelector("[data-act='open']")?.addEventListener("click", async () => {
+    if (playing) return;
     if (left <= 0) {
-      el.dataset.run = "expired";
-      light(0, true);
-      if (!reduce) await wait(pace);
-      el.dataset.fail = "exp";
-      setLog("EXPIRED");
-      playing = false;
+      await runExpired();
       return;
     }
+    playing = true;
+    reset();
     el.dataset.run = "open";
     if (reduce) {
       light(4, true);
@@ -426,6 +438,10 @@ function bindGrantline(el: HTMLElement, reduce: boolean) {
     el.dataset.payoff = "open";
     setLog("SESSION OPEN");
     playing = false;
+  });
+  el.querySelector("[data-act='expire']")?.addEventListener("click", () => {
+    if (playing) return;
+    void runExpired();
   });
   el.querySelector("[data-act='badkey']")?.addEventListener("click", async () => {
     if (playing) return;

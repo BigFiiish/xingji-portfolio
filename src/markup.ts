@@ -2,7 +2,7 @@ import { experience, person, principles, projects, type Project } from "./conten
 import { failDemos } from "./failures";
 
 export const shorts: Record<string, string> = {
-  dockline: "Agent evaluation without letting the model grade itself.",
+  dockline: "The model is never the judge.",
   sketchsync: "Realtime collaboration over a typed WebSocket protocol.",
   resumatch: "Deterministic resume/JD scoring with an optional grounded LLM layer.",
 };
@@ -36,14 +36,18 @@ const featured = () => projects.filter((p) => p.featured);
 const rest = () => projects.filter((p) => !p.featured);
 
 export function workCopy(p: Project, i: number, extra = ""): string {
+  const proof = p.proof?.length
+    ? `<p class="proof">${p.proof.map((s) => `<span>${esc(s)}</span>`).join("")}</p>`
+    : "";
   return `<div class="work-copy">
           <span class="work-idx">${String(i + 1).padStart(2, "0")}</span>
           <h3>${esc(p.name)}</h3>
           <p class="work-head">${esc(p.headline)}</p>
+          ${proof}
           <p class="tags">${p.stack.map((s) => `<span>${esc(s)}</span>`).join("")}</p>
           <p class="work-body">${esc(p.blurb)}</p>
           <p class="work-links">
-            ${p.live ? `<a class="btn" href="${esc(p.live)}" target="_blank" rel="noreferrer">Live demo ↗</a>` : ""}
+            ${p.live ? `<a class="btn" href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a>` : ""}
             <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
             ${extra}
           </p>
@@ -93,13 +97,13 @@ export function moreArticle(p: Project, previewInner: string, withShot = true): 
         <div class="more-copy">
           <h4>${esc(p.name)}</h4>
           <span>${esc(shorts[p.slug] ?? p.headline)}</span>
-          ${p.slug === "dockline" ? `<p class="more-aside">The model is never the judge.</p>` : ""}
+          ${p.slug === "dockline" ? `<p class="more-aside">40 deterministic cases. Trace-level evaluation.</p>` : ""}
         </div>
         <div class="more-preview">${previewInner}${withShot && p.slug === "sketchsync" ? productFigure(p, true) : ""}</div>
         <div class="more-foot">
           <em>${p.stack.map(esc).join(" · ")}</em>
           <p class="more-links">
-            ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Live ↗</a>` : ""}
+            ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a>` : ""}
             <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
           </p>
         </div>
@@ -113,7 +117,10 @@ export function staticPrinciplesHtml(): string {
     <li class="reveal">
       <span>${esc(p.idx)}</span>
       <strong>${esc(p.title)}</strong>
-      <p>${esc(p.line)}</p>
+      <div class="principle-copy">
+        <p>${esc(p.line)}</p>
+        <p class="seen">Seen in <a href="${esc(p.seen.href)}">${esc(p.seen.name)}</a></p>
+      </div>
     </li>`,
     )
     .join("");

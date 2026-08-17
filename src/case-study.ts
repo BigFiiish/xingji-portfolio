@@ -17,7 +17,7 @@ export function caseHtml(p: Project): string {
       <p class="case-kicker">${p.headline}</p>
       <p class="case-stack">${p.stack.join(" · ")}</p>
       <p class="case-id-links">
-        ${p.live ? `<a href="${p.live}" target="_blank" rel="noreferrer">Live demo ↗</a>` : ""}
+        ${p.live ? `<a href="${p.live}" target="_blank" rel="noreferrer">Open product ↗</a>` : ""}
         <a href="${p.repo}" target="_blank" rel="noreferrer">GitHub ↗</a>
       </p>
     </header>
