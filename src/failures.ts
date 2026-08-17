@@ -186,6 +186,14 @@ function simMarkup(id: FailId): string {
     <p class="fp-line">${d.line}</p>`;
 }
 
+let play: ((id: FailId) => void) | null = null;
+
+export function playFail(id: FailId) {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelector("#failures")?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+  play?.(id);
+}
+
 export function bindFailures(root: HTMLElement) {
   const stageEl = root.querySelector<HTMLElement>("#play-stage");
   const reset = root.querySelector<HTMLButtonElement>("[data-reset]");
@@ -366,6 +374,8 @@ export function bindFailures(root: HTMLElement) {
     if (reset) reset.hidden = false;
     void run(id, token);
   };
+
+  play = open;
 
   words.forEach((w) =>
     w.addEventListener("click", () => {

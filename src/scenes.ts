@@ -34,7 +34,7 @@ function clearbay(): string {
       </div>
       <div class="scene-ops">
         <button type="button" data-act="retry">Run request</button>
-        <button type="button" class="text" data-act="spoof" hidden>Tenant spoof →</button>
+        <button type="button" class="text" data-act="spoof">Spoof tenant</button>
         <button type="button" class="text" data-act="reset" hidden>Reset</button>
       </div>
     </div>`;
@@ -271,7 +271,7 @@ function bindClearbay(el: HTMLElement, reduce: boolean) {
       retryBtn.hidden = replayed;
       retryBtn.textContent = created ? "Retry same request" : "Run request";
     }
-    if (spoofBtn) spoofBtn.hidden = !replayed;
+    if (spoofBtn) spoofBtn.hidden = false;
     if (resetBtn) resetBtn.hidden = !replayed;
   };
 
@@ -295,7 +295,7 @@ function bindClearbay(el: HTMLElement, reduce: boolean) {
     busy = false;
   });
   spoofBtn?.addEventListener("click", () => {
-    if (busy || !replayed) return;
+    if (busy) return;
     el.dataset.mode = "spoof";
     el.dataset.step = "spoof";
     delete el.dataset.flow;

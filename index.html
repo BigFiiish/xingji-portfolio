@@ -64,6 +64,7 @@
           </p>
           <div class="hero-cta reveal delay-3">
             <a href="#work">View work ↓</a>
+            <a href="#failures">Failure modes</a>
             <a href="https://github.com/BigFiiish" target="_blank" rel="noreferrer">GitHub ↗</a>
           </div>
         </div>
@@ -89,9 +90,9 @@
       </section>
 
       <section class="failures" id="failures" style="--accent:#c4a882" aria-labelledby="fail-heading">
-        <h2 class="visually-hidden" id="fail-heading">Failure modes</h2>
+        <p class="fail-label reveal">Failure modes</p>
         <div class="play-pause">
-          <p class="pause-a reveal">Happy paths are easy.</p>
+          <h2 class="pause-a reveal" id="fail-heading">Happy paths are easy.</h2>
           <p class="pause-b reveal delay-1">I design the other paths.</p>
         </div>
         <div class="fail-grid" id="fail-grid"><!--inject:fail--></div>
@@ -145,7 +146,8 @@
     </dialog>
 
     <dialog class="cmd" id="cmd" aria-modal="true" aria-label="Command palette">
-      <input id="cmd-input" type="search" placeholder="Go to, open, copy…" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="cmd-list" aria-autocomplete="list" />
+      <input id="cmd-input" type="search" placeholder="Grantline, Java, Resume, Race…" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="cmd-list" aria-autocomplete="list" />
+      <div class="cmd-chips" id="cmd-chips" hidden></div>
       <div id="cmd-list" role="listbox"></div>
     </dialog>
 

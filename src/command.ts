@@ -1,4 +1,5 @@
 import { experience, person, projects } from "./content";
+import { failDemos, playFail } from "./failures";
 import { openCase } from "./panel";
 
 type Item = { group: string; label: string; run: () => void; keywords: string };
@@ -32,6 +33,20 @@ export function initCommand() {
   dlg.setAttribute("aria-modal", "true");
   input.setAttribute("aria-controls", "cmd-list");
 
+  const chips = document.querySelector<HTMLElement>("#cmd-chips");
+  const showChips = (on: boolean) => {
+    if (chips) chips.hidden = !on;
+  };
+  if (chips) {
+    chips.setAttribute("role", "group");
+    chips.setAttribute("aria-label", "Suggested searches");
+    chips.innerHTML = `
+      <button type="button" class="cmd-chip" data-chip="grantline">Grantline</button>
+      <button type="button" class="cmd-chip" data-chip="java">Java</button>
+      <button type="button" class="cmd-chip" data-chip="resume">Resume</button>
+      <button type="button" class="cmd-chip" data-chip="race">Race</button>`;
+  }
+
   const go = (sel: string) => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     document.querySelector(sel)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
@@ -43,6 +58,12 @@ export function initCommand() {
     { group: "Navigation", label: "Experience", keywords: "jobs career jasci sonos tencent", run: () => go("#experience") },
     { group: "Navigation", label: "About", keywords: "about bio", run: () => go("#about") },
     { group: "Navigation", label: "Contact", keywords: "email", run: () => go("#contact") },
+    ...failDemos.map((d) => ({
+      group: "Failure modes",
+      label: `${d.kicker} · ${d.project}`,
+      keywords: `${d.kicker} ${d.title} ${d.line} ${d.project} ${d.id}`,
+      run: () => playFail(d.id),
+    })),
     ...experience.map((job) => ({
       group: "Experience",
       label: `${job.company} · ${job.role}`,
@@ -121,6 +142,7 @@ export function initCommand() {
     shown = ranked.map((x) => x.it);
     active = 0;
     paint();
+    showChips(!q.trim());
   };
 
   const open = () => {
@@ -130,6 +152,22 @@ export function initCommand() {
     input.focus();
   };
   const close = () => dlg.close();
+
+  chips?.addEventListener("click", (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-chip]");
+    if (!btn) return;
+    const id = btn.dataset.chip;
+    if (id === "java") {
+      input.value = "java";
+      filter("java");
+      input.focus();
+      return;
+    }
+    close();
+    if (id === "grantline") openCase("grantline", true);
+    if (id === "resume") window.open(person.resume, "_blank");
+    if (id === "race") playFail("race");
+  });
 
   openBtn?.addEventListener("click", open);
   dlg.addEventListener("click", (e) => {

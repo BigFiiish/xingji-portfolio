@@ -1875,6 +1875,34 @@ html:has(#case[open]) {
   background: rgba(255, 255, 255, 0.05);
 }
 
+.cmd-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.7rem 1rem 0.15rem;
+}
+
+.cmd-chips[hidden] {
+  display: none;
+}
+
+.cmd-chip {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.28rem 0.7rem;
+}
+
+.cmd-chip:hover,
+.cmd-chip:focus-visible {
+  color: var(--ink);
+  border-color: rgba(247, 246, 241, 0.22);
+}
+
 .cmd-empty,
 .cmd-system {
   padding: 1rem;
@@ -2919,6 +2947,16 @@ html:has(#case[open]) {
   display: grid;
   align-content: center;
   background: #05060a;
+  scroll-margin-top: 4.5rem;
+}
+
+.fail-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 1.15rem;
 }
 
 .failures.is-open {
