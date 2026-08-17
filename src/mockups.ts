@@ -47,17 +47,20 @@ function diagram(kind: Project["preview"]): string {
     </svg>`;
   }
   if (kind === "durable") {
-    return `<svg class="xray-svg" viewBox="0 0 320 240" aria-hidden="true">
-      ${label(50, 28, "Research")}
-      ${label(50, 52, "×3")}
-      ${line(90, 40, 150, 40)}
-      ${label(180, 44, "Draft")}
-      ${line(210, 40, 250, 40)}
-      ${label(280, 44, "Eval")}
-      ${line(160, 56, 160, 96)}
-      ${label(160, 116, "Human gate")}
-      ${line(160, 128, 160, 168)}
-      ${label(160, 188, "Publish")}
+    return `<svg class="xray-svg" viewBox="0 0 280 340" aria-hidden="true">
+      ${label(140, 22, "Next.js")}
+      ${line(140, 32, 140, 52)}
+      ${label(140, 68, "Workflow")}
+      ${line(140, 78, 140, 98)}
+      ${label(140, 114, "Parallel Research")}
+      ${line(140, 124, 140, 144)}
+      ${label(140, 160, "Draft")}
+      ${line(140, 170, 140, 190)}
+      ${label(140, 206, "Evaluator / Revision")}
+      ${line(140, 216, 140, 236)}
+      ${label(140, 252, "Human Hook")}
+      ${line(140, 262, 140, 282)}
+      ${label(140, 298, "Publish")}
     </svg>`;
   }
   if (kind === "pulse") {

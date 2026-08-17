@@ -634,7 +634,8 @@ section {
 }
 
 .js .work-row.scene-clearbay,
-.js .work-row.scene-grantline {
+.js .work-row.scene-grantline,
+.js .work-row.scene-durable-brief {
   opacity: 1;
   transform: none;
   animation: none;
@@ -651,11 +652,22 @@ section {
 
 .work-row.scene-durable-brief {
   grid-template-columns: 1fr;
+  align-items: start;
+  gap: 2.4rem;
 }
 
 .work-row.scene-durable-brief .work-copy {
   order: 0;
-  max-width: 40rem;
+  max-width: 38rem;
+}
+
+.work-row.scene-durable-brief .work-visual,
+.work-row.scene-durable-brief .stage {
+  width: 100%;
+}
+
+.work-row.scene-durable-brief .stage {
+  min-height: 0;
 }
 
 .work-row.scene-pulsequeue {
@@ -2279,32 +2291,156 @@ th {
   color: color-mix(in srgb, #c9897a 75%, var(--ink));
 }
 
-.flowline {
+.scene-db {
+  min-height: 0;
+  justify-content: flex-start;
+}
+
+.db-status {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+  min-height: 1.2em;
+  margin: 0 0 1.35rem;
+}
+
+.scene-db[data-phase="eval1"] .db-status,
+.scene-db[data-phase="eval2"] .db-status,
+.scene-db[data-phase="publish"] .db-status {
+  color: var(--ink);
+}
+
+.scene-db[data-phase="gate"] .db-status {
+  color: color-mix(in srgb, var(--accent) 62%, var(--ink));
+}
+
+.db-canvas {
+  width: 100%;
+}
+
+.db-flow {
+  display: block;
   width: 100%;
   height: auto;
-  margin-bottom: 1.4rem;
 }
 
-.flowline path {
+.db-hand {
+  display: none;
+}
+
+.db-flow path {
   fill: none;
-  stroke: rgba(210, 220, 235, 0.22);
+  stroke: rgba(210, 220, 235, 0.18);
   stroke-width: 1;
+  stroke-linejoin: round;
+  stroke-linecap: round;
 }
 
-.flowline text {
+.db-flow text {
   fill: var(--faint);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: 11px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   font-family: "IBM Plex Mono", monospace;
+  opacity: 0.4;
 }
 
-.scene-db[data-phase="gate"] .scene-end {
-  color: var(--accent);
+.db-flow circle[data-dot] {
+  fill: rgba(210, 220, 235, 0.28);
 }
 
-.scene-db[data-phase="publish"] .scene-end {
-  color: var(--ink);
+.db-sig {
+  fill: color-mix(in srgb, var(--accent) 70%, var(--ink));
+  opacity: 0;
+}
+
+.db-sig.on {
+  opacity: 1;
+}
+
+.scene-db[data-on~="a"] [data-wire="a"],
+.scene-db[data-on~="b"] [data-wire="b"],
+.scene-db[data-on~="c"] [data-wire="c"],
+.scene-db[data-on~="join"] [data-wire="join"],
+.scene-db[data-on~="draft"] [data-wire="join"],
+.scene-db[data-on~="eval"] [data-wire="eval"],
+.scene-db[data-on~="revise"] [data-wire="loop"],
+.scene-db[data-on~="eval2"] [data-wire="eval2"],
+.scene-db[data-on~="gate"] [data-wire="gate"],
+.scene-db[data-on~="pub"] [data-wire="pub"] {
+  stroke: rgba(210, 220, 235, 0.42);
+}
+
+.scene-db[data-on~="a"] [data-node="a"],
+.scene-db[data-on~="b"] [data-node="b"],
+.scene-db[data-on~="c"] [data-node="c"],
+.scene-db[data-on~="join"] [data-node="join"],
+.scene-db[data-on~="draft"] [data-node="draft"],
+.scene-db[data-on~="eval"] [data-node="eval"],
+.scene-db[data-on~="revise"] [data-node="revise"],
+.scene-db[data-on~="eval2"] [data-node="eval2"],
+.scene-db[data-on~="gate"] [data-node="gate"],
+.scene-db[data-on~="pub"] [data-node="pub"] {
+  fill: var(--ink);
+  opacity: 1;
+}
+
+.scene-db[data-on~="a"] [data-dot="a"],
+.scene-db[data-on~="b"] [data-dot="b"],
+.scene-db[data-on~="c"] [data-dot="c"],
+.scene-db[data-on~="join"] [data-dot="join"],
+.scene-db[data-on~="draft"] [data-dot="draft"],
+.scene-db[data-on~="eval"] [data-dot="eval"],
+.scene-db[data-on~="revise"] [data-dot="revise"],
+.scene-db[data-on~="eval2"] [data-dot="eval2"],
+.scene-db[data-on~="gate"] [data-dot="gate"],
+.scene-db[data-on~="pub"] [data-dot="pub"] {
+  fill: var(--ink);
+}
+
+.scene-db[data-now~="a"] [data-wire="a"],
+.scene-db[data-now~="b"] [data-wire="b"],
+.scene-db[data-now~="c"] [data-wire="c"],
+.scene-db[data-now="join"] [data-wire="join"],
+.scene-db[data-now="draft"] [data-wire="join"],
+.scene-db[data-now="eval"] [data-wire="eval"],
+.scene-db[data-now="revise"] [data-wire="loop"],
+.scene-db[data-now="eval2"] [data-wire="eval2"],
+.scene-db[data-now="gate"] [data-wire="gate"],
+.scene-db[data-now="pub"] [data-wire="pub"] {
+  stroke: color-mix(in srgb, var(--accent) 46%, rgba(210, 220, 235, 0.35));
+}
+
+.scene-db[data-now~="a"] [data-node="a"],
+.scene-db[data-now~="b"] [data-node="b"],
+.scene-db[data-now~="c"] [data-node="c"],
+.scene-db[data-now="join"] [data-node="join"],
+.scene-db[data-now="draft"] [data-node="draft"],
+.scene-db[data-now="eval"] [data-node="eval"],
+.scene-db[data-now="revise"] [data-node="revise"],
+.scene-db[data-now="eval2"] [data-node="eval2"],
+.scene-db[data-now="gate"] [data-node="gate"],
+.scene-db[data-now="pub"] [data-node="pub"] {
+  fill: color-mix(in srgb, var(--accent) 55%, var(--ink));
+}
+
+.scene-db .db-note {
+  opacity: 0.5;
+  margin-top: 1.55rem;
+}
+
+.scene-db[data-phase="gate"] .db-note,
+.scene-db[data-phase="publish"] .db-note {
+  opacity: 1;
+}
+
+.scene-db .scene-ops button {
+  font-family: "Inter Tight", system-ui, sans-serif;
+  font-size: 0.88rem;
+  letter-spacing: -0.015em;
+  text-transform: none;
 }
 
 .pq {
@@ -2668,13 +2804,16 @@ th {
     gap: 0.7rem;
   }
   .scene-cb .scene-ops,
-  .scene-gl .scene-ops {
+  .scene-gl .scene-ops,
+  .scene-db .scene-ops {
     gap: 0.75rem 1.2rem;
   }
-  .scene-cb .scene-ops button,
-  .scene-gl .scene-ops button,
+  .scene-cb .scene-ops button:not([hidden]),
+  .scene-gl .scene-ops button:not([hidden]),
+  .scene-db .scene-ops button:not([hidden]),
   .work-row.scene-clearbay .xray-toggle,
   .work-row.scene-grantline .xray-toggle,
+  .work-row.scene-durable-brief .xray-toggle,
   .work-row.scene-clearbay .work-links a,
   .work-row.scene-clearbay .work-links button,
   .work-row.scene-grantline .work-links a,
@@ -2682,6 +2821,21 @@ th {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+  }
+  .db-desk {
+    display: none;
+  }
+  .db-hand {
+    display: block;
+  }
+  .db-flow text {
+    font-size: 12px;
+  }
+  .work-row.scene-durable-brief .stage {
+    overflow: visible;
+  }
+  .work-row.scene-durable-brief .work-visual.is-xray .stage {
+    overflow: hidden;
   }
 }
 
@@ -2699,7 +2853,8 @@ th {
     min-height: 16rem;
   }
   .work-row.scene-clearbay .stage,
-  .work-row.scene-grantline .stage {
+  .work-row.scene-grantline .stage,
+  .work-row.scene-durable-brief .stage {
     min-height: 0;
   }
   .scene-cb .scene-hero {

@@ -29,8 +29,8 @@ function clearbay(): string {
       </div>
       <div class="scene-ops">
         <button type="button" data-act="retry">Run request</button>
-        <button type="button" class="text" data-act="spoof" hidden>Tenant spoof</button>
-        <button type="button" class="text" data-act="retry-mode" hidden>Idempotency</button>
+        <button type="button" class="text" data-act="spoof" hidden>Tenant spoof →</button>
+        <button type="button" class="text" data-act="reset" hidden>Reset</button>
       </div>
     </div>`;
 }
@@ -60,23 +60,82 @@ function grantline(): string {
 
 function durable(): string {
   return `
-    <div class="scene scene-db" data-scene="durable">
-      <svg class="flowline" viewBox="0 0 760 140" role="img" aria-label="Parallel research joining into draft, evaluate, human gate, publish">
-        <path d="M 40 20 H 180 V 70 H 300"/>
-        <path d="M 40 70 H 300"/>
-        <path d="M 40 120 H 180 V 70"/>
-        <path d="M 300 70 H 720"/>
-        <text x="40" y="16">Research A</text>
-        <text x="40" y="66">Research B</text>
-        <text x="40" y="116">Research C</text>
-        <text x="300" y="62">Draft</text>
-        <text x="430" y="62">Evaluate</text>
-        <text x="560" y="62">Human gate</text>
-        <text x="690" y="62">Publish</text>
-      </svg>
-      <p class="scene-end" data-log>WAITING FOR HUMAN</p>
-      <p class="scene-note">The tab can close. The workflow doesn't.</p>
-      <button type="button" data-act="approve" disabled>Approve</button>
+    <div class="scene scene-db" data-scene="durable" data-phase="idle" data-on="" data-now="">
+      <p class="db-status" data-log aria-live="polite">READY</p>
+      <div class="db-canvas">
+        <svg class="db-flow db-desk" viewBox="0 0 1100 300" aria-hidden="true">
+          <path data-wire="a" d="M 148 46 H 248 L 300 150"/>
+          <path data-wire="b" d="M 148 150 H 300"/>
+          <path data-wire="c" d="M 148 254 H 248 L 300 150"/>
+          <path data-wire="join" d="M 300 150 H 400"/>
+          <path data-wire="eval" d="M 400 150 H 590"/>
+          <path data-wire="loop" d="M 610 150 V 246 H 548 V 150 H 610"/>
+          <path data-wire="gate" d="M 610 150 H 790"/>
+          <path data-wire="pub" d="M 790 150 H 980"/>
+          <circle data-dot="a" cx="148" cy="46" r="2.4"/>
+          <circle data-dot="b" cx="148" cy="150" r="2.4"/>
+          <circle data-dot="c" cx="148" cy="254" r="2.4"/>
+          <circle data-dot="join" cx="300" cy="150" r="2.4"/>
+          <circle data-dot="draft" cx="400" cy="150" r="2.4"/>
+          <circle data-dot="eval" cx="590" cy="150" r="2.4"/>
+          <circle data-dot="revise" cx="590" cy="246" r="2.4"/>
+          <circle data-dot="gate" cx="790" cy="150" r="2.4"/>
+          <circle data-dot="pub" cx="980" cy="150" r="2.4"/>
+          <text data-node="a" x="24" y="50">Research A</text>
+          <text data-node="b" x="24" y="154">Research B</text>
+          <text data-node="c" x="24" y="258">Research C</text>
+          <text data-node="draft" x="400" y="136" text-anchor="middle">Draft</text>
+          <text data-node="eval" x="590" y="136" text-anchor="middle">Evaluate</text>
+          <text data-node="revise" x="590" y="272" text-anchor="middle">Revise</text>
+          <text data-node="gate" x="790" y="136" text-anchor="middle">Human gate</text>
+          <text data-node="pub" x="980" y="136" text-anchor="middle">Publish</text>
+          <circle class="db-sig" data-sig="a" data-x="148" data-y="46" r="3.4" cx="148" cy="46"/>
+          <circle class="db-sig" data-sig="b" data-x="148" data-y="150" r="3.4" cx="148" cy="150"/>
+          <circle class="db-sig" data-sig="c" data-x="148" data-y="254" r="3.4" cx="148" cy="254"/>
+          <circle class="db-sig" data-sig="m" data-x="300" data-y="150" r="3.4" cx="300" cy="150"/>
+        </svg>
+        <svg class="db-flow db-hand" viewBox="0 0 360 680" aria-hidden="true">
+          <path data-wire="a" d="M 216 40 V 188"/>
+          <path data-wire="b" d="M 216 96 V 188"/>
+          <path data-wire="c" d="M 216 152 V 188"/>
+          <path data-wire="join" d="M 216 188 V 250"/>
+          <path data-wire="eval" d="M 216 250 V 320"/>
+          <path data-wire="loop" d="M 216 320 C 288 320 288 400 216 400"/>
+          <path data-wire="eval2" d="M 216 400 V 480"/>
+          <path data-wire="gate" d="M 216 480 V 560"/>
+          <path data-wire="pub" d="M 216 560 V 640"/>
+          <circle data-dot="a" cx="216" cy="40" r="2.4"/>
+          <circle data-dot="b" cx="216" cy="96" r="2.4"/>
+          <circle data-dot="c" cx="216" cy="152" r="2.4"/>
+          <circle data-dot="join" cx="216" cy="188" r="2.4"/>
+          <circle data-dot="draft" cx="216" cy="250" r="2.4"/>
+          <circle data-dot="eval" cx="216" cy="320" r="2.4"/>
+          <circle data-dot="revise" cx="216" cy="400" r="2.4"/>
+          <circle data-dot="eval2" cx="216" cy="480" r="2.4"/>
+          <circle data-dot="gate" cx="216" cy="560" r="2.4"/>
+          <circle data-dot="pub" cx="216" cy="640" r="2.4"/>
+          <text data-node="a" x="24" y="44">Research A</text>
+          <text data-node="b" x="24" y="100">Research B</text>
+          <text data-node="c" x="24" y="156">Research C</text>
+          <text data-node="join" x="24" y="192">Join</text>
+          <text data-node="draft" x="24" y="254">Draft</text>
+          <text data-node="eval" x="24" y="324">Evaluate</text>
+          <text data-node="revise" x="24" y="404">Revise</text>
+          <text data-node="eval2" x="24" y="484">Evaluate</text>
+          <text data-node="gate" x="24" y="564">Human gate</text>
+          <text data-node="pub" x="24" y="644">Publish</text>
+          <circle class="db-sig" data-sig="a" data-x="216" data-y="40" r="3.4" cx="216" cy="40"/>
+          <circle class="db-sig" data-sig="b" data-x="216" data-y="96" r="3.4" cx="216" cy="96"/>
+          <circle class="db-sig" data-sig="c" data-x="216" data-y="152" r="3.4" cx="216" cy="152"/>
+          <circle class="db-sig" data-sig="m" data-x="216" data-y="188" r="3.4" cx="216" cy="188"/>
+        </svg>
+      </div>
+      <p class="scene-note db-note">The tab can close. The workflow doesn't.</p>
+      <div class="scene-ops">
+        <button type="button" data-act="run">Run workflow</button>
+        <button type="button" data-act="approve" hidden>Approve</button>
+        <button type="button" class="text" data-act="replay" hidden>Replay</button>
+      </div>
     </div>`;
 }
 
@@ -126,7 +185,7 @@ function bindClearbay(el: HTMLElement, reduce: boolean) {
   const inv = el.querySelector("[data-inv]");
   const post2 = el.querySelector("[data-post='2']");
   const spoofBtn = el.querySelector<HTMLButtonElement>("[data-act='spoof']");
-  const backBtn = el.querySelector<HTMLButtonElement>("[data-act='retry-mode']");
+  const resetBtn = el.querySelector<HTMLButtonElement>("[data-act='reset']");
   const retryBtn = el.querySelector<HTMLButtonElement>("[data-act='retry']");
   const wait = (ms: number) => new Promise((r) => setTimeout(r, reduce ? 0 : ms));
 
@@ -142,11 +201,11 @@ function bindClearbay(el: HTMLElement, reduce: boolean) {
     if (end) end.textContent = replayed ? "ONE INVOICE." : "";
     el.dataset.step = replayed ? "replay" : created ? "create" : "idle";
     if (retryBtn) {
-      retryBtn.hidden = false;
+      retryBtn.hidden = replayed;
       retryBtn.textContent = created ? "Retry same request" : "Run request";
     }
     if (spoofBtn) spoofBtn.hidden = !replayed;
-    if (backBtn) backBtn.hidden = true;
+    if (resetBtn) resetBtn.hidden = !replayed;
   };
 
   retryBtn?.addEventListener("click", async () => {
@@ -182,9 +241,14 @@ function bindClearbay(el: HTMLElement, reduce: boolean) {
     if (end) end.textContent = "X-Tenant-Id: globex never wins.";
     if (retryBtn) retryBtn.hidden = true;
     if (spoofBtn) spoofBtn.hidden = true;
-    if (backBtn) backBtn.hidden = false;
+    if (resetBtn) resetBtn.hidden = false;
   });
-  backBtn?.addEventListener("click", paintRetry);
+  resetBtn?.addEventListener("click", () => {
+    if (busy) return;
+    created = false;
+    replayed = false;
+    paintRetry();
+  });
 }
 
 function bindGrantline(el: HTMLElement, reduce: boolean) {
@@ -195,6 +259,7 @@ function bindGrantline(el: HTMLElement, reduce: boolean) {
   const steps = [...el.querySelectorAll<HTMLElement>(".vchain [data-step]")];
   let left = 299;
   let playing = false;
+  let ticking = false;
   const pace = reduce ? 0 : 300;
   const tick = () => {
     if (left <= 0) {
@@ -204,7 +269,20 @@ function bindGrantline(el: HTMLElement, reduce: boolean) {
     left -= 1;
     if (ttl) ttl.textContent = `${String(Math.floor(left / 60)).padStart(2, "0")}:${String(left % 60).padStart(2, "0")}`;
   };
-  window.setInterval(tick, 1000);
+  const startTtl = () => {
+    if (ticking) return;
+    ticking = true;
+    window.setInterval(tick, 1000);
+  };
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((e) => e.intersectionRatio >= 0.45)) return;
+      io.disconnect();
+      startTtl();
+    },
+    { threshold: [0, 0.4, 0.45, 0.5] },
+  );
+  io.observe(el);
   const place = (n: number, instant = false) => {
     if (!signal || !box) return;
     const step = steps[Math.max(n, 0)];
@@ -296,28 +374,149 @@ function bindGrantline(el: HTMLElement, reduce: boolean) {
   });
 }
 
+type DbPhase = "idle" | "research" | "join" | "draft" | "eval1" | "revise" | "eval2" | "gate" | "publish";
+
 function bindDurable(el: HTMLElement, reduce: boolean) {
   const log = el.querySelector("[data-log]");
-  const btn = el.querySelector<HTMLButtonElement>("[data-act='approve']");
-  const io = new IntersectionObserver(
-    (entries) => {
-      if (!entries.some((e) => e.isIntersecting)) return;
-      io.disconnect();
-      el.dataset.phase = "run";
-      window.setTimeout(() => {
-        el.dataset.phase = "gate";
-        if (log) log.textContent = "WAITING FOR HUMAN";
-        if (btn) btn.disabled = false;
-      }, reduce ? 0 : 2400);
-    },
-    { threshold: 0.45 },
-  );
-  io.observe(el);
-  btn?.addEventListener("click", () => {
-    el.dataset.phase = "publish";
-    if (log) log.textContent = "PUBLISH";
-    btn.disabled = true;
+  const runBtn = el.querySelector<HTMLButtonElement>("[data-act='run']");
+  const approveBtn = el.querySelector<HTMLButtonElement>("[data-act='approve']");
+  const replayBtn = el.querySelector<HTMLButtonElement>("[data-act='replay']");
+  let gen = 0;
+  const hold = (ms: number) => new Promise((r) => setTimeout(r, reduce ? 90 : ms));
+
+  const canvas = () => {
+    const desk = el.querySelector<SVGSVGElement>(".db-desk");
+    if (desk && getComputedStyle(desk).display !== "none") return desk;
+    return el.querySelector<SVGSVGElement>(".db-hand");
+  };
+
+  const park = () => {
+    el.querySelectorAll<SVGCircleElement>("[data-sig]").forEach((sig) => {
+      sig.classList.remove("on");
+      sig.setAttribute("cx", sig.dataset.x ?? "0");
+      sig.setAttribute("cy", sig.dataset.y ?? "0");
+    });
+  };
+
+  const travel = (name: string, wire: string, ms: number, id: number) => {
+    const root = canvas();
+    const token = root?.querySelector<SVGCircleElement>(`[data-sig="${name}"]`);
+    const path = root?.querySelector<SVGPathElement>(`[data-wire="${wire}"]`);
+    if (!token || !path) return Promise.resolve();
+    token.classList.add("on");
+    const len = path.getTotalLength();
+    const end = path.getPointAtLength(len);
+    if (reduce) {
+      token.setAttribute("cx", String(end.x));
+      token.setAttribute("cy", String(end.y));
+      return Promise.resolve();
+    }
+    const t0 = performance.now();
+    return new Promise<void>((resolve) => {
+      const step = (now: number) => {
+        if (id !== gen) {
+          resolve();
+          return;
+        }
+        const t = Math.min(1, (now - t0) / ms);
+        const p = path.getPointAtLength(len * t);
+        token.setAttribute("cx", String(p.x));
+        token.setAttribute("cy", String(p.y));
+        if (t < 1) requestAnimationFrame(step);
+        else resolve();
+      };
+      requestAnimationFrame(step);
+    });
+  };
+
+  const paint = (phase: DbPhase, on: string, now: string, status: string) => {
+    el.dataset.phase = phase;
+    el.dataset.on = on;
+    el.dataset.now = now;
+    if (log) log.textContent = status;
+    const idle = phase === "idle";
+    const gate = phase === "gate";
+    const done = phase === "publish";
+    if (runBtn) runBtn.hidden = !idle;
+    if (approveBtn) approveBtn.hidden = !gate;
+    if (replayBtn) replayBtn.hidden = !done;
+    el.setAttribute("aria-busy", idle || gate || done ? "false" : "true");
+  };
+
+  const idle = () => {
+    park();
+    paint("idle", "", "", "READY");
+  };
+
+  const alive = (id: number) => id === gen;
+
+  runBtn?.addEventListener("click", async () => {
+    if (el.dataset.phase !== "idle") return;
+    const id = ++gen;
+    paint("research", "", "a b c", "RESEARCH");
+    await Promise.all([travel("a", "a", 700, id), travel("b", "b", 700, id), travel("c", "c", 700, id)]);
+    if (!alive(id)) return;
+    paint("research", "a b c", "a b c", "RESEARCH");
+    await hold(180);
+    if (!alive(id)) return;
+    el.querySelectorAll<SVGCircleElement>('[data-sig="a"], [data-sig="b"], [data-sig="c"]').forEach((s) => {
+      s.classList.remove("on");
+      s.setAttribute("cx", s.dataset.x ?? "0");
+      s.setAttribute("cy", s.dataset.y ?? "0");
+    });
+    paint("join", "a b c join", "join", "RESEARCH");
+    await travel("m", "join", 500, id);
+    if (!alive(id)) return;
+    await hold(180);
+    if (!alive(id)) return;
+    paint("draft", "a b c join draft", "draft", "DRAFT");
+    await hold(420);
+    if (!alive(id)) return;
+    await travel("m", "eval", 600, id);
+    if (!alive(id)) return;
+    paint("eval1", "a b c join draft eval", "eval", "NEEDS REVISION");
+    await hold(520);
+    if (!alive(id)) return;
+    paint("revise", "a b c join draft eval revise", "revise", "REVISE");
+    await travel("m", "loop", 900, id);
+    if (!alive(id)) return;
+    await hold(200);
+    if (!alive(id)) return;
+    const hand = canvas()?.classList.contains("db-hand");
+    if (hand) {
+      paint("eval2", "a b c join draft eval revise eval2", "eval2", "PASS");
+      await travel("m", "eval2", 500, id);
+    } else {
+      paint("eval2", "a b c join draft eval revise", "eval", "PASS");
+      await hold(420);
+    }
+    if (!alive(id)) return;
+    await hold(280);
+    if (!alive(id)) return;
+    await travel("m", "gate", 650, id);
+    if (!alive(id)) return;
+    paint("gate", "a b c join draft eval revise eval2 gate", "gate", "WAITING FOR HUMAN");
+    el.querySelectorAll<SVGCircleElement>('[data-sig="m"]').forEach((s) => s.classList.remove("on"));
   });
+
+  approveBtn?.addEventListener("click", async () => {
+    if (el.dataset.phase !== "gate") return;
+    const id = ++gen;
+    if (approveBtn) approveBtn.hidden = true;
+    const token = canvas()?.querySelector<SVGCircleElement>('[data-sig="m"]');
+    token?.classList.add("on");
+    await travel("m", "pub", 700, id);
+    if (!alive(id)) return;
+    paint("publish", "a b c join draft eval revise eval2 gate pub", "pub", "PUBLISHED");
+    el.querySelectorAll<SVGCircleElement>('[data-sig="m"]').forEach((s) => s.classList.remove("on"));
+  });
+
+  replayBtn?.addEventListener("click", () => {
+    gen += 1;
+    idle();
+  });
+
+  idle();
 }
 
 function bindPulse(el: HTMLElement, reduce: boolean) {

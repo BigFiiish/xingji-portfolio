@@ -226,7 +226,7 @@ export const projects: Project[] = [
     repo: "https://github.com/BigFiiish/durable-brief",
     accent: "#8F7BFF",
     preview: "durable",
-    xray: ["Next.js", "Workflow", "Parallel Research", "Draft", "Eval Loop", "Human Hook"],
+    xray: ["Next.js", "Workflow", "Parallel Research", "Draft", "Evaluator / Revision Loop", "Human Hook", "Publish"],
     caseStudy: {
       problem:
         "Most AI demos die when the tab closes. A briefing desk that publishes without a human, or forgets the run, is not a workflow — it is a prompt.",
