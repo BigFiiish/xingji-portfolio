@@ -1,4 +1,5 @@
 import { person, projects } from "./content";
+import { openCase } from "./panel";
 
 type Item = { group: string; label: string; run: () => void; keywords: string };
 
@@ -32,7 +33,8 @@ export function initCommand() {
   input.setAttribute("aria-controls", "cmd-list");
 
   const go = (sel: string) => {
-    document.querySelector(sel)?.scrollIntoView({ behavior: "smooth" });
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.querySelector(sel)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
   };
 
   const items: Item[] = [
@@ -45,7 +47,8 @@ export function initCommand() {
       label: `Open ${p.name}`,
       keywords: `${p.name} ${p.slug} ${p.stack.join(" ")} case study`,
       run: () => {
-        location.hash = `#project/${p.slug}`;
+        if (p.featured) openCase(p.slug, true);
+        else go(`#${p.slug}`);
       },
     })),
     {
@@ -130,8 +133,9 @@ export function initCommand() {
     const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(".cmd-item");
     if (!btn) return;
     const it = shown[Number(btn.dataset.i)];
-    it?.run();
-    if (it && it.label !== "> system") close();
+    if (!it) return;
+    if (it.label !== "> system") close();
+    it.run();
   });
 
   window.addEventListener("keydown", (e) => {
@@ -156,8 +160,9 @@ export function initCommand() {
     if (e.key === "Enter") {
       e.preventDefault();
       const it = shown[active];
-      it?.run();
-      if (it && it.label !== "> system") close();
+      if (!it) return;
+      if (it.label !== "> system") close();
+      it.run();
     }
   });
 }

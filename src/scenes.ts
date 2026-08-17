@@ -336,10 +336,18 @@ function bindGrantline(el: HTMLElement, reduce: boolean) {
     left -= 1;
     if (ttl) ttl.textContent = `${String(Math.floor(left / 60)).padStart(2, "0")}:${String(left % 60).padStart(2, "0")}`;
   };
+  let ttlTimer = 0;
   const startTtl = () => {
     if (ticking) return;
     ticking = true;
-    window.setInterval(tick, 1000);
+    ttlTimer = window.setInterval(() => {
+      tick();
+      if (left <= 0) {
+        window.clearInterval(ttlTimer);
+        ttlTimer = 0;
+        ticking = false;
+      }
+    }, 1000);
   };
   const io = new IntersectionObserver(
     (entries) => {

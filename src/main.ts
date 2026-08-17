@@ -40,7 +40,7 @@ if (fails) {
 }
 
 const principles = document.querySelector<HTMLElement>("#principles");
-if (principles) {
+if (principles && !principles.children.length) {
   renderPrinciples(principles);
   principles.querySelectorAll(".reveal").forEach((n) => io.observe(n));
 }

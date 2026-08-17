@@ -197,7 +197,8 @@ button {
   color: var(--faint);
 }
 
-main {
+main,
+.contact {
   position: relative;
   z-index: 3;
 }
@@ -576,7 +577,8 @@ summary:focus-visible,
   opacity: 1;
 }
 
-section {
+section,
+.contact {
   padding: 9rem var(--pad);
 }
 
@@ -606,6 +608,28 @@ section {
 .work-list {
   display: grid;
   gap: 11rem;
+}
+
+html:not(.js) .work-list {
+  gap: 4.5rem;
+}
+
+html:not(.js) .work-row,
+html:not(.js) .work-row:nth-child(even) {
+  grid-template-columns: 1fr;
+  min-height: 0;
+}
+
+html:not(.js) .work-row:nth-child(even) .work-copy {
+  order: 0;
+}
+
+html:not(.js) .more-preview:empty {
+  display: none;
+}
+
+html:not(.js) .more-row:not(:has(figure)) {
+  grid-template-columns: 1fr;
 }
 
 .work-row {
@@ -1313,6 +1337,7 @@ th {
 .more-label {
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.68rem;
+  font-weight: 400;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--faint);
@@ -3112,6 +3137,36 @@ html:has(#case[open]) {
   clip: rect(0 0 0 0);
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.fail-static-list {
+  list-style: none;
+  display: grid;
+  gap: 0.85rem;
+  max-width: 42rem;
+}
+
+.fail-static-list li {
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: 1.02rem;
+}
+
+.fail-static-list b {
+  color: var(--ink);
+  font-weight: 500;
+}
+
 .play-stage .mono,
 .play-stage .mute,
 .play-stage .gate,
@@ -3218,17 +3273,21 @@ html:has(#case[open]) {
   min-width: 0;
 }
 
-.more-row strong {
+.more-row strong,
+.more-copy h4 {
+  margin: 0;
   font-size: 1rem;
   font-weight: 500;
   letter-spacing: -0.02em;
 }
 
-.more-row[data-more="dockline"] strong {
+.more-row[data-more="dockline"] strong,
+.more-row[data-more="dockline"] .more-copy h4 {
   font-size: 1.08rem;
 }
 
-.more-row:is(:hover, :focus-within) strong {
+.more-row:is(:hover, :focus-within) strong,
+.more-row:is(:hover, :focus-within) .more-copy h4 {
   color: var(--ink);
 }
 
@@ -3245,7 +3304,7 @@ html:has(#case[open]) {
   grid-row: 1 / 3;
   min-width: 0;
   overflow: visible;
-  opacity: 0.4;
+  opacity: 0.5;
   transition: opacity 0.4s var(--ease);
 }
 
@@ -3686,7 +3745,8 @@ html:has(#case[open]) {
   .nav nav {
     display: none;
   }
-  section {
+  section,
+  .contact {
     padding: 4.5rem var(--pad);
   }
   .ui-split {
@@ -3713,6 +3773,9 @@ html:has(#case[open]) {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   * {
     animation: none !important;
     transition: none !important;

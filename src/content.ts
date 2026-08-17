@@ -14,6 +14,7 @@ export const person = {
   github: "https://github.com/BigFiiish",
   linkedin: "https://www.linkedin.com/in/xingji-yan",
   resume: "/Xingji-Yan-Resume.pdf",
+  site: "https://www.xingjiyan.com/",
   aboutLede:
     "I ship the unglamorous systems that keep operations alive — then I put an agent on top of them, with guardrails, so people can talk to the warehouse instead of clicking through twelve screens.",
   aboutBody:

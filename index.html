@@ -6,15 +6,23 @@
     <title>Xingji Yan — Software Engineer · Carnegie Mellon ECE</title>
     <meta
       name="description"
-      content="Xingji Yan, M.S. ECE Carnegie Mellon. Full-stack software engineer. Clearbay, Grantline, Durable Brief, PulseQueue — systems that stay correct under retries."
+      content="Xingji Yan, M.S. ECE Carnegie Mellon. Software engineer building reliable systems, AI workflows, and developer infrastructure."
     />
+    <link rel="canonical" href="https://www.xingjiyan.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Xingji Yan" />
     <meta property="og:title" content="Xingji Yan — Software Engineer · Carnegie Mellon" />
     <meta
       property="og:description"
       content="I build systems people actually use. Carnegie Mellon ECE. Selected work: Clearbay, Grantline, Durable Brief, PulseQueue."
     />
-    <link rel="canonical" href="https://www.xingjiyan.com/" />
     <meta property="og:url" content="https://www.xingjiyan.com/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Xingji Yan — Software Engineer · Carnegie Mellon" />
+    <meta
+      name="twitter:description"
+      content="Reliable systems, AI workflows, and developer infrastructure. M.S. ECE, Carnegie Mellon."
+    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,19 +30,8 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@1&family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap"
       rel="stylesheet"
     />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Xingji Yan",
-        "jobTitle": "Software Engineer",
-        "alumniOf": { "@type": "CollegeOrUniversity", "name": "Carnegie Mellon University" },
-        "url": "https://www.xingjiyan.com",
-        "sameAs": ["https://github.com/BigFiiish", "https://www.linkedin.com/in/xingji-yan"],
-        "knowsAbout": ["Clearbay", "Grantline", "Durable Brief", "PulseQueue", "Dockline", "SketchSync", "ResuMatch"]
-      }
-    </script>
-    <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+    <script type="application/ld+json"><!--inject:jsonld--></script>
+    <noscript><style>.loader{display:none!important}.reveal{opacity:1!important;transform:none!important}</style></noscript>
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
@@ -42,7 +39,7 @@
 
     <header class="nav">
       <a class="nav-mark" href="#top">XY</a>
-      <nav>
+      <nav aria-label="Primary">
         <a href="#work">Work</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
@@ -73,7 +70,7 @@
           <svg id="systems-map" class="systems-map" role="img" aria-label="Systems topology: Clearbay, Grantline, Durable Brief, Dockline, PulseQueue, SketchSync"></svg>
           <p class="map-readout" id="map-readout"></p>
         </div>
-        <ul class="impact-strip" aria-label="Impact">
+        <ul class="impact-strip" aria-label="Professional impact">
           <li class="reveal"><b>20+</b><span>Production customer organizations</span></li>
           <li class="reveal"><b>10s → &lt;1s</b><span>Search latency</span></li>
           <li class="reveal"><b>~95%</b><span>Fewer DB round trips</span></li>
@@ -86,12 +83,17 @@
           <span class="idx">01</span>
           <h2>Selected work</h2>
         </div>
-        <div class="work-list" id="work-list"></div>
-        <div class="more" id="more"></div>
+        <div class="work-list" id="work-list"><!--inject:work--></div>
+        <div class="more" id="more"><!--inject:more--></div>
       </section>
 
-      <section class="failures" id="failures" style="--accent:#c4a882">
-        <div class="fail-grid" id="fail-grid"></div>
+      <section class="failures" id="failures" style="--accent:#c4a882" aria-labelledby="fail-heading">
+        <h2 class="visually-hidden" id="fail-heading">Failure modes</h2>
+        <div class="play-pause">
+          <p class="pause-a reveal">Happy paths are easy.</p>
+          <p class="pause-b reveal delay-1">I design the other paths.</p>
+        </div>
+        <div class="fail-grid" id="fail-grid"><!--inject:fail--></div>
       </section>
 
       <section class="about" id="about">
@@ -104,26 +106,26 @@
           put an agent on top of them, with guardrails, so people can talk to
           the warehouse instead of clicking through twelve screens.
         </p>
-        <ul class="principles" id="principles"></ul>
+        <ul class="principles" id="principles"><!--inject:principles--></ul>
         <p class="stack-line reveal">Java/Spring · React/TypeScript · AI systems · M.S. ECE · Carnegie Mellon</p>
       </section>
-
-      <section class="contact" id="contact">
-        <div class="section-head reveal">
-          <span class="idx">04</span>
-          <h2>Contact</h2>
-        </div>
-        <p class="contact-line reveal">Let's build something useful.</p>
-        <a class="contact-mail reveal delay-1" id="mail" href="mailto:yanxingji7@gmail.com">yanxingji7@gmail.com</a>
-        <div class="contact-row reveal delay-2">
-          <a href="https://github.com/BigFiiish" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://www.linkedin.com/in/xingji-yan" target="_blank" rel="noreferrer">LinkedIn</a>
-          <a href="mailto:yanxingji7@gmail.com">Email</a>
-        </div>
-        <p class="resolve-line reveal">Build → Measure → Improve.</p>
-        <p class="footer-note">© 2026 Xingji Yan · M.S. ECE, Carnegie Mellon University</p>
-      </section>
     </main>
+
+    <footer class="contact" id="contact">
+      <div class="section-head reveal">
+        <span class="idx">04</span>
+        <h2>Contact</h2>
+      </div>
+      <p class="contact-line reveal">Let's build something useful.</p>
+      <a class="contact-mail reveal delay-1" id="mail" href="mailto:yanxingji7@gmail.com">yanxingji7@gmail.com</a>
+      <div class="contact-row reveal delay-2">
+        <a href="https://github.com/BigFiiish" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/xingji-yan" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="mailto:yanxingji7@gmail.com">Email</a>
+      </div>
+      <p class="resolve-line reveal">Build → Measure → Improve.</p>
+      <p class="footer-note">© 2026 Xingji Yan · M.S. ECE, Carnegie Mellon University</p>
+    </footer>
 
     <dialog class="case" id="case" aria-modal="true">
       <div class="case-chrome">
@@ -134,22 +136,10 @@
     </dialog>
 
     <dialog class="cmd" id="cmd" aria-modal="true" aria-label="Command palette">
-      <input id="cmd-input" type="search" placeholder="Go to, open, copy…" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="cmd-list" />
+      <input id="cmd-input" type="search" placeholder="Go to, open, copy…" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="cmd-list" aria-autocomplete="list" />
       <div id="cmd-list" role="listbox"></div>
     </dialog>
 
-    <noscript>
-      <section>
-        <h2>Selected work</h2>
-        <article><h3>Clearbay</h3><p>Financial workflows that stay correct under retries.</p></article>
-        <article><h3>Grantline</h3><p>Identity from a signed grant, never a header.</p></article>
-        <article><h3>Durable Brief</h3><p>AI workflows that can wait.</p></article>
-        <article><h3>PulseQueue</h3><p>Retries are easy. Correct retries aren't.</p></article>
-        <article><h3>Dockline</h3><p>Don't ask the model if the model was right.</p></article>
-        <article><h3>SketchSync</h3><p>Realtime whiteboard. Raw WebSockets.</p></article>
-        <article><h3>ResuMatch</h3><p>A match score, not a vibe.</p></article>
-      </section>
-    </noscript>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

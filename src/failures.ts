@@ -54,10 +54,6 @@ export const failDemos: {
 
 export function failSection(): string {
   return `
-    <div class="play-pause">
-      <p class="pause-a reveal">Happy paths are easy.</p>
-      <p class="pause-b reveal delay-1">I design the other paths.</p>
-    </div>
     <div class="play-words" role="tablist" aria-label="Failure simulations">
       ${failDemos
         .map(

@@ -1,4 +1,5 @@
-import { principles, projects, type Project } from "./content";
+import { principles, projects } from "./content";
+import { moreArticle, productFigure, workCopy } from "./markup";
 import { xrayMarkup } from "./mockups";
 import { bindScenes, sceneMarkup, type PulseCtl } from "./scenes";
 import { secondaryPreview } from "./secondary";
@@ -6,50 +7,13 @@ import { secondaryPreview } from "./secondary";
 const featured = () => projects.filter((p) => p.featured);
 const rest = () => projects.filter((p) => !p.featured);
 
-const shorts: Record<string, string> = {
-  dockline: "Agent evaluation without letting the model grade itself.",
-  sketchsync: "Realtime collaboration over a typed WebSocket protocol.",
-  resumatch: "Deterministic resume/JD scoring with an optional grounded LLM layer.",
-};
-
-const shots: Partial<Record<string, { src: string; alt: string; w: number; h: number }>> = {
-  "durable-brief": {
-    src: "/proof/durable-brief.webp",
-    alt: "Durable Brief desk paused on the human approval hook, with research, draft, and evaluator complete",
-    w: 1600,
-    h: 1002,
-  },
-  pulsequeue: {
-    src: "/proof/pulsequeue.webp",
-    alt: "PulseQueue dashboard showing workers, job statuses, retries, dead letters, and live throughput",
-    w: 1600,
-    h: 1002,
-  },
-  sketchsync: {
-    src: "/proof/sketchsync.webp",
-    alt: "SketchSync shared canvas with Ada's live cursor and two connected users",
-    w: 1280,
-    h: 720,
-  },
-};
-
 export function renderWork(root: HTMLElement) {
   root.innerHTML = featured()
-    .map(
-      (p, i) => `
-      <article class="work-row scene-${p.slug}${p.slug === "clearbay" || p.slug === "grantline" || p.slug === "durable-brief" || p.slug === "pulsequeue" ? "" : " reveal"}" id="${p.slug}" data-slug="${p.slug}" style="--accent:${p.accent}">
-        <div class="work-copy">
-          <span class="work-idx">${String(i + 1).padStart(2, "0")}</span>
-          <h3>${p.name}</h3>
-          <p class="work-head">${p.headline}</p>
-          <p class="tags">${p.stack.map((s) => `<span>${s}</span>`).join("")}</p>
-          <p class="work-body">${p.blurb}</p>
-          <p class="work-links">
-            ${p.live ? `<a class="btn" href="${p.live}" target="_blank" rel="noreferrer">Live demo ↗</a>` : ""}
-            <a href="${p.repo}" target="_blank" rel="noreferrer">GitHub ↗</a>
-            <button type="button" data-case="${p.slug}">${p.slug === "clearbay" || p.slug === "grantline" ? "Case study →" : "Case study"}</button>
-          </p>
-        </div>
+    .map((p, i) => {
+      const caseBtn = `<button type="button" data-case="${p.slug}">${p.slug === "clearbay" || p.slug === "grantline" ? "Case study →" : "Case study"}</button>`;
+      return `
+      <article class="work-row scene-${p.slug}" id="${p.slug}" data-slug="${p.slug}" style="--accent:${p.accent}">
+        ${workCopy(p, i, caseBtn)}
         <div class="work-visual">
           <p class="xray-pill">Hold <kbd>⇧</kbd> inspect system</p>
           <button class="xray-toggle" type="button" hidden>View architecture</button>
@@ -58,52 +22,19 @@ export function renderWork(root: HTMLElement) {
             <div class="stage-body product">${sceneMarkup(p)}</div>
             <div class="stage-body xray">${xrayMarkup(p)}</div>
           </div>
-          ${shot(p)}
+          ${productFigure(p)}
         </div>
-      </article>`
-    )
+      </article>`;
+    })
     .join("");
   bindScenes(root);
 }
 
-function shot(p: Project, compact = false): string {
-  const s = shots[p.slug];
-  if (!s) return "";
-  const href = p.live ?? p.repo;
-  const see = p.live
-    ? `<a class="shot-link" href="${p.live}" target="_blank" rel="noreferrer">See the product ↗</a>`
-    : "";
-  return `<figure class="shot${compact ? " shot-compact" : ""}">
-    <p class="shot-k">Product view</p>
-    ${see}
-    <a class="shot-frame" href="${href}" target="_blank" rel="noreferrer">
-      <img src="${s.src}" alt="${s.alt}" width="${s.w}" height="${s.h}" loading="lazy" decoding="async" />
-    </a>
-  </figure>`;
-}
-
 export function renderMore(root: HTMLElement) {
   root.innerHTML =
-    `<p class="more-label">Also</p>` +
+    `<h3 class="more-label">Also</h3>` +
     rest()
-      .map(
-        (p) => `
-      <article class="more-row" id="${p.slug}" data-more="${p.slug}" data-phase="idle">
-        <div class="more-copy">
-          <strong>${p.name}</strong>
-          <span>${shorts[p.slug] ?? p.headline}</span>
-          ${p.slug === "dockline" ? `<p class="more-aside">The model is never the judge.</p>` : ""}
-        </div>
-        <div class="more-preview">${secondaryPreview(p.slug)}${p.slug === "sketchsync" ? shot(p, true) : ""}</div>
-        <div class="more-foot">
-          <em>${p.stack.join(" · ")}</em>
-          <p class="more-links">
-            ${p.live ? `<a href="${p.live}" target="_blank" rel="noreferrer">Live ↗</a>` : ""}
-            <a href="${p.repo}" target="_blank" rel="noreferrer">GitHub ↗</a>
-          </p>
-        </div>
-      </article>`
-      )
+      .map((p) => moreArticle(p, secondaryPreview(p.slug)))
       .join("");
 }
 
