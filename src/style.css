@@ -1291,26 +1291,6 @@ th {
   margin: 1.4rem 0 0.4rem;
 }
 
-.more-row {
-  display: grid;
-  grid-template-columns: 9rem 1fr auto;
-  gap: 1.2rem;
-  align-items: baseline;
-  padding: 1.05rem 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.more-row span {
-  color: var(--muted);
-}
-
-.more-row em {
-  font-style: normal;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.72rem;
-  color: var(--faint);
-}
-
 .lede {
   font-family: "Instrument Serif", serif;
   font-style: italic;
@@ -2956,24 +2936,263 @@ th {
 
 .more-row {
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 1.2rem;
-  align-items: baseline;
-  padding: 1.15rem 0;
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 17rem);
+  column-gap: 2.2rem;
+  row-gap: 0.7rem;
+  align-items: start;
+  padding: 1.45rem 0 1.3rem;
   border-bottom: 1px solid var(--line);
+  transition: opacity 0.35s var(--ease);
+}
+
+.more:has(.more-row:hover) .more-row:not(:hover):not(:focus-within),
+.more:has(.more-row:focus-within) .more-row:not(:hover):not(:focus-within) {
+  opacity: 0.64;
+}
+
+.more-copy {
+  min-width: 0;
+}
+
+.more-row strong {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.more-row[data-more="dockline"] strong {
+  font-size: 1.08rem;
+}
+
+.more-row:is(:hover, :focus-within) strong {
+  color: var(--ink);
 }
 
 .more-row span {
   display: block;
   color: var(--muted);
-  margin-top: 0.25rem;
+  margin-top: 0.3rem;
+  line-height: 1.45;
+  max-width: 36rem;
+}
+
+.more-preview {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  min-width: 0;
+  overflow: visible;
+  opacity: 0.4;
+  transition: opacity 0.4s var(--ease);
+}
+
+.more-row:is(:hover, :focus-within) .more-preview,
+.more-row[data-phase="done"] .more-preview {
+  opacity: 1;
+}
+
+.more-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.more-row[data-more="dockline"] .more-svg {
+  max-width: 14.5rem;
+}
+
+.more-row[data-more="sketchsync"] .more-svg {
+  max-width: 13.5rem;
+  margin-top: 0.2rem;
+}
+
+.more-row[data-more="resumatch"] .more-svg {
+  max-width: 12.5rem;
+}
+
+.more-svg path {
+  fill: none;
+  stroke: rgba(210, 220, 235, 0.18);
+  stroke-width: 1;
+}
+
+.more-svg text {
+  fill: var(--faint);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: "IBM Plex Mono", monospace;
+  opacity: 0.34;
+}
+
+.more-aside {
+  margin-top: 0.55rem;
+  font-family: "Instrument Serif", serif;
+  font-style: italic;
+  font-size: 0.98rem;
+  color: var(--muted);
+  opacity: 0;
+  max-width: 28rem;
+  min-height: 1.2em;
+  transition: opacity 0.35s var(--ease);
+}
+
+.more-row[data-more="dockline"]:is(:hover, :focus-within) .more-aside,
+.more-row[data-more="dockline"][data-phase="done"] .more-aside {
+  opacity: 0.8;
+}
+
+.more-row[data-phase="case"] [data-n="case"],
+.more-row[data-phase="trace"] [data-n="case"],
+.more-row[data-phase="trace"] [data-n="trace"],
+.more-row[data-phase="schema"] [data-n="case"],
+.more-row[data-phase="schema"] [data-n="trace"],
+.more-row[data-phase="schema"] [data-n="schema"],
+.more-row[data-phase="read"] [data-n="case"],
+.more-row[data-phase="read"] [data-n="trace"],
+.more-row[data-phase="read"] [data-n="schema"],
+.more-row[data-phase="read"] [data-n="read"],
+.more-row[data-phase="tenant"] [data-n="case"],
+.more-row[data-phase="tenant"] [data-n="trace"],
+.more-row[data-phase="tenant"] [data-n="schema"],
+.more-row[data-phase="tenant"] [data-n="read"],
+.more-row[data-phase="tenant"] [data-n="tenant"],
+.more-row[data-phase="pass"] [data-n],
+.more-row[data-phase="done"][data-more="dockline"] [data-n] {
+  fill: var(--ink);
+  opacity: 0.92;
+}
+
+.more-row[data-phase="pass"] [data-n="pass"],
+.more-row[data-phase="done"][data-more="dockline"] [data-n="pass"] {
+  opacity: 1;
+}
+
+.ss-stroke {
+  stroke: rgba(247, 246, 241, 0.55);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+  transition: stroke-dashoffset 0.42s var(--ease);
+}
+
+.more-row[data-phase="stroke"] .ss-stroke,
+.more-row[data-phase="b"] .ss-stroke,
+.more-row[data-phase="done"][data-more="sketchsync"] .ss-stroke {
+  stroke-dashoffset: 0;
+}
+
+.ss-cur {
+  transform-box: fill-box;
+  transform-origin: 0 0;
+  transition: transform 0.38s var(--ease);
+}
+
+.more-svg .ss-cur path {
+  fill: var(--ink);
+  stroke: none;
+  opacity: 0.5;
+}
+
+.ss-a {
+  transform: translate(40px, 38px);
+}
+
+.ss-b {
+  transform: translate(168px, 70px);
+}
+
+.more-row[data-phase="a"] .ss-a,
+.more-row[data-phase="stroke"] .ss-a,
+.more-row[data-phase="b"] .ss-a,
+.more-row[data-phase="done"][data-more="sketchsync"] .ss-a {
+  transform: translate(118px, 52px);
+}
+
+.more-row[data-phase="b"] .ss-b,
+.more-row[data-phase="done"][data-more="sketchsync"] .ss-b {
+  transform: translate(126px, 58px);
+}
+
+.more-row[data-phase="a"] .ss-a path,
+.more-row[data-phase="stroke"] .ss-a path,
+.more-row[data-phase="b"] .ss-cur path,
+.more-row[data-phase="done"][data-more="sketchsync"] .ss-cur path {
+  opacity: 0.9;
+}
+
+.more-svg [data-n="a1"],
+.more-svg [data-n="a2"] {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 10px;
+  opacity: 0.22;
+}
+
+.more-svg [data-n="llm"],
+.more-svg [data-n="llm-wire"] {
+  opacity: 0.28;
+}
+
+.more-row[data-phase="jd"] [data-n="jd"],
+.more-row[data-phase="skills"] [data-n="jd"],
+.more-row[data-phase="skills"] [data-n="skills"],
+.more-row[data-phase="alias"] [data-n="jd"],
+.more-row[data-phase="alias"] [data-n="skills"],
+.more-row[data-phase="alias"] [data-n="alias"],
+.more-row[data-phase="alias"] [data-n="a1"],
+.more-row[data-phase="alias"] [data-n="a2"],
+.more-row[data-phase="tfidf"] [data-n="jd"],
+.more-row[data-phase="tfidf"] [data-n="skills"],
+.more-row[data-phase="tfidf"] [data-n="alias"],
+.more-row[data-phase="tfidf"] [data-n="a1"],
+.more-row[data-phase="tfidf"] [data-n="a2"],
+.more-row[data-phase="tfidf"] [data-n="tfidf"],
+.more-row[data-phase="score"] [data-n="jd"],
+.more-row[data-phase="score"] [data-n="skills"],
+.more-row[data-phase="score"] [data-n="alias"],
+.more-row[data-phase="score"] [data-n="a1"],
+.more-row[data-phase="score"] [data-n="a2"],
+.more-row[data-phase="score"] [data-n="tfidf"],
+.more-row[data-phase="score"] [data-n="score"],
+.more-row[data-phase="done"][data-more="resumatch"] [data-n="jd"],
+.more-row[data-phase="done"][data-more="resumatch"] [data-n="skills"],
+.more-row[data-phase="done"][data-more="resumatch"] [data-n="alias"],
+.more-row[data-phase="done"][data-more="resumatch"] [data-n="a1"],
+.more-row[data-phase="done"][data-more="resumatch"] [data-n="a2"],
+.more-row[data-phase="done"][data-more="resumatch"] [data-n="tfidf"],
+.more-row[data-phase="done"][data-more="resumatch"] [data-n="score"] {
+  fill: var(--ink);
+  opacity: 0.9;
+}
+
+.more-foot {
+  grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.6rem 1.2rem;
+}
+
+.more-row em {
+  font-style: normal;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--faint);
 }
 
 .more-links {
   display: flex;
-  gap: 0.85rem;
+  gap: 0.95rem;
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: 0.82rem;
+}
+
+.more-links a:hover,
+.more-links a:focus-visible {
+  color: var(--ink);
 }
 
 .case-list.mono {
@@ -3065,9 +3284,31 @@ th {
     border-left: 0;
     padding-left: 0;
   }
-  .jobs li,
-  .more-row {
+  .jobs li {
     grid-template-columns: 1fr auto;
+  }
+  .more-row {
+    grid-template-columns: 1fr;
+    padding: 1.25rem 0 1.15rem;
+  }
+  .more-preview {
+    grid-column: 1;
+    grid-row: auto;
+    opacity: 0.78;
+    max-width: 18rem;
+  }
+  .more-row[data-phase="done"] .more-preview {
+    opacity: 0.8;
+  }
+  .more-foot {
+    grid-column: 1;
+  }
+  .more:has(.more-row:hover) .more-row:not(:hover):not(:focus-within),
+  .more:has(.more-row:focus-within) .more-row:not(:hover):not(:focus-within) {
+    opacity: 1;
+  }
+  .more-aside {
+    opacity: 0.75;
   }
   .jobs p {
     grid-column: 1 / -1;

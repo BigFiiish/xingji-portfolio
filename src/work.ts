@@ -2,6 +2,7 @@ import { principles, projects, type Project } from "./content";
 import { caseFails } from "./failures";
 import { xrayMarkup } from "./mockups";
 import { bindScenes, sceneMarkup, type PulseCtl } from "./scenes";
+import { secondaryPreview } from "./secondary";
 
 const featured = () => projects.filter((p) => p.featured);
 const rest = () => projects.filter((p) => !p.featured);
@@ -62,16 +63,20 @@ export function renderMore(root: HTMLElement) {
     rest()
       .map(
         (p) => `
-      <article class="more-row" id="${p.slug}">
-        <div>
+      <article class="more-row" id="${p.slug}" data-more="${p.slug}" data-phase="idle">
+        <div class="more-copy">
           <strong>${p.name}</strong>
           <span>${shorts[p.slug] ?? p.headline}</span>
+          ${p.slug === "dockline" ? `<p class="more-aside">The model is never the judge.</p>` : ""}
         </div>
-        <em>${p.stack.join(" · ")}</em>
-        <p class="more-links">
-          ${p.live ? `<a href="${p.live}" target="_blank" rel="noreferrer">Live</a>` : ""}
-          <a href="${p.repo}" target="_blank" rel="noreferrer">GitHub</a>
-        </p>
+        <div class="more-preview">${secondaryPreview(p.slug)}</div>
+        <div class="more-foot">
+          <em>${p.stack.join(" · ")}</em>
+          <p class="more-links">
+            ${p.live ? `<a href="${p.live}" target="_blank" rel="noreferrer">Live ↗</a>` : ""}
+            <a href="${p.repo}" target="_blank" rel="noreferrer">GitHub ↗</a>
+          </p>
+        </div>
       </article>`
       )
       .join("");

@@ -4,6 +4,7 @@ import { initCommand } from "./command";
 import { bindFailures, failSection } from "./failures";
 import { initMap } from "./map";
 import { initPanel } from "./panel";
+import { bindSecondary } from "./secondary";
 import { bindXray, renderMore, renderPrinciples, renderWork } from "./work";
 
 document.documentElement.classList.add("js");
@@ -26,7 +27,10 @@ if (work) {
   bindXray(work);
   work.querySelectorAll(".reveal").forEach((n) => io.observe(n));
 }
-if (more) renderMore(more);
+if (more) {
+  renderMore(more);
+  bindSecondary(more);
+}
 
 const fails = document.querySelector<HTMLElement>("#fail-grid");
 if (fails) {
