@@ -286,7 +286,7 @@ export const projects: Project[] = [
     repo: "https://github.com/BigFiiish/pulsequeue",
     accent: "#E0A657",
     preview: "pulse",
-    xray: ["React Dashboard", "SSE", "Express", "Worker Pool", "Queue Engine", "Retry / DLQ"],
+    xray: ["React Dashboard", "SSE", "Express", "Worker Pool", "Queue / Lease", "Retry / Backoff", "DLQ"],
     caseStudy: {
       problem:
         "A retry that two workers both own is a double send. A retry with no backoff is a thundering herd. A retry that never dies is a poison pill.",

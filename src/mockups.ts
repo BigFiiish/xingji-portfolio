@@ -64,16 +64,20 @@ function diagram(kind: Project["preview"]): string {
     </svg>`;
   }
   if (kind === "pulse") {
-    return `<svg class="xray-svg" viewBox="0 0 280 280" aria-hidden="true">
-      ${label(140, 24, "Dashboard")}
-      ${line(140, 36, 140, 56)}
-      ${label(140, 72, "SSE")}
-      ${line(140, 84, 140, 104)}
-      ${label(140, 120, "Workers")}
-      ${line(140, 132, 140, 160)}
-      ${line(70, 160, 210, 160)}
-      ${label(70, 184, "Retry")}
-      ${label(210, 184, "DLQ")}
+    return `<svg class="xray-svg" viewBox="0 0 280 340" aria-hidden="true">
+      ${label(140, 22, "Dashboard")}
+      ${line(140, 32, 140, 52)}
+      ${label(140, 68, "SSE")}
+      ${line(140, 78, 140, 98)}
+      ${label(140, 114, "Express")}
+      ${line(140, 124, 140, 144)}
+      ${label(140, 160, "Worker pool")}
+      ${line(140, 170, 140, 190)}
+      ${label(140, 206, "Queue / lease")}
+      ${line(140, 216, 140, 236)}
+      ${label(140, 252, "Retry / backoff")}
+      ${line(140, 262, 140, 282)}
+      ${label(140, 298, "DLQ")}
     </svg>`;
   }
   if (kind === "dockline") {

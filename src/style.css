@@ -635,7 +635,8 @@ section {
 
 .js .work-row.scene-clearbay,
 .js .work-row.scene-grantline,
-.js .work-row.scene-durable-brief {
+.js .work-row.scene-durable-brief,
+.js .work-row.scene-pulsequeue {
   opacity: 1;
   transform: none;
   animation: none;
@@ -671,7 +672,23 @@ section {
 }
 
 .work-row.scene-pulsequeue {
-  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: 2.4rem;
+}
+
+.work-row.scene-pulsequeue .work-copy {
+  order: 0;
+  max-width: 38rem;
+}
+
+.work-row.scene-pulsequeue .work-visual,
+.work-row.scene-pulsequeue .stage {
+  width: 100%;
+}
+
+.work-row.scene-pulsequeue .stage {
+  min-height: 0;
 }
 
 .work-copy {
@@ -2443,6 +2460,159 @@ th {
   text-transform: none;
 }
 
+.scene-pq {
+  min-height: 0;
+  justify-content: flex-start;
+}
+
+.pq-status {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+  min-height: 1.2em;
+  margin: 0 0 1.35rem;
+}
+
+.scene-pq[data-phase="run1"] .pq-status,
+.scene-pq[data-phase="run2"] .pq-status,
+.scene-pq[data-phase="run3"] .pq-status,
+.scene-pq[data-phase="dlq"] .pq-status {
+  color: var(--ink);
+}
+
+.scene-pq[data-phase="fail1"] .pq-status,
+.scene-pq[data-phase="fail2"] .pq-status,
+.scene-pq[data-phase="fail3"] .pq-status {
+  color: color-mix(in srgb, #c9897a 70%, var(--ink));
+}
+
+.scene-pq[data-phase="wait1"] .pq-status,
+.scene-pq[data-phase="wait2"] .pq-status,
+.scene-pq[data-lease="01"] .pq-status,
+.scene-pq[data-lease="02"] .pq-status,
+.scene-pq[data-lease="03"] .pq-status {
+  color: color-mix(in srgb, var(--accent) 55%, var(--ink));
+}
+
+.scene-pq[data-phase="idle"] .pq-status {
+  color: var(--faint);
+}
+
+.pq-canvas {
+  width: 100%;
+}
+
+.pq-flow {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.pq-hand {
+  display: none;
+}
+
+.pq-flow path,
+.pq-flow line {
+  fill: none;
+  stroke: rgba(210, 220, 235, 0.16);
+  stroke-width: 1;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.pq-flow .pq-lane {
+  stroke: rgba(210, 220, 235, 0.1);
+  stroke-dasharray: 3 5;
+}
+
+.pq-flow text,
+.pq-flow .pq-col {
+  fill: var(--faint);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: "IBM Plex Mono", monospace;
+  opacity: 0.42;
+}
+
+.pq-flow circle[data-dot],
+.pq-flow .pq-slot {
+  fill: rgba(210, 220, 235, 0.28);
+}
+
+.pq-token circle {
+  fill: color-mix(in srgb, var(--accent) 72%, var(--ink));
+}
+
+.pq-token text {
+  fill: #111;
+  font-size: 8px;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 1;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 500;
+}
+
+.pq-stem {
+  opacity: 0;
+}
+
+.scene-pq[data-lease="01"] [data-stem="01"],
+.scene-pq[data-lease="02"] [data-stem="02"],
+.scene-pq[data-lease="03"] [data-stem="03"] {
+  stroke: color-mix(in srgb, var(--accent) 55%, rgba(210, 220, 235, 0.4));
+  opacity: 1;
+}
+
+.scene-pq[data-lease="01"] [data-node="01"],
+.scene-pq[data-lease="02"] [data-node="02"],
+.scene-pq[data-lease="03"] [data-node="03"],
+.scene-pq[data-lease="01"] [data-dot="01"],
+.scene-pq[data-lease="02"] [data-dot="02"],
+.scene-pq[data-lease="03"] [data-dot="03"] {
+  fill: color-mix(in srgb, var(--accent) 55%, var(--ink));
+  opacity: 1;
+}
+
+.scene-pq[data-phase="wait1"] [data-node="wait"],
+.scene-pq[data-phase="wait2"] [data-node="wait"] {
+  fill: color-mix(in srgb, var(--accent) 45%, var(--ink));
+  opacity: 0.9;
+}
+
+.scene-pq[data-phase="wait1"] .pq-lane,
+.scene-pq[data-phase="wait2"] .pq-lane {
+  stroke: color-mix(in srgb, var(--accent) 38%, rgba(210, 220, 235, 0.28));
+}
+
+.scene-pq[data-phase="dlq"] [data-node="dlq"],
+.scene-pq[data-phase="dlq"] [data-dot="dlq"],
+.scene-pq[data-phase="dlq"] .pq-dlq-val {
+  fill: var(--ink);
+  opacity: 1;
+}
+
+.scene-pq .pq-note {
+  min-height: 1.4em;
+  opacity: 0.5;
+  margin-top: 1.4rem;
+}
+
+.scene-pq[data-phase="dlq"] .pq-note {
+  opacity: 1;
+}
+
+.scene-pq .scene-ops button {
+  font-family: "Inter Tight", system-ui, sans-serif;
+  font-size: 0.88rem;
+  letter-spacing: -0.015em;
+  text-transform: none;
+}
+
 .pq {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -2811,9 +2981,11 @@ th {
   .scene-cb .scene-ops button:not([hidden]),
   .scene-gl .scene-ops button:not([hidden]),
   .scene-db .scene-ops button:not([hidden]),
+  .scene-pq .scene-ops button:not([hidden]),
   .work-row.scene-clearbay .xray-toggle,
   .work-row.scene-grantline .xray-toggle,
   .work-row.scene-durable-brief .xray-toggle,
+  .work-row.scene-pulsequeue .xray-toggle,
   .work-row.scene-clearbay .work-links a,
   .work-row.scene-clearbay .work-links button,
   .work-row.scene-grantline .work-links a,
@@ -2831,10 +3003,21 @@ th {
   .db-flow text {
     font-size: 12px;
   }
-  .work-row.scene-durable-brief .stage {
+  .pq-desk {
+    display: none;
+  }
+  .pq-hand {
+    display: block;
+  }
+  .pq-flow text {
+    font-size: 12px;
+  }
+  .work-row.scene-durable-brief .stage,
+  .work-row.scene-pulsequeue .stage {
     overflow: visible;
   }
-  .work-row.scene-durable-brief .work-visual.is-xray .stage {
+  .work-row.scene-durable-brief .work-visual.is-xray .stage,
+  .work-row.scene-pulsequeue .work-visual.is-xray .stage {
     overflow: hidden;
   }
 }
@@ -2854,7 +3037,8 @@ th {
   }
   .work-row.scene-clearbay .stage,
   .work-row.scene-grantline .stage,
-  .work-row.scene-durable-brief .stage {
+  .work-row.scene-durable-brief .stage,
+  .work-row.scene-pulsequeue .stage {
     min-height: 0;
   }
   .scene-cb .scene-hero {

@@ -141,26 +141,85 @@ function durable(): string {
 
 function pulse(): string {
   return `
-    <div class="scene scene-pq" data-scene="pulse">
-      <div class="pq">
-        <div>
-          <p class="scene-k">Queued</p>
-          <p data-queue>○ ○ ○ ○ ○ ○</p>
-        </div>
-        <div>
-          <p class="scene-k">Workers</p>
-          <p data-workers>01  02  03</p>
-        </div>
-        <div>
-          <p class="scene-k">Complete</p>
-          <p data-done>—</p>
-          <p class="scene-k">Dead letter</p>
-          <p data-dlq>—</p>
-        </div>
+    <div class="scene scene-pq" data-scene="pulse" data-phase="idle" data-lease="">
+      <p class="pq-status" data-log aria-live="polite">READY</p>
+      <div class="pq-canvas">
+        <svg class="pq-flow pq-desk" viewBox="0 0 1100 280" aria-hidden="true">
+          <path data-wire="c1" d="M 176 88 H 500"/>
+          <path data-wire="c2" d="M 176 88 H 650"/>
+          <path data-wire="c3" d="M 176 88 H 800"/>
+          <path data-wire="d1" d="M 500 88 V 200"/>
+          <path data-wire="b1" d="M 500 200 H 176"/>
+          <path data-wire="r1" d="M 176 200 V 88"/>
+          <path data-wire="d2" d="M 650 88 V 200"/>
+          <path data-wire="b2" d="M 650 200 H 176"/>
+          <path data-wire="r2" d="M 176 200 V 88"/>
+          <path data-wire="dlq" d="M 800 88 L 960 200"/>
+          <path class="pq-lane" d="M 176 200 H 800"/>
+          <line class="pq-stem" data-stem="01" x1="500" y1="54" x2="500" y2="80"/>
+          <line class="pq-stem" data-stem="02" x1="650" y1="54" x2="650" y2="80"/>
+          <line class="pq-stem" data-stem="03" x1="800" y1="54" x2="800" y2="80"/>
+          <circle class="pq-slot" cx="48" cy="88" r="3.2"/>
+          <circle class="pq-slot" cx="72" cy="88" r="3.2"/>
+          <circle class="pq-slot" cx="96" cy="88" r="3.2"/>
+          <circle class="pq-slot" cx="120" cy="88" r="3.2"/>
+          <circle class="pq-slot" cx="144" cy="88" r="3.2"/>
+          <circle data-dot="01" cx="500" cy="88" r="2.4"/>
+          <circle data-dot="02" cx="650" cy="88" r="2.4"/>
+          <circle data-dot="03" cx="800" cy="88" r="2.4"/>
+          <circle data-dot="dlq" cx="960" cy="200" r="2.4"/>
+          <text class="pq-col" x="48" y="32">Queue</text>
+          <text class="pq-col" x="500" y="32" text-anchor="middle">Workers</text>
+          <text class="pq-col" x="960" y="32" text-anchor="middle">Result</text>
+          <text data-node="01" x="500" y="48" text-anchor="middle">01</text>
+          <text data-node="02" x="650" y="48" text-anchor="middle">02</text>
+          <text data-node="03" x="800" y="48" text-anchor="middle">03</text>
+          <text data-node="done" x="960" y="56" text-anchor="middle">Complete  —</text>
+          <text data-node="wait" x="176" y="222">Backoff</text>
+          <text data-node="dlq" x="960" y="186" text-anchor="middle">Dead letter</text>
+          <text class="pq-dlq-val" data-dlq x="960" y="222" text-anchor="middle">—</text>
+          <g class="pq-token" data-token transform="translate(176 88)">
+            <circle r="8"/>
+            <text y="3.2" text-anchor="middle">14</text>
+          </g>
+        </svg>
+        <svg class="pq-flow pq-hand" viewBox="0 0 360 640" aria-hidden="true">
+          <path data-wire="c1" d="M 216 48 V 140"/>
+          <path data-wire="b1" d="M 216 140 V 210"/>
+          <path data-wire="c2" d="M 216 210 V 300"/>
+          <path data-wire="b2" d="M 216 300 V 370"/>
+          <path data-wire="c3" d="M 216 370 V 460"/>
+          <path data-wire="dlq" d="M 216 460 V 560"/>
+          <line class="pq-stem" data-stem="01" x1="200" y1="140" x2="216" y2="140"/>
+          <line class="pq-stem" data-stem="02" x1="200" y1="300" x2="216" y2="300"/>
+          <line class="pq-stem" data-stem="03" x1="200" y1="460" x2="216" y2="460"/>
+          <circle class="pq-slot" cx="48" cy="48" r="3.2"/>
+          <circle class="pq-slot" cx="68" cy="48" r="3.2"/>
+          <circle class="pq-slot" cx="88" cy="48" r="3.2"/>
+          <circle class="pq-slot" cx="108" cy="48" r="3.2"/>
+          <circle class="pq-slot" cx="128" cy="48" r="3.2"/>
+          <circle data-dot="01" cx="216" cy="140" r="2.4"/>
+          <circle data-dot="02" cx="216" cy="300" r="2.4"/>
+          <circle data-dot="03" cx="216" cy="460" r="2.4"/>
+          <circle data-dot="dlq" cx="216" cy="560" r="2.4"/>
+          <text class="pq-col" x="24" y="32">Queue</text>
+          <text data-node="01" x="24" y="144">Worker 01</text>
+          <text data-node="wait" x="24" y="214">Backoff</text>
+          <text data-node="02" x="24" y="304">Worker 02</text>
+          <text data-node="03" x="24" y="464">Worker 03</text>
+          <text data-node="dlq" x="24" y="564">Dead letter</text>
+          <text class="pq-dlq-val" data-dlq x="24" y="588">—</text>
+          <g class="pq-token" data-token transform="translate(216 48)">
+            <circle r="8"/>
+            <text y="3.2" text-anchor="middle">14</text>
+          </g>
+        </svg>
       </div>
-      <p class="scene-hero job" data-job>job-14</p>
-      <p class="scene-end" data-log></p>
-      <button type="button" data-act="run">Run job</button>
+      <p class="scene-note pq-note" data-note></p>
+      <div class="scene-ops">
+        <button type="button" data-act="run">Run job</button>
+        <button type="button" class="text" data-act="replay" hidden>Replay</button>
+      </div>
     </div>`;
 }
 
@@ -520,33 +579,144 @@ function bindDurable(el: HTMLElement, reduce: boolean) {
 }
 
 function bindPulse(el: HTMLElement, reduce: boolean) {
-  const job = el.querySelector("[data-job]");
   const log = el.querySelector("[data-log]");
-  const workers = el.querySelector("[data-workers]");
-  const queue = el.querySelector("[data-queue]");
-  const dlq = el.querySelector("[data-dlq]");
-  const wait = (ms: number) => new Promise((r) => setTimeout(r, reduce ? 0 : ms));
-  el.querySelector("[data-act='run']")?.addEventListener("click", async () => {
-    if (queue) queue.textContent = "○ ○ ○ ○ ○";
-    const steps = [
-      ["LEASED", "01"],
-      ["RUNNING", "01"],
-      ["FAILED", "01"],
-      ["RETRY IN 1.0s", ""],
-      ["LEASED", "02"],
-      ["FAILED", "02"],
-      ["RETRY IN 2.0s", ""],
-      ["LEASED", "03"],
-      ["FAILED", "03"],
-    ];
-    for (const [state, w] of steps) {
-      if (job) job.textContent = "job-14";
-      if (log) log.textContent = state;
-      if (workers) workers.textContent = w ? `${w}  leased` : "01  02  03";
-      await wait(state.includes("RETRY") ? (state.includes("2.0") ? 1400 : 900) : 550);
+  const note = el.querySelector("[data-note]");
+  const runBtn = el.querySelector<HTMLButtonElement>("[data-act='run']");
+  const replayBtn = el.querySelector<HTMLButtonElement>("[data-act='replay']");
+  let gen = 0;
+  const hold = (ms: number) => new Promise((r) => setTimeout(r, reduce ? 90 : ms));
+
+  const canvas = () => {
+    const desk = el.querySelector<SVGSVGElement>(".pq-desk");
+    if (desk && getComputedStyle(desk).display !== "none") return desk;
+    return el.querySelector<SVGSVGElement>(".pq-hand");
+  };
+
+  const put = (x: number, y: number) => {
+    el.querySelectorAll<SVGGElement>("[data-token]").forEach((token) => {
+      const root = token.closest("svg");
+      const visible = root && getComputedStyle(root).display !== "none";
+      if (!visible) return;
+      token.setAttribute("transform", `translate(${x} ${y})`);
+    });
+  };
+
+  const park = () => {
+    el.querySelectorAll<SVGGElement>("[data-token]").forEach((token) => {
+      const start = token.closest("svg")?.classList.contains("pq-hand") ? [216, 48] : [176, 88];
+      token.setAttribute("transform", `translate(${start[0]} ${start[1]})`);
+    });
+  };
+
+  const travel = (wire: string, ms: number, id: number) => {
+    const root = canvas();
+    const token = root?.querySelector<SVGGElement>("[data-token]");
+    const path = root?.querySelector<SVGPathElement>(`[data-wire="${wire}"]`);
+    if (!token || !path) return Promise.resolve();
+    const len = path.getTotalLength();
+    const end = path.getPointAtLength(len);
+    if (reduce || len < 1) {
+      put(end.x, end.y);
+      return Promise.resolve();
     }
-    if (log) log.textContent = "DEAD LETTER";
-    if (dlq) dlq.textContent = "job-14";
-    if (workers) workers.textContent = "01  02  03";
+    const t0 = performance.now();
+    return new Promise<void>((resolve) => {
+      const step = (now: number) => {
+        if (id !== gen) {
+          resolve();
+          return;
+        }
+        const t = Math.min(1, (now - t0) / ms);
+        const p = path.getPointAtLength(len * t);
+        put(p.x, p.y);
+        if (t < 1) requestAnimationFrame(step);
+        else resolve();
+      };
+      requestAnimationFrame(step);
+    });
+  };
+
+  const paint = (phase: string, lease: string, status: string, footnote = "") => {
+    el.dataset.phase = phase;
+    el.dataset.lease = lease;
+    if (log) log.textContent = status;
+    if (note) note.textContent = footnote;
+    const idle = phase === "idle";
+    const done = phase === "dlq";
+    if (runBtn) runBtn.hidden = !idle;
+    if (replayBtn) replayBtn.hidden = !done;
+    el.querySelectorAll("[data-dlq]").forEach((n) => {
+      n.textContent = done ? "job-14" : "—";
+    });
+    el.setAttribute("aria-busy", idle || done ? "false" : "true");
+  };
+
+  const idle = () => {
+    park();
+    paint("idle", "", "READY");
+  };
+
+  const alive = (id: number) => id === gen;
+
+  runBtn?.addEventListener("click", async () => {
+    if (el.dataset.phase !== "idle") return;
+    const id = ++gen;
+    paint("lease1", "01", "LEASED");
+    await travel("c1", 420, id);
+    if (!alive(id)) return;
+    await hold(200);
+    if (!alive(id)) return;
+    paint("run1", "01", "RUNNING");
+    await hold(320);
+    if (!alive(id)) return;
+    paint("fail1", "", "FAILED");
+    await hold(220);
+    if (!alive(id)) return;
+    await travel("d1", 200, id);
+    if (!alive(id)) return;
+    paint("wait1", "", "BACKOFF 1s");
+    await travel("b1", 700, id);
+    if (!alive(id)) return;
+    await travel("r1", 250, id);
+    if (!alive(id)) return;
+    paint("lease2", "02", "LEASED BY 02");
+    await travel("c2", 420, id);
+    if (!alive(id)) return;
+    await hold(200);
+    if (!alive(id)) return;
+    paint("run2", "02", "RUNNING");
+    await hold(300);
+    if (!alive(id)) return;
+    paint("fail2", "", "FAILED");
+    await hold(220);
+    if (!alive(id)) return;
+    await travel("d2", 200, id);
+    if (!alive(id)) return;
+    paint("wait2", "", "BACKOFF 2s");
+    await travel("b2", 1000, id);
+    if (!alive(id)) return;
+    await travel("r2", 250, id);
+    if (!alive(id)) return;
+    paint("lease3", "03", "LEASED BY 03");
+    await travel("c3", 420, id);
+    if (!alive(id)) return;
+    await hold(200);
+    if (!alive(id)) return;
+    paint("run3", "03", "RUNNING");
+    await hold(300);
+    if (!alive(id)) return;
+    paint("fail3", "", "FAILED");
+    await hold(220);
+    if (!alive(id)) return;
+    await travel("dlq", 450, id);
+    if (!alive(id)) return;
+    paint("dlq", "", "DEAD LETTER", "retry budget exhausted");
   });
+
+  replayBtn?.addEventListener("click", () => {
+    gen += 1;
+    idle();
+  });
+
+  idle();
 }

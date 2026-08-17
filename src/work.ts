@@ -18,7 +18,7 @@ export function renderWork(root: HTMLElement) {
   root.innerHTML = featured()
     .map(
       (p, i) => `
-      <article class="work-row scene-${p.slug}${p.slug === "clearbay" || p.slug === "grantline" || p.slug === "durable-brief" ? "" : " reveal"}" id="${p.slug}" data-slug="${p.slug}" style="--accent:${p.accent}">
+      <article class="work-row scene-${p.slug}${p.slug === "clearbay" || p.slug === "grantline" || p.slug === "durable-brief" || p.slug === "pulsequeue" ? "" : " reveal"}" id="${p.slug}" data-slug="${p.slug}" style="--accent:${p.accent}">
         <div class="work-copy">
           <span class="work-idx">${String(i + 1).padStart(2, "0")}</span>
           <h3>${p.name}</h3>
