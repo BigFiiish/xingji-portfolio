@@ -76,6 +76,7 @@ export type CaseStudy = {
   architecture: ArchNode[];
   decisions: { decision: string; why: string; tradeoff: string }[];
   failures: { fail: string; handle: string }[];
+  artifact?: { caption: string; body: string };
 };
 
 export type Project = {
@@ -159,6 +160,15 @@ export const projects: Project[] = [
         { fail: "Worker starts before the job row commits.", handle: "afterCommit callback. The insert is visible first." },
         { fail: "MCP call includes extra JSON fields.", handle: "Unknown fields rejected before execution." },
       ],
+      artifact: {
+        caption: "POST /api/v1/waves/482/release · loser",
+        body: `{
+  "type": "about:blank",
+  "title": "Conflict",
+  "status": 409,
+  "detail": "record was updated by another request"
+}`,
+      },
     },
   },
   {
@@ -215,6 +225,12 @@ export const projects: Project[] = [
         { fail: "Machine opens billing.api.", handle: "403. Kind and role fail the resource policy." },
         { fail: "Grant past TTL.", handle: "Open session returns expired. Sessions expire lazily on list." },
       ],
+      artifact: {
+        caption: "POST /v1/sessions · grant past TTL",
+        body: `{
+  "error": "expired"
+}`,
+      },
     },
   },
   {
@@ -276,6 +292,14 @@ export const projects: Project[] = [
         { fail: "Draft is weak.", handle: "Evaluator-optimizer loop revises before the hook." },
         { fail: "Someone tries to skip the human.", handle: "Publish is not a step the model can call." },
       ],
+      artifact: {
+        caption: "hook still waiting after the tab closed",
+        body: `{
+  "type": "awaiting_approval",
+  "token": "brief-approval:brief_1042",
+  "passed": true
+}`,
+      },
     },
   },
   {
@@ -333,6 +357,19 @@ export const projects: Project[] = [
         { fail: "A flaky job fails twice.", handle: "Exponential backoff. It becomes eligible later, not immediately." },
         { fail: "A job fails past maxAttempts.", handle: "Marked dead. It leaves the active cycle." },
       ],
+      artifact: {
+        caption: "job_014 after maxAttempts",
+        body: `{
+  "id": "job_014",
+  "type": "flaky",
+  "payload": "partner-call-14",
+  "status": "dead",
+  "attempts": 3,
+  "maxAttempts": 3,
+  "workerId": null,
+  "error": "partner timeout"
+}`,
+      },
     },
   },
   {
@@ -400,7 +437,7 @@ export const projects: Project[] = [
     blurb:
       "Shareable rooms, live named cursors, per-user undo, PNG export. Typed protocol — no Socket.IO.",
     stack: ["TypeScript", "WebSocket", "React"],
-    live: null,
+    live: "https://sketchsync-fwed.onrender.com",
     repo: "https://github.com/BigFiiish/sketchsync",
     accent: "#c4b082",
     preview: "sketch",

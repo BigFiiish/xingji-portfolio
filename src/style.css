@@ -1835,6 +1835,16 @@ html:has(#case[open]) {
   line-height: 1.5;
 }
 
+.case .trace {
+  max-width: 36rem;
+  margin: 0;
+}
+
+.case .trace p {
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+
 .case-inspect {
   display: grid;
   gap: 0.85rem;

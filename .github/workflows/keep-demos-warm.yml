@@ -1,0 +1,26 @@
+name: Keep demos warm
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Hit Render health endpoints
+        run: |
+          ping() {
+            echo "GET $1"
+            curl -fsS --max-time 120 "$1" >/dev/null && echo ok || echo miss
+          }
+          ping https://clearbay.onrender.com/actuator/health
+          ping https://grantline.onrender.com/health
+          ping https://pulsequeue-wokz.onrender.com/api/health
+          ping https://dockline.onrender.com/api/health
+          ping https://sketchsync-fwed.onrender.com/api/health

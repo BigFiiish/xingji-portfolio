@@ -406,10 +406,29 @@ export function bindFailures(root: HTMLElement) {
     if (live) live.textContent = "";
     if (reset) reset.hidden = false;
     dismissHint();
+    const next = `#failures/${id}`;
+    if (location.hash.toLowerCase() !== next) {
+      history.replaceState(history.state, "", next);
+    }
     void run(id, token);
   };
 
   play = open;
+
+  const failFromHash = (): FailId | null => {
+    const m = location.hash.match(/^#failures\/(race|expire|fail|hallucinate)$/i);
+    return m ? (m[1].toLowerCase() as FailId) : null;
+  };
+
+  const fromHash = (scroll: boolean) => {
+    const id = failFromHash();
+    if (!id) return;
+    if (stageEl?.dataset.sim === id && !stageEl.hidden) return;
+    if (scroll) {
+      document.querySelector("#failures")?.scrollIntoView({ behavior: "auto" });
+    }
+    open(id);
+  };
 
   if (!hinted() && hint && raceBtn) {
     hintIO = new IntersectionObserver(
@@ -445,7 +464,12 @@ export function bindFailures(root: HTMLElement) {
     if (chapter.classList.contains("is-open")) open((words[n].dataset.fail as FailId) ?? "race");
   });
 
-  reset?.addEventListener("click", close);
+  reset?.addEventListener("click", () => {
+    if (location.hash.toLowerCase().startsWith("#failures/")) {
+      history.replaceState(history.state, "", "#failures");
+    }
+    close();
+  });
 
   root.querySelectorAll<HTMLButtonElement>("[data-run]").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -461,6 +485,9 @@ export function bindFailures(root: HTMLElement) {
       slot.innerHTML = stage((btn.dataset.run as FailId) ?? "race");
     });
   });
+
+  window.addEventListener("hashchange", () => fromHash(false));
+  fromHash(true);
 }
 
 export function caseFails(slug: string): string {

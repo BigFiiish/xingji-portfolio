@@ -6,6 +6,7 @@ import { initMap } from "./map";
 import { initPanel } from "./panel";
 import { bindSecondary } from "./secondary";
 import { initPointer } from "./pointer";
+import { initWarm } from "./warm";
 import { bindXray, renderMore, renderPrinciples, renderWork } from "./work";
 
 document.documentElement.classList.add("js");
@@ -52,6 +53,7 @@ if (map) initMap(map);
 initPanel();
 initCommand();
 initPointer();
+initWarm();
 
 document.querySelector("#mail")?.setAttribute("href", `mailto:${person.email}`);
 
