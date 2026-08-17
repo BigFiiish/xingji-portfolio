@@ -1,5 +1,10 @@
 import type { Project } from "./content";
 
+export type PulseCtl = {
+  pause: () => void;
+  resume: () => void;
+};
+
 export function sceneMarkup(p: Project): string {
   switch (p.preview) {
     case "clearbay":
@@ -145,17 +150,17 @@ function pulse(): string {
       <p class="pq-status" data-log aria-live="polite">READY</p>
       <div class="pq-canvas">
         <svg class="pq-flow pq-desk" viewBox="0 0 1100 280" aria-hidden="true">
-          <path data-wire="c1" d="M 176 88 H 500"/>
-          <path data-wire="c2" d="M 176 88 H 650"/>
-          <path data-wire="c3" d="M 176 88 H 800"/>
+          <path data-wire="c1" d="M 168 88 H 500"/>
+          <path data-wire="c2" d="M 168 88 H 650"/>
+          <path data-wire="c3" d="M 168 88 H 800"/>
           <path data-wire="d1" d="M 500 88 V 200"/>
-          <path data-wire="b1" d="M 500 200 H 176"/>
-          <path data-wire="r1" d="M 176 200 V 88"/>
+          <path data-wire="b1" d="M 500 200 H 168"/>
+          <path data-wire="r1" d="M 168 200 V 88"/>
           <path data-wire="d2" d="M 650 88 V 200"/>
-          <path data-wire="b2" d="M 650 200 H 176"/>
-          <path data-wire="r2" d="M 176 200 V 88"/>
+          <path data-wire="b2" d="M 650 200 H 168"/>
+          <path data-wire="r2" d="M 168 200 V 88"/>
           <path data-wire="dlq" d="M 800 88 L 960 200"/>
-          <path class="pq-lane" d="M 176 200 H 800"/>
+          <path class="pq-lane" d="M 168 200 H 800"/>
           <line class="pq-stem" data-stem="01" x1="500" y1="54" x2="500" y2="80"/>
           <line class="pq-stem" data-stem="02" x1="650" y1="54" x2="650" y2="80"/>
           <line class="pq-stem" data-stem="03" x1="800" y1="54" x2="800" y2="80"/>
@@ -175,23 +180,23 @@ function pulse(): string {
           <text data-node="02" x="650" y="48" text-anchor="middle">02</text>
           <text data-node="03" x="800" y="48" text-anchor="middle">03</text>
           <text data-node="done" x="960" y="56" text-anchor="middle">Complete  —</text>
-          <text data-node="wait" x="176" y="222">Backoff</text>
+          <text data-node="wait" x="168" y="222">Backoff</text>
           <text data-node="dlq" x="960" y="186" text-anchor="middle">Dead letter</text>
           <text class="pq-dlq-val" data-dlq x="960" y="222" text-anchor="middle">—</text>
-          <g class="pq-token" data-token transform="translate(176 88)">
+          <g class="pq-token" data-token transform="translate(168 88)">
             <circle r="8"/>
             <text y="3.2" text-anchor="middle">14</text>
           </g>
         </svg>
-        <svg class="pq-flow pq-hand" viewBox="0 0 360 640" aria-hidden="true">
-          <path data-wire="c1" d="M 216 48 V 140"/>
+        <svg class="pq-flow pq-hand" viewBox="0 0 360 700" aria-hidden="true">
+          <path data-wire="c1" d="M 148 48 H 216 V 140"/>
           <path data-wire="b1" d="M 216 140 V 210"/>
-          <path data-wire="c2" d="M 216 210 V 300"/>
-          <path data-wire="b2" d="M 216 300 V 370"/>
+          <path data-wire="c2" d="M 216 210 V 290"/>
+          <path data-wire="b2" d="M 216 290 V 370"/>
           <path data-wire="c3" d="M 216 370 V 460"/>
           <path data-wire="dlq" d="M 216 460 V 560"/>
           <line class="pq-stem" data-stem="01" x1="200" y1="140" x2="216" y2="140"/>
-          <line class="pq-stem" data-stem="02" x1="200" y1="300" x2="216" y2="300"/>
+          <line class="pq-stem" data-stem="02" x1="200" y1="290" x2="216" y2="290"/>
           <line class="pq-stem" data-stem="03" x1="200" y1="460" x2="216" y2="460"/>
           <circle class="pq-slot" cx="48" cy="48" r="3.2"/>
           <circle class="pq-slot" cx="68" cy="48" r="3.2"/>
@@ -199,17 +204,20 @@ function pulse(): string {
           <circle class="pq-slot" cx="108" cy="48" r="3.2"/>
           <circle class="pq-slot" cx="128" cy="48" r="3.2"/>
           <circle data-dot="01" cx="216" cy="140" r="2.4"/>
-          <circle data-dot="02" cx="216" cy="300" r="2.4"/>
+          <circle data-dot="02" cx="216" cy="290" r="2.4"/>
           <circle data-dot="03" cx="216" cy="460" r="2.4"/>
           <circle data-dot="dlq" cx="216" cy="560" r="2.4"/>
           <text class="pq-col" x="24" y="32">Queue</text>
           <text data-node="01" x="24" y="144">Worker 01</text>
-          <text data-node="wait" x="24" y="214">Backoff</text>
-          <text data-node="02" x="24" y="304">Worker 02</text>
+          <text data-node="wait1" x="24" y="204">Backoff</text>
+          <text data-node="wait1s" x="24" y="222">1s</text>
+          <text data-node="02" x="24" y="294">Worker 02</text>
+          <text data-node="wait2" x="24" y="364">Backoff</text>
+          <text data-node="wait2s" x="24" y="382">2s</text>
           <text data-node="03" x="24" y="464">Worker 03</text>
           <text data-node="dlq" x="24" y="564">Dead letter</text>
           <text class="pq-dlq-val" data-dlq x="24" y="588">—</text>
-          <g class="pq-token" data-token transform="translate(216 48)">
+          <g class="pq-token" data-token transform="translate(148 48)">
             <circle r="8"/>
             <text y="3.2" text-anchor="middle">14</text>
           </g>
@@ -584,7 +592,40 @@ function bindPulse(el: HTMLElement, reduce: boolean) {
   const runBtn = el.querySelector<HTMLButtonElement>("[data-act='run']");
   const replayBtn = el.querySelector<HTMLButtonElement>("[data-act='replay']");
   let gen = 0;
-  const hold = (ms: number) => new Promise((r) => setTimeout(r, reduce ? 90 : ms));
+  let paused = false;
+  let pauseStarted = 0;
+  let pauseAccum = 0;
+  const clock = () => {
+    const p = performance.now();
+    return p - pauseAccum - (paused ? p - pauseStarted : 0);
+  };
+  const pause = () => {
+    if (paused) return;
+    paused = true;
+    pauseStarted = performance.now();
+  };
+  const resume = () => {
+    if (!paused) return;
+    pauseAccum += performance.now() - pauseStarted;
+    pauseStarted = 0;
+    paused = false;
+  };
+  (el as HTMLElement & { __pulse?: PulseCtl }).__pulse = { pause, resume };
+
+  const hold = (ms: number, id: number) =>
+    new Promise<void>((resolve) => {
+      const t0 = clock();
+      const need = reduce ? 90 : ms;
+      const tick = () => {
+        if (id !== gen) {
+          resolve();
+          return;
+        }
+        if (clock() - t0 >= need) resolve();
+        else requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
 
   const canvas = () => {
     const desk = el.querySelector<SVGSVGElement>(".pq-desk");
@@ -603,7 +644,7 @@ function bindPulse(el: HTMLElement, reduce: boolean) {
 
   const park = () => {
     el.querySelectorAll<SVGGElement>("[data-token]").forEach((token) => {
-      const start = token.closest("svg")?.classList.contains("pq-hand") ? [216, 48] : [176, 88];
+      const start = token.closest("svg")?.classList.contains("pq-hand") ? [148, 48] : [168, 88];
       token.setAttribute("transform", `translate(${start[0]} ${start[1]})`);
     });
   };
@@ -619,14 +660,14 @@ function bindPulse(el: HTMLElement, reduce: boolean) {
       put(end.x, end.y);
       return Promise.resolve();
     }
-    const t0 = performance.now();
+    const t0 = clock();
     return new Promise<void>((resolve) => {
-      const step = (now: number) => {
+      const step = () => {
         if (id !== gen) {
           resolve();
           return;
         }
-        const t = Math.min(1, (now - t0) / ms);
+        const t = Math.min(1, (clock() - t0) / ms);
         const p = path.getPointAtLength(len * t);
         put(p.x, p.y);
         if (t < 1) requestAnimationFrame(step);
@@ -661,16 +702,18 @@ function bindPulse(el: HTMLElement, reduce: boolean) {
   runBtn?.addEventListener("click", async () => {
     if (el.dataset.phase !== "idle") return;
     const id = ++gen;
-    paint("lease1", "01", "LEASED");
+    pauseAccum = 0;
+    paused = false;
+    paint("lease1", "01", "LEASED BY 01");
     await travel("c1", 420, id);
     if (!alive(id)) return;
-    await hold(200);
+    await hold(200, id);
     if (!alive(id)) return;
     paint("run1", "01", "RUNNING");
-    await hold(320);
+    await hold(320, id);
     if (!alive(id)) return;
     paint("fail1", "", "FAILED");
-    await hold(220);
+    await hold(220, id);
     if (!alive(id)) return;
     await travel("d1", 200, id);
     if (!alive(id)) return;
@@ -682,13 +725,13 @@ function bindPulse(el: HTMLElement, reduce: boolean) {
     paint("lease2", "02", "LEASED BY 02");
     await travel("c2", 420, id);
     if (!alive(id)) return;
-    await hold(200);
+    await hold(200, id);
     if (!alive(id)) return;
     paint("run2", "02", "RUNNING");
-    await hold(300);
+    await hold(300, id);
     if (!alive(id)) return;
     paint("fail2", "", "FAILED");
-    await hold(220);
+    await hold(220, id);
     if (!alive(id)) return;
     await travel("d2", 200, id);
     if (!alive(id)) return;
@@ -700,13 +743,13 @@ function bindPulse(el: HTMLElement, reduce: boolean) {
     paint("lease3", "03", "LEASED BY 03");
     await travel("c3", 420, id);
     if (!alive(id)) return;
-    await hold(200);
+    await hold(200, id);
     if (!alive(id)) return;
     paint("run3", "03", "RUNNING");
-    await hold(300);
+    await hold(300, id);
     if (!alive(id)) return;
     paint("fail3", "", "FAILED");
-    await hold(220);
+    await hold(220, id);
     if (!alive(id)) return;
     await travel("dlq", 450, id);
     if (!alive(id)) return;
@@ -715,6 +758,8 @@ function bindPulse(el: HTMLElement, reduce: boolean) {
 
   replayBtn?.addEventListener("click", () => {
     gen += 1;
+    pauseAccum = 0;
+    paused = false;
     idle();
   });
 

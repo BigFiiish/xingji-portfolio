@@ -1,7 +1,7 @@
 import { principles, projects, type Project } from "./content";
 import { caseFails } from "./failures";
 import { xrayMarkup } from "./mockups";
-import { bindScenes, sceneMarkup } from "./scenes";
+import { bindScenes, sceneMarkup, type PulseCtl } from "./scenes";
 
 const featured = () => projects.filter((p) => p.featured);
 const rest = () => projects.filter((p) => !p.featured);
@@ -108,6 +108,10 @@ export function bindXray(root: HTMLElement) {
 
     const show = (on: boolean) => {
       visual.classList.toggle("is-xray", on);
+      const pulse = visual.querySelector<HTMLElement>("[data-scene='pulse']");
+      const ctl = (pulse as (HTMLElement & { __pulse?: PulseCtl }) | null)?.__pulse;
+      if (on) ctl?.pause();
+      else ctl?.resume();
       if (!on || !scan || reduce) return;
       scan.style.animation = "none";
       void scan.offsetWidth;
