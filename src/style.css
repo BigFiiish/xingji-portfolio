@@ -651,12 +651,13 @@ section,
 }
 
 .work {
-  padding-top: 5rem;
+  padding-top: 5.25rem;
+  padding-bottom: 4.5rem;
 }
 
 .work-list {
   display: grid;
-  gap: 11rem;
+  gap: clamp(4.25rem, 6.5vw, 6.25rem);
 }
 
 html:not(.js) .work-list {
@@ -698,12 +699,10 @@ html:not(.js) .more-row:not(:has(figure)) {
 
 .work-row.scene-clearbay {
   grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.32fr);
-  min-height: 100svh;
 }
 
 .work-row.scene-grantline {
   grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.82fr);
-  min-height: 92svh;
 }
 
 .js .work-row.scene-clearbay,
@@ -721,7 +720,7 @@ html:not(.js) .more-row:not(:has(figure)) {
 
 .work-row.scene-clearbay .stage,
 .work-row.scene-grantline .stage {
-  min-height: min(42rem, 72svh);
+  min-height: min(30rem, 52svh);
 }
 
 .work-row.scene-durable-brief {
@@ -909,6 +908,13 @@ html:not(.js) .more-row:not(:has(figure)) {
   max-width: 38rem;
 }
 
+.work-row.scene-durable-brief .work-visual .shot,
+.work-row.scene-pulsequeue .work-visual .shot {
+  max-width: none;
+  width: 100%;
+  margin-top: 1.75rem;
+}
+
 .shot-k {
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.62rem;
@@ -937,6 +943,11 @@ html:not(.js) .more-row:not(:has(figure)) {
   height: auto;
   border: 1px solid var(--line);
   opacity: 0.9;
+}
+
+.work-row.scene-durable-brief .shot img,
+.work-row.scene-pulsequeue .shot img {
+  opacity: 0.96;
 }
 
 .more-row .shot-compact {
@@ -1419,7 +1430,7 @@ th {
 }
 
 .more {
-  margin-top: 5rem;
+  margin-top: 3.25rem;
   border-top: 1px solid var(--line);
 }
 
@@ -2320,7 +2331,7 @@ html:has(#case[open]) {
 }
 
 .scene-cb {
-  min-height: min(36rem, 68svh);
+  min-height: min(28rem, 52svh);
 }
 
 .cb-stack {
@@ -2488,7 +2499,7 @@ html:has(#case[open]) {
 .scene-gl {
   align-items: center;
   text-align: center;
-  min-height: min(34rem, 64svh);
+  min-height: min(26rem, 50svh);
 }
 
 .vchain-box {
@@ -3071,6 +3082,8 @@ html:has(#case[open]) {
   align-content: center;
   background: #05060a;
   scroll-margin-top: 4.5rem;
+  padding-top: 5.5rem;
+  padding-bottom: 5.5rem;
 }
 
 .fail-label {
@@ -3092,7 +3105,7 @@ html:has(#case[open]) {
 }
 
 .play-pause {
-  margin-bottom: 5.5rem;
+  margin-bottom: 3.25rem;
 }
 
 .pause-a,
