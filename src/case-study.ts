@@ -12,21 +12,8 @@ function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 }
 
-export function caseHtml(p: Project): string {
-  const c = p.caseStudy;
-  const cap = archCaption[p.slug];
-  const inspectN = c.artifact ? "07" : "06";
-  const object = c.artifact
-    ? `<section>
-      <h3><span>06</span> Object</h3>
-      <figure class="trace">
-        <p>${esc(c.artifact.caption)}</p>
-        <code>${esc(c.artifact.body)}</code>
-      </figure>
-    </section>`
-    : "";
-  return `
-    <header class="case-id">
+function header(p: Project): string {
+  return `<header class="case-id">
       <h2 id="case-title" class="case-name" tabindex="-1">${esc(p.name)}</h2>
       <p class="case-kicker">${esc(p.headline)}</p>
       <p class="case-stack">${esc(p.stack.join(" · "))}</p>
@@ -34,10 +21,100 @@ export function caseHtml(p: Project): string {
         ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a>` : ""}
         <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
       </p>
-    </header>
+    </header>`;
+}
+
+function artifact(p: Project): string {
+  const a = p.caseStudy.artifact;
+  if (!a) return "";
+  return `<figure class="trace case-open">
+      <p>${esc(a.caption)}</p>
+      <code>${esc(a.body)}</code>
+    </figure>`;
+}
+
+function problem(p: Project): string {
+  return `<p class="case-problem">${esc(p.caseStudy.problem)}</p>`;
+}
+
+function failures(p: Project): string {
+  return `<div class="fail-cols" aria-hidden="true"><span>Failure</span><span>Handling</span></div>
+      <ul class="fail-ledger">
+        ${p.caseStudy.failures
+          .map((f) => `<li><p class="fail-k">${esc(f.fail)}</p><p class="fail-h">${esc(f.handle)}</p></li>`)
+          .join("")}
+      </ul>`;
+}
+
+function inspect(p: Project): string {
+  return `<div class="case-inspect">
+        ${p.live ? `<p><span class="case-k">Live</span> <a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a></p>` : ""}
+        <p><span class="case-k">Source</span> <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a></p>
+      </div>`;
+}
+
+function arch(p: Project): string {
+  const cap = archCaption[p.slug];
+  return `<figure class="case-arch">
+        ${cap ? `<figcaption class="case-arch-cap">${esc(cap)}</figcaption>` : ""}
+        ${xrayMarkup(p)}
+      </figure>`;
+}
+
+function objectFirst(p: Project): string {
+  return `${header(p)}
+    <section>
+      ${artifact(p)}
+      ${problem(p)}
+    </section>
+    <section>
+      <h3>Failure</h3>
+      ${failures(p)}
+    </section>
+    <section>
+      <h3>Inspect</h3>
+      ${inspect(p)}
+    </section>`;
+}
+
+function grantFirst(p: Project): string {
+  return `${header(p)}
+    <section>
+      ${artifact(p)}
+      ${problem(p)}
+    </section>
+    <section>
+      <h3>Trust path</h3>
+      ${arch(p)}
+    </section>
+    <section>
+      <h3>Failure</h3>
+      ${failures(p)}
+    </section>
+    <section>
+      <h3>Inspect</h3>
+      ${inspect(p)}
+    </section>`;
+}
+
+function hookOnly(p: Project): string {
+  return `${header(p)}
+    <section>
+      ${problem(p)}
+      ${artifact(p)}
+    </section>
+    <section>
+      <h3>Inspect</h3>
+      ${inspect(p)}
+    </section>`;
+}
+
+function full(p: Project): string {
+  const c = p.caseStudy;
+  return `${header(p)}
     <section>
       <h3><span>01</span> Problem</h3>
-      <p class="case-problem">${esc(c.problem)}</p>
+      ${problem(p)}
     </section>
     <section>
       <h3><span>02</span> Constraints</h3>
@@ -52,10 +129,7 @@ export function caseHtml(p: Project): string {
     </section>
     <section>
       <h3><span>03</span> Architecture</h3>
-      <figure class="case-arch">
-        ${cap ? `<figcaption class="case-arch-cap">${esc(cap)}</figcaption>` : ""}
-        ${xrayMarkup(p)}
-      </figure>
+      ${arch(p)}
     </section>
     <section>
       <h3><span>04</span> Decisions</h3>
@@ -74,22 +148,22 @@ export function caseHtml(p: Project): string {
     </section>
     <section>
       <h3><span>05</span> Failure</h3>
-      <div class="fail-cols" aria-hidden="true"><span>Failure</span><span>Handling</span></div>
-      <ul class="fail-ledger">
-        ${c.failures
-          .map(
-            (f) =>
-              `<li><p class="fail-k">${esc(f.fail)}</p><p class="fail-h">${esc(f.handle)}</p></li>`,
-          )
-          .join("")}
-      </ul>
+      ${failures(p)}
     </section>
-    ${object}
     <section>
-      <h3><span>${inspectN}</span> Inspect</h3>
-      <div class="case-inspect">
-        ${p.live ? `<p><span class="case-k">Live</span> <a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a></p>` : ""}
-        <p><span class="case-k">Source</span> <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a></p>
-      </div>
+      <h3><span>06</span> Object</h3>
+      ${artifact(p)}
+    </section>
+    <section>
+      <h3><span>07</span> Inspect</h3>
+      ${inspect(p)}
     </section>`;
+}
+
+export function caseHtml(p: Project): string {
+  const shape = p.caseStudy.shape ?? "full";
+  if (shape === "object") return objectFirst(p);
+  if (shape === "grant") return grantFirst(p);
+  if (shape === "hook") return hookOnly(p);
+  return full(p);
 }

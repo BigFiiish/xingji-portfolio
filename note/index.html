@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The model is never the judge — Xingji Yan</title>
+    <meta
+      name="description"
+      content="If the model grades the model, you will ship a confident wrong tool call. Schema, role, and a rule scorer — not a vibe."
+    />
+    <link rel="canonical" href="https://www.xingjiyan.com/note/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Xingji Yan" />
+    <meta property="og:title" content="The model is never the judge" />
+    <meta
+      property="og:description"
+      content="If the model grades the model, you will ship a confident wrong tool call."
+    />
+    <meta property="og:url" content="https://www.xingjiyan.com/note/" />
+    <meta property="og:image" content="https://www.xingjiyan.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The model is never the judge" />
+    <meta
+      name="twitter:description"
+      content="If the model grades the model, you will ship a confident wrong tool call."
+    />
+    <meta name="twitter:image" content="https://www.xingjiyan.com/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@1&family=Inter+Tight:ital,wght@0,400;0,500;0,600;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The model is never the judge",
+        "datePublished": "2026-08-17",
+        "author": { "@type": "Person", "name": "Xingji Yan", "url": "https://www.xingjiyan.com/" },
+        "url": "https://www.xingjiyan.com/note/"
+      }
+    </script>
+  </head>
+  <body class="note-page">
+    <div class="grain" aria-hidden="true"></div>
+    <header class="nav">
+      <a class="nav-mark" href="/">XY</a>
+      <nav aria-label="Primary">
+        <a href="/#work">Work</a>
+        <a href="/#experience">Experience</a>
+        <a href="/#about">Principles</a>
+        <a href="/note/" aria-current="page">Note</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+      <div class="nav-end">
+        <a class="nav-resume" href="/Xingji-Yan-Resume.pdf" download="Xingji_Yan_Resume_Portfolio_General.pdf">Resume ↓</a>
+      </div>
+    </header>
+
+    <article class="note">
+      <p class="note-meta">2026 · Dockline · JASCI</p>
+      <h1>The model is never <em>the judge.</em></h1>
+      <p class="note-lead">
+        If the model grades the model, you will ship a confident wrong tool call.
+      </p>
+      <p>
+        That is not a philosophy. It is a production incident waiting for a warehouse.
+        An ops agent that can release a wave, look up another tenant, or invent a JSON
+        field does not get to score itself. Confidence is not evidence.
+      </p>
+      <p>
+        At JASCI I put an LLM on top of systems that already had to be correct: tenant
+        isolation, idempotent writes, audit rows. The useful part was not the chat.
+        The useful part was the contract. Schema. Role. A trace you can read when it
+        fails.
+      </p>
+      <p>
+        <a href="/#dockline">Dockline</a> is that contract as a product. Forty cases.
+        The default router is deterministic. OpenAI tools are optional. The scorer is a
+        rule file. The model, when it is present, is an untrusted caller — the same as
+        a browser, the same as a retry.
+      </p>
+      <p>
+        Schema, then auth, then execute. Extra fields die at schema. Cross-tenant
+        prompts die at auth. The execute step never sees a guess. You can watch that
+        path fail closed in
+        <a href="/#failures/hallucinate">Hallucinate</a>.
+      </p>
+      <p>
+        People ask for an eval harness after the demo works. That is backwards. The
+        harness is the product. Cases are cheaper than a wrong wave.
+      </p>
+      <p>
+        I want the seat where this can go wrong: on-call for tenants, retries, and
+        agents that fail closed. If the judge floats, I do not ship.
+      </p>
+      <p class="note-end">
+        <a href="/#contact">Write me</a>
+        ·
+        <a href="https://github.com/BigFiiish/dockline" target="_blank" rel="noreferrer">Dockline source</a>
+      </p>
+    </article>
+    <script type="module" src="/src/note.ts"></script>
+  </body>
+</html>

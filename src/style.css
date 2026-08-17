@@ -1468,6 +1468,10 @@ th {
   margin-top: 0;
 }
 
+.nav nav a[aria-current="page"] {
+  color: var(--ink);
+}
+
 .jobs {
   list-style: none;
   margin-top: 3.2rem;
@@ -1500,6 +1504,128 @@ th {
 .jobs em {
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.72rem;
+  color: var(--faint);
+}
+
+.job-lead {
+  grid-template-columns: 16rem minmax(0, 1fr);
+  gap: 1.75rem 2.5rem;
+  padding: 2.35rem 0 2.6rem;
+  align-items: start;
+}
+
+.job-lead .job-who strong {
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+}
+
+.job-lead .job-who em {
+  display: block;
+  margin-top: 0.55rem;
+}
+
+.job-lede {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  line-height: 1.32;
+  color: var(--ink);
+  max-width: 28rem;
+  margin: 0;
+}
+
+.job-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.35rem 1.8rem;
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+}
+
+.job-stats b {
+  display: block;
+  font-weight: 500;
+  font-size: 1.05rem;
+  letter-spacing: -0.03em;
+}
+
+.job-stats span {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.job-lead .seen {
+  margin: 1.1rem 0 0;
+}
+
+.case-open {
+  margin: 0 0 1.6rem;
+}
+
+.note-page .note {
+  max-width: 38rem;
+  padding: 8.5rem var(--pad) 6rem;
+}
+
+.note-meta {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 1.4rem;
+}
+
+.note-page .note h1 {
+  font-weight: 500;
+  font-size: clamp(2.2rem, 5.2vw, 3.5rem);
+  letter-spacing: -0.048em;
+  line-height: 1.05;
+  margin-bottom: 1.6rem;
+}
+
+.note-page .note h1 em {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.note-lead {
+  font-size: 1.28rem;
+  line-height: 1.45;
+  color: var(--ink);
+  margin: 0 0 1.4rem;
+}
+
+.note-page .note p {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin: 0 0 1.15rem;
+}
+
+.note-page .note a {
+  color: var(--ink);
+  border-bottom: 1px solid rgba(247, 246, 241, 0.28);
+}
+
+.note-page .note a:hover,
+.note-page .note a:focus-visible {
+  border-bottom-color: rgba(247, 246, 241, 0.7);
+}
+
+.note-end {
+  margin-top: 2.4rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
   color: var(--faint);
 }
 
@@ -3598,6 +3724,16 @@ html:has(#case[open]) {
   max-width: 28rem;
 }
 
+.more-aside a {
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+
+.more-aside a:hover,
+.more-aside a:focus-visible {
+  border-bottom-color: rgba(247, 246, 241, 0.5);
+}
+
 .more-row[data-more="dockline"] .more-aside {
   opacity: 1;
 }
@@ -3802,6 +3938,10 @@ html:has(#case[open]) {
   }
   .jobs li {
     grid-template-columns: 1fr auto;
+  }
+  .job-lead {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
   }
   .more-row {
     grid-template-columns: 1fr;

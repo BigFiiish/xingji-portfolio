@@ -63,6 +63,7 @@ export function initCommand() {
     { group: "Navigation", label: "Failure Modes", keywords: "race expire fail hallucinate playground", run: () => go("#failures") },
     { group: "Navigation", label: "Experience", keywords: "jobs career jasci sonos tencent", run: () => go("#experience") },
     { group: "Navigation", label: "Principles", keywords: "about bio principles correctness", run: () => go("#about") },
+    { group: "Navigation", label: "Note", keywords: "note essay dockline judge model", run: () => { window.location.href = person.note; } },
     { group: "Navigation", label: "Contact", keywords: "email", run: () => go("#contact") },
     ...failDemos.map((d) => ({
       group: "Failure modes",

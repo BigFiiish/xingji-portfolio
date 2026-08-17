@@ -15,6 +15,8 @@ export const person = {
   linkedin: "https://www.linkedin.com/in/xingji-yan",
   resume: "/Xingji-Yan-Resume.pdf",
   site: "https://www.xingjiyan.com/",
+  note: "/note/",
+  seat: "On-call for tenants, retries, and agents that fail closed.",
   aboutLede:
     "I ship the unglamorous systems that keep operations alive — then I put an agent on top of them, with guardrails, so people can talk to the warehouse instead of clicking through twelve screens.",
   aboutBody:
@@ -71,6 +73,7 @@ export const domains = [
 export type ArchNode = { label: string; children?: ArchNode[] };
 
 export type CaseStudy = {
+  shape?: "object" | "grant" | "hook" | "full";
   problem: string;
   constraints: string[];
   architecture: ArchNode[];
@@ -104,7 +107,7 @@ export const projects: Project[] = [
     featured: true,
     headline: "Financial workflows that stay correct under retries.",
     blurb:
-      "Multi-tenant Java/Spring platform demonstrating tenant isolation, idempotent billing, optimistic concurrency, async jobs, MCP guardrails, and production-style observability.",
+      "The contracts I carried on-call at JASCI — tenant isolation, idempotent billing, optimistic concurrency — as a system you can retry.",
     stack: ["Java 21", "Spring Boot", "PostgreSQL", "Redis", "MCP"],
     proof: ["Idempotent", "Multi-tenant", "Retry-safe"],
     live: "https://clearbay.onrender.com",
@@ -113,6 +116,7 @@ export const projects: Project[] = [
     preview: "clearbay",
     xray: ["Browser", "Spring REST API", "Tenant Context", "Service Layer", "PostgreSQL / Redis", "Async Worker", "MCP / Audit"],
     caseStudy: {
+      shape: "object",
       problem:
         "Warehouse SaaS shares one database across customers. A retry, a spoofed header, or a cache key without a tenant prefix is enough to charge twice or leak inventory.",
       constraints: [
@@ -187,6 +191,7 @@ export const projects: Project[] = [
     preview: "grantline",
     xray: ["Console", "Challenge / Prove", "Grant (ed25519)", "Policy", "Sessions + audit"],
     caseStudy: {
+      shape: "grant",
       problem:
         "Passwords and spoofable tenant headers confuse authentication with authorization. Humans, machines, and agents need short-lived access that still fails closed.",
       constraints: [
@@ -249,6 +254,7 @@ export const projects: Project[] = [
     preview: "durable",
     xray: ["Next.js", "Workflow", "Parallel Research", "Draft", "Evaluator / Revision Loop", "Human Hook", "Publish"],
     caseStudy: {
+      shape: "hook",
       problem:
         "Most AI demos die when the tab closes. A briefing desk that publishes without a human, or forgets the run, is not a workflow — it is a prompt.",
       constraints: [
@@ -318,6 +324,7 @@ export const projects: Project[] = [
     preview: "pulse",
     xray: ["React Dashboard", "SSE", "Express", "Worker Pool", "Queue / Lease", "Retry / Backoff", "DLQ"],
     caseStudy: {
+      shape: "full",
       problem:
         "A retry that two workers both own is a double send. A retry with no backoff is a thundering herd. A retry that never dies is a poison pill.",
       constraints: [
@@ -486,13 +493,33 @@ export const projects: Project[] = [
   },
 ];
 
-export const experience = [
+export type Job = {
+  id: string;
+  company: string;
+  role: string;
+  dates: string;
+  line: string;
+  lead?: boolean;
+  lede?: string;
+  stats?: { value: string; label: string }[];
+  seen?: { name: string; href: string; label: string };
+};
+
+export const experience: Job[] = [
   {
     id: "jasci",
     company: "JASCI Software",
     role: "Software Engineer",
     dates: "2023 — 2026",
     line: "Multi-tenant warehouse SaaS. Agentic action layer, sub-second search, billing engine, production on-call.",
+    lead: true,
+    lede: "A smart WMS used by 20+ 3PL customers and 500+ concurrent users. I took an LLM action layer from a sketch to production — JSON Schema, idempotent writes, audit trails — and I still carried on-call.",
+    stats: [
+      { value: "20+", label: "Production customer organizations" },
+      { value: "10s → <1s", label: "Search latency" },
+      { value: "~95%", label: "Fewer DB round trips" },
+    ],
+    seen: { name: "Clearbay", href: "#clearbay", label: "The same contracts, public" },
   },
   {
     id: "sonos",

@@ -97,7 +97,7 @@ export function moreArticle(p: Project, previewInner: string, withShot = true): 
         <div class="more-copy">
           <h4>${esc(p.name)}</h4>
           <span>${esc(shorts[p.slug] ?? p.headline)}</span>
-          ${p.slug === "dockline" ? `<p class="more-aside">40 deterministic cases. Trace-level evaluation.</p>` : ""}
+          ${p.slug === "dockline" ? `<p class="more-aside">40 deterministic cases. <a href="${esc(person.note)}">The model is never the judge.</a></p>` : ""}
         </div>
         <div class="more-preview">${previewInner}${withShot && p.slug === "sketchsync" ? productFigure(p, true) : ""}</div>
         <div class="more-foot">
@@ -128,8 +128,30 @@ export function staticPrinciplesHtml(): string {
 
 export function staticExperienceHtml(): string {
   return experience
-    .map(
-      (job) => `
+    .map((job) => {
+      if (job.lead) {
+        const stats = job.stats
+          ?.map((s) => `<li><b>${esc(s.value)}</b><span>${esc(s.label)}</span></li>`)
+          .join("");
+        return `
+    <li class="job-lead reveal" id="${esc(job.id)}">
+      <div class="job-who">
+        <strong>${esc(job.company)}</strong>
+        <span>${esc(job.role)}</span>
+        <em>${esc(job.dates)}</em>
+      </div>
+      <div class="job-body">
+        <p class="job-lede">${esc(job.lede ?? job.line)}</p>
+        ${stats ? `<ul class="job-stats">${stats}</ul>` : ""}
+        ${
+          job.seen
+            ? `<p class="seen">${esc(job.seen.label)}: <a href="${esc(job.seen.href)}">${esc(job.seen.name)}</a></p>`
+            : ""
+        }
+      </div>
+    </li>`;
+      }
+      return `
     <li class="reveal" id="${esc(job.id)}">
       <div class="job-who">
         <strong>${esc(job.company)}</strong>
@@ -137,8 +159,8 @@ export function staticExperienceHtml(): string {
       </div>
       <p>${esc(job.line)}</p>
       <em>${esc(job.dates)}</em>
-    </li>`,
-    )
+    </li>`;
+    })
     .join("");
 }
 
@@ -171,7 +193,7 @@ export function jsonLd(): string {
     worksFor: { "@type": "Organization", name: "JASCI Software" },
     url: person.site,
     sameAs: [person.github, person.linkedin],
-    knowsAbout: ["Reliable systems", "AI workflows", "Developer infrastructure", "Java", "TypeScript"],
+    knowsAbout: ["On-call systems", "Multi-tenant isolation", "Idempotency", "AI guardrails", "Java", "TypeScript"],
     workExample: works,
   });
 }
