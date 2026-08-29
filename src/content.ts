@@ -36,12 +36,13 @@ export const domains = [
     id: "reliable",
     label: "Reliable systems",
     detail: "Correctness · retries · concurrency · isolation",
-    href: "#clearbay",
+    href: "#catalog-order-service",
     related: [
+      { name: "Catalog Order Service", href: "#catalog-order-service" },
       { name: "Clearbay", href: "#clearbay" },
       { name: "Grantline", href: "#grantline" },
     ],
-    story: "Tenant isolation · idempotency · signed identity",
+    story: "Atomic stock · idempotency · tenant isolation · signed identity",
     accent: "#3ECF8E",
   },
   {
@@ -94,12 +95,99 @@ export type Project = {
   live: string | null;
   repo: string;
   accent: string;
-  preview: "clearbay" | "grantline" | "durable" | "pulse" | "dockline" | "sketch" | "resumatch";
+  preview: "catalog" | "clearbay" | "grantline" | "durable" | "pulse" | "dockline" | "sketch" | "resumatch";
   caseStudy: CaseStudy;
   xray: string[];
 };
 
 export const projects: Project[] = [
+  {
+    name: "Catalog Order Service",
+    slug: "catalog-order-service",
+    year: "2026",
+    featured: true,
+    headline: "One last unit. One winning order.",
+    blurb:
+      "A Java 21 / Spring service that creates each order in one transaction, atomically decrements stock, replays idempotent requests, and ships with bounded asynchronous webhook retries.",
+    stack: ["Java 21", "Spring Boot", "Spring JDBC", "H2", "JUnit 5"],
+    proof: ["Atomic stock", "Idempotent", "Race-tested"],
+    live: null,
+    repo: "https://github.com/BigFiiish/catalog-order-service",
+    accent: "#E6B566",
+    preview: "catalog",
+    xray: [
+      "X-API-Key",
+      "Spring REST API",
+      "OrderService",
+      "TransactionTemplate",
+      "Conditional stock SQL",
+      "Orders + items",
+      "Async webhook",
+    ],
+    caseStudy: {
+      shape: "object",
+      problem:
+        "Checkout looks simple until two buyers want the last unit, a client retries after a timeout, or item three fails after items one and two already changed stock.",
+      constraints: [
+        "Every /api/* request requires X-API-Key; order creation also requires Idempotency-Key.",
+        "Duplicate product lines are combined and processed in stable product-ID order.",
+        "The order, item rows, and every stock decrement succeed or roll back together.",
+        "The database decides stock availability with one conditional UPDATE.",
+        "Shipping transitions once; webhook delivery starts after commit and stops after three attempts.",
+      ],
+      architecture: [
+        { label: "X-API-Key interceptor" },
+        { label: "Product + order controllers" },
+        {
+          label: "OrderService",
+          children: [
+            { label: "TreeMap aggregation" },
+            { label: "TransactionTemplate" },
+            { label: "Idempotency conflict re-read" },
+          ],
+        },
+        { label: "Spring JDBC → products / orders / order_items" },
+        { label: "Committed shipment → @Async webhook retry" },
+      ],
+      decisions: [
+        {
+          decision: "Stock is claimed with a conditional SQL update.",
+          why: "UPDATE ... WHERE stock_quantity >= ? makes the database the concurrency authority. One affected row wins; zero cannot oversell.",
+          tradeoff: "The caller must distinguish missing product from insufficient stock before returning the final API error.",
+        },
+        {
+          decision: "Idempotency uses a fast read plus a UNIQUE constraint.",
+          why: "The read handles ordinary retries; the database constraint closes the concurrent race. A loser re-reads the winning order.",
+          tradeoff: "Conflict handling is part of the normal path and must preserve the original response semantics.",
+        },
+        {
+          decision: "All requested products run in one transaction and stable ID order.",
+          why: "A later failure rolls back earlier deductions. Deterministic ordering also reduces avoidable deadlock risk.",
+          tradeoff: "The transaction spans every line item; production scale would require careful limits and database tuning.",
+        },
+        {
+          decision: "Webhook retries are asynchronous and bounded.",
+          why: "Shipping commits before external IO, and a failing receiver cannot block the request forever.",
+          tradeoff: "The focused demo uses in-process retry state; production would use a durable outbox or queue.",
+        },
+      ],
+      failures: [
+        { fail: "Two buyers race for the last unit.", handle: "Exactly one conditional UPDATE succeeds. Stock finishes at zero, never negative." },
+        { fail: "The client retries with the same key.", handle: "The original order returns with 200; stock is not deducted again." },
+        { fail: "A later line item is out of stock.", handle: "The transaction rolls back the order and every earlier deduction." },
+        { fail: "Two requests ship the same order.", handle: "Only CREATED can become SHIPPED; the loser receives 409." },
+        { fail: "The webhook endpoint keeps failing.", handle: "Delivery stops after three attempts; the committed shipment remains shipped." },
+      ],
+      artifact: {
+        caption: "two threads · product 4 · stock 1",
+        body: `{
+  "successfulDeductions": 1,
+  "rejectedDeductions": 1,
+  "stockQuantity": 0
+}`,
+      },
+    },
+  },
   {
     name: "Clearbay",
     slug: "clearbay",
@@ -559,8 +647,8 @@ export const principles = [
   {
     idx: "01",
     title: "Correctness",
-    line: "Retries should not double-write. Tenant boundaries should not depend on client input.",
-    seen: { name: "Clearbay", href: "#clearbay" },
+    line: "Retries should not double-write. Concurrent checkout should not oversell.",
+    seen: { name: "Catalog Order Service", href: "#catalog-order-service" },
   },
   {
     idx: "02",

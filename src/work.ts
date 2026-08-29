@@ -10,7 +10,7 @@ const rest = () => projects.filter((p) => !p.featured);
 export function renderWork(root: HTMLElement) {
   root.innerHTML = featured()
     .map((p, i) => {
-      const caseBtn = `<button type="button" data-case="${p.slug}">${p.slug === "clearbay" || p.slug === "grantline" ? "Case study →" : "Case study"}</button>`;
+      const caseBtn = `<button type="button" data-case="${p.slug}">${p.slug === "catalog-order-service" || p.slug === "clearbay" || p.slug === "grantline" ? "Case study →" : "Case study"}</button>`;
       return `
       <article class="work-row scene-${p.slug}" id="${p.slug}" data-slug="${p.slug}" style="--accent:${p.accent}">
         ${workCopy(p, i, caseBtn)}

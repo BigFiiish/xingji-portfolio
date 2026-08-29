@@ -13,12 +13,12 @@ export const failDemos: {
   {
     id: "race",
     kicker: "Race",
-    title: "Two concurrent writes",
-    from: "Both read version = 8.",
-    to: "200 · version 9  /  409 CONFLICT",
-    project: "Clearbay",
-    slugs: ["clearbay"],
-    line: "Concurrent writes do not silently overwrite each other.",
+    title: "Two buyers, one unit",
+    from: "Both target stock = 1.",
+    to: "1 CREATED  /  1 CONFLICT",
+    project: "Catalog Order Service",
+    slugs: ["catalog-order-service"],
+    line: "Concurrent orders cannot oversell the last unit.",
   },
   {
     id: "expire",

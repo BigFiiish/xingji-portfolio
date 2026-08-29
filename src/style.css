@@ -697,6 +697,7 @@ html:not(.js) .more-row:not(:has(figure)) {
   order: 2;
 }
 
+.work-row.scene-catalog-order-service,
 .work-row.scene-clearbay {
   grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.32fr);
 }
@@ -705,6 +706,7 @@ html:not(.js) .more-row:not(:has(figure)) {
   grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.82fr);
 }
 
+.js .work-row.scene-catalog-order-service,
 .js .work-row.scene-clearbay,
 .js .work-row.scene-grantline,
 .js .work-row.scene-durable-brief,
@@ -718,6 +720,7 @@ html:not(.js) .more-row:not(:has(figure)) {
   order: 2;
 }
 
+.work-row.scene-catalog-order-service .stage,
 .work-row.scene-clearbay .stage,
 .work-row.scene-grantline .stage {
   min-height: min(30rem, 52svh);
@@ -859,6 +862,7 @@ html:not(.js) .more-row:not(:has(figure)) {
   color: var(--muted);
 }
 
+.work-row.scene-catalog-order-service .work-copy h3,
 .work-row.scene-clearbay .work-copy h3,
 .work-row.scene-grantline .work-copy h3 {
   font-size: 0.68rem;
@@ -866,6 +870,9 @@ html:not(.js) .more-row:not(:has(figure)) {
   letter-spacing: 0.22em;
 }
 
+.work-row.scene-catalog-order-service .work-head,
+.work-row.scene-catalog-order-service .work-body,
+.work-row.scene-catalog-order-service .work-links,
 .work-row.scene-clearbay .work-head,
 .work-row.scene-clearbay .work-body,
 .work-row.scene-clearbay .work-links,
@@ -881,16 +888,19 @@ html:not(.js) .more-row:not(:has(figure)) {
   font-size: 0.9rem;
 }
 
+.work-row.scene-catalog-order-service .tags,
 .work-row.scene-clearbay .tags,
 .work-row.scene-grantline .tags {
   opacity: 0.88;
 }
 
+.work-row.scene-catalog-order-service .work-links a:not(.btn),
 .work-row.scene-clearbay .work-links a:not(.btn),
 .work-row.scene-grantline .work-links a:not(.btn) {
   color: var(--faint);
 }
 
+.work-row.scene-catalog-order-service .work-links button,
 .work-row.scene-clearbay .work-links button,
 .work-row.scene-grantline .work-links button {
   color: var(--faint);
@@ -2466,6 +2476,160 @@ html:has(#case[open]) {
   font-family: "Inter Tight", system-ui, sans-serif;
 }
 
+.scene-co {
+  min-height: min(28rem, 52svh);
+}
+
+.co-status {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--faint);
+  text-transform: uppercase;
+}
+
+.co-race {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: clamp(0.7rem, 2vw, 1.35rem);
+  align-items: center;
+  margin-top: 2.5rem;
+}
+
+.co-lane {
+  min-width: 0;
+  display: grid;
+  gap: 0.65rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.co-lane[data-lane="a"] {
+  text-align: right;
+}
+
+.co-lane[data-lane="b"] {
+  text-align: left;
+}
+
+.co-lane i {
+  position: relative;
+  display: block;
+  height: 1px;
+  background: rgba(247, 246, 241, 0.16);
+  overflow: visible;
+}
+
+.co-lane i::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink);
+  opacity: 0;
+}
+
+.co-lane[data-lane="a"] i::after {
+  left: 0;
+}
+
+.co-lane[data-lane="b"] i::after {
+  right: 0;
+}
+
+.scene-co[data-step="racing"] .co-lane[data-lane="a"] i::after {
+  animation: co-race-a 0.58s var(--ease) forwards;
+}
+
+.scene-co[data-step="racing"] .co-lane[data-lane="b"] i::after {
+  animation: co-race-b 0.58s var(--ease) forwards;
+}
+
+@keyframes co-race-a {
+  from { left: 0; opacity: 1; }
+  80% { opacity: 1; }
+  to { left: calc(100% - 5px); opacity: 0; }
+}
+
+@keyframes co-race-b {
+  from { right: 0; opacity: 1; }
+  80% { opacity: 1; }
+  to { right: calc(100% - 5px); opacity: 0; }
+}
+
+.co-lane strong {
+  min-height: 1.2em;
+  font-size: 0.68rem;
+  font-weight: 400;
+  color: var(--faint);
+  transition: color 0.25s var(--ease);
+}
+
+.co-gate {
+  width: clamp(7.4rem, 14vw, 9.25rem);
+  aspect-ratio: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  border: 1px solid rgba(247, 246, 241, 0.16);
+  border-radius: 50%;
+  transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+}
+
+.co-gate span,
+.co-gate small {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.co-gate b {
+  margin: 0.18rem 0 0.28rem;
+  font-family: "Inter Tight", system-ui, sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4.2rem);
+  font-weight: 500;
+  line-height: 0.9;
+  color: color-mix(in srgb, var(--accent) 52%, var(--ink));
+}
+
+.scene-co[data-step="settled"] .co-gate,
+.scene-co[data-step="replay"] .co-gate {
+  border-color: color-mix(in srgb, var(--accent) 48%, transparent);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+.scene-co[data-step="settled"] [data-lane="a"] strong,
+.scene-co[data-step="replay"] [data-lane="a"] strong {
+  color: color-mix(in srgb, var(--accent) 68%, var(--ink));
+}
+
+.scene-co[data-step="settled"] [data-lane="b"] strong {
+  color: color-mix(in srgb, #c9897a 78%, var(--ink));
+}
+
+.scene-co .co-note {
+  min-height: 1.35em;
+  margin-top: 2.1rem;
+}
+
+.scene-co .scene-ops button {
+  font-family: "Inter Tight", system-ui, sans-serif;
+  font-size: 0.88rem;
+  letter-spacing: -0.015em;
+  text-transform: none;
+}
+
+.scene-co .scene-ops > button:not(.text) {
+  font-size: 0.98rem;
+}
+
 .scene-cb {
   min-height: min(28rem, 52svh);
 }
@@ -3994,6 +4158,7 @@ html:has(#case[open]) {
   .principle-copy {
     grid-column: 1 / -1;
   }
+  .work-row.scene-catalog-order-service,
   .work-row.scene-clearbay,
   .work-row.scene-grantline,
   .work-row.scene-pulsequeue,
@@ -4001,6 +4166,7 @@ html:has(#case[open]) {
     grid-template-columns: 1fr;
     min-height: 0;
   }
+  .work-row.scene-catalog-order-service,
   .work-row.scene-clearbay,
   .work-row.scene-grantline {
     gap: 2.4rem;
@@ -4009,6 +4175,10 @@ html:has(#case[open]) {
   .work-row.scene-grantline .work-copy {
     order: 0;
   }
+  .work-row.scene-catalog-order-service > *,
+  .work-row.scene-catalog-order-service .work-copy,
+  .work-row.scene-catalog-order-service .work-visual,
+  .work-row.scene-catalog-order-service .stage,
   .work-row.scene-clearbay > *,
   .work-row.scene-grantline > *,
   .work-row.scene-clearbay .work-copy,
@@ -4020,20 +4190,24 @@ html:has(#case[open]) {
     min-width: 0;
     max-width: 100%;
   }
+  .scene-co,
   .scene-cb,
   .scene-gl {
     min-height: 0;
     padding-top: 0.4rem;
   }
+  .work-row.scene-catalog-order-service .stage,
   .work-row.scene-clearbay .stage,
   .work-row.scene-grantline .stage {
     min-height: 0;
     overflow: visible;
   }
+  .work-row.scene-catalog-order-service .work-visual.is-xray .stage,
   .work-row.scene-clearbay .work-visual.is-xray .stage,
   .work-row.scene-grantline .work-visual.is-xray .stage {
     overflow: hidden;
   }
+  .scene-co,
   .scene-cb .cb-stack,
   .scene-gl {
     min-width: 0;
@@ -4056,19 +4230,24 @@ html:has(#case[open]) {
   .scene-gl .vchain {
     gap: 0.7rem;
   }
+  .scene-co .scene-ops,
   .scene-cb .scene-ops,
   .scene-gl .scene-ops,
   .scene-db .scene-ops {
     gap: 0.75rem 1.2rem;
   }
+  .scene-co .scene-ops button:not([hidden]),
   .scene-cb .scene-ops button:not([hidden]),
   .scene-gl .scene-ops button:not([hidden]),
   .scene-db .scene-ops button:not([hidden]),
   .scene-pq .scene-ops button:not([hidden]),
+  .work-row.scene-catalog-order-service .view-tab,
   .work-row.scene-clearbay .view-tab,
   .work-row.scene-grantline .view-tab,
   .work-row.scene-durable-brief .view-tab,
   .work-row.scene-pulsequeue .view-tab,
+  .work-row.scene-catalog-order-service .work-links a,
+  .work-row.scene-catalog-order-service .work-links button,
   .work-row.scene-clearbay .work-links a,
   .work-row.scene-clearbay .work-links button,
   .work-row.scene-grantline .work-links a,

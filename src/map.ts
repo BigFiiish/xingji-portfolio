@@ -12,7 +12,8 @@ type Node = {
 
 const nodes: Node[] = [
   { id: "xy", x: 310, y: 248, label: "XY", hub: true },
-  { id: "clearbay", x: 392, y: 62, label: "Clearbay", domain: "reliable", href: "#clearbay" },
+  { id: "catalog", x: 264, y: 70, label: "Catalog Orders", domain: "reliable", href: "#catalog-order-service" },
+  { id: "clearbay", x: 448, y: 82, label: "Clearbay", domain: "reliable", href: "#clearbay" },
   { id: "grantline", x: 78, y: 186, label: "Grantline", domain: "reliable", href: "#grantline" },
   { id: "pulsequeue", x: 548, y: 158, label: "PulseQueue", domain: "infra", href: "#pulsequeue" },
   { id: "durable", x: 168, y: 418, label: "Durable Brief", domain: "ai", href: "#durable-brief" },
@@ -22,8 +23,10 @@ const nodes: Node[] = [
 
 const edges: [string, string][] = [
   ["grantline", "xy"],
+  ["catalog", "xy"],
   ["xy", "pulsequeue"],
   ["xy", "clearbay"],
+  ["catalog", "clearbay"],
   ["grantline", "durable"],
   ["pulsequeue", "durable"],
   ["durable", "dockline"],
@@ -60,7 +63,8 @@ export function initMap(svg: SVGSVGElement) {
   const pulsePaths = reduce
     ? ""
     : [
-        pathD("xy", "clearbay"),
+        pathD("catalog", "xy"),
+        pathD("catalog", "clearbay"),
         pathD("xy", "pulsequeue"),
         pathD("grantline", "durable"),
         pathD("pulsequeue", "sketchsync"),

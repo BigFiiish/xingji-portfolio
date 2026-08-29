@@ -7,6 +7,8 @@ export type PulseCtl = {
 
 export function sceneMarkup(p: Project): string {
   switch (p.preview) {
+    case "catalog":
+      return catalog();
     case "clearbay":
       return clearbay();
     case "grantline":
@@ -18,6 +20,36 @@ export function sceneMarkup(p: Project): string {
     default:
       return "";
   }
+}
+
+function catalog(): string {
+  return `
+    <div class="scene scene-co" data-scene="catalog" data-step="idle">
+      <p class="co-status" data-status aria-live="polite">STOCK 1 · READY</p>
+      <div class="co-race" aria-label="Two order requests racing for one unit">
+        <div class="co-lane" data-lane="a">
+          <span>ORDER A</span>
+          <i aria-hidden="true"></i>
+          <strong data-result-a>waiting</strong>
+        </div>
+        <div class="co-gate">
+          <span>PRODUCT 4</span>
+          <b data-stock>1</b>
+          <small>conditional UPDATE</small>
+        </div>
+        <div class="co-lane" data-lane="b">
+          <span>ORDER B</span>
+          <i aria-hidden="true"></i>
+          <strong data-result-b>waiting</strong>
+        </div>
+      </div>
+      <p class="scene-note co-note" data-note>One row affected means the unit is yours.</p>
+      <div class="scene-ops">
+        <button type="button" data-act="race">Race for last unit</button>
+        <button type="button" class="text" data-act="replay" hidden>Replay winner</button>
+        <button type="button" class="text" data-act="reset" hidden>Reset</button>
+      </div>
+    </div>`;
 }
 
 function clearbay(): string {
@@ -236,10 +268,72 @@ export function bindScenes(root: HTMLElement) {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   root.querySelectorAll<HTMLElement>("[data-scene]").forEach((el) => {
     const kind = el.dataset.scene;
+    if (kind === "catalog") bindCatalog(el, reduce);
     if (kind === "clearbay") bindClearbay(el, reduce);
     if (kind === "grantline") bindGrantline(el, reduce);
     if (kind === "durable") bindDurable(el, reduce);
     if (kind === "pulse") bindPulse(el, reduce);
+  });
+}
+
+function bindCatalog(el: HTMLElement, reduce: boolean) {
+  const status = el.querySelector<HTMLElement>("[data-status]");
+  const stock = el.querySelector<HTMLElement>("[data-stock]");
+  const resultA = el.querySelector<HTMLElement>("[data-result-a]");
+  const resultB = el.querySelector<HTMLElement>("[data-result-b]");
+  const note = el.querySelector<HTMLElement>("[data-note]");
+  const raceBtn = el.querySelector<HTMLButtonElement>("[data-act='race']");
+  const replayBtn = el.querySelector<HTMLButtonElement>("[data-act='replay']");
+  const resetBtn = el.querySelector<HTMLButtonElement>("[data-act='reset']");
+  let busy = false;
+  const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, reduce ? 0 : ms));
+
+  const reset = () => {
+    el.dataset.step = "idle";
+    if (status) status.textContent = "STOCK 1 · READY";
+    if (stock) stock.textContent = "1";
+    if (resultA) resultA.textContent = "waiting";
+    if (resultB) resultB.textContent = "waiting";
+    if (note) note.textContent = "One row affected means the unit is yours.";
+    if (raceBtn) raceBtn.hidden = false;
+    if (replayBtn) replayBtn.hidden = true;
+    if (resetBtn) resetBtn.hidden = true;
+  };
+
+  raceBtn?.addEventListener("click", async () => {
+    if (busy) return;
+    busy = true;
+    el.dataset.step = "racing";
+    if (status) status.textContent = "TWO THREADS · ONE ROW";
+    if (resultA) resultA.textContent = "claiming";
+    if (resultB) resultB.textContent = "claiming";
+    await wait(620);
+    el.dataset.step = "settled";
+    if (status) status.textContent = "STOCK 0 · COMMITTED";
+    if (stock) stock.textContent = "0";
+    if (resultA) resultA.textContent = "201 created";
+    if (resultB) resultB.textContent = "409 conflict";
+    if (note) note.textContent = "One deduction. One order. No oversell.";
+    if (raceBtn) raceBtn.hidden = true;
+    if (replayBtn) replayBtn.hidden = false;
+    if (resetBtn) resetBtn.hidden = false;
+    busy = false;
+  });
+
+  replayBtn?.addEventListener("click", async () => {
+    if (busy) return;
+    busy = true;
+    el.dataset.step = "replay";
+    if (status) status.textContent = "IDEMPOTENCY KEY · REPLAY";
+    if (resultA) resultA.textContent = "same order";
+    if (resultB) resultB.textContent = "no new write";
+    await wait(360);
+    if (note) note.textContent = "200 OK. Original order returned; stock stays 0.";
+    busy = false;
+  });
+
+  resetBtn?.addEventListener("click", () => {
+    if (!busy) reset();
   });
 }
 
