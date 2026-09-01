@@ -111,7 +111,7 @@ export const projects: Project[] = [
       "A Java 21 / Spring service that creates each order in one transaction, atomically decrements stock, replays idempotent requests, and ships with bounded asynchronous webhook retries.",
     stack: ["Java 21", "Spring Boot", "Spring JDBC", "H2", "JUnit 5"],
     proof: ["Atomic stock", "Idempotent", "Race-tested"],
-    live: null,
+    live: "https://xingji-catalog-order-service.onrender.com",
     repo: "https://github.com/BigFiiish/catalog-order-service",
     accent: "#E6B566",
     preview: "catalog",
