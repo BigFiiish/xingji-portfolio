@@ -13,6 +13,26 @@ function label(x: number, y: number, t: string, cls = ""): string {
 }
 
 function diagram(kind: Project["preview"]): string {
+  if (kind === "catalog") {
+    return `<svg class="xray-svg" viewBox="0 0 280 340" aria-hidden="true">
+      ${label(140, 22, "Browser")}
+      ${line(140, 32, 140, 52)}
+      ${label(140, 68, "REST + API key")}
+      ${line(140, 78, 140, 98)}
+      ${label(140, 114, "OrderService")}
+      ${line(140, 124, 140, 144)}
+      ${label(140, 160, "TransactionTemplate")}
+      ${line(140, 170, 140, 198)}
+      ${line(52, 198, 228, 198)}
+      ${label(52, 220, "Stock SQL")}
+      ${label(140, 220, "Orders + items")}
+      ${label(228, 220, "Unique key")}
+      ${line(140, 230, 140, 258)}
+      ${label(140, 274, "Commit")}
+      ${line(140, 284, 140, 304)}
+      ${label(140, 320, "Async webhook")}
+    </svg>`;
+  }
   if (kind === "clearbay") {
     return `<svg class="xray-svg" viewBox="0 0 280 320" aria-hidden="true">
       ${label(140, 22, "Browser")}
