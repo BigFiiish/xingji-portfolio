@@ -1,6 +1,5 @@
-import { experience, person, projects } from "./content";
+import { caseStudyPath, experience, person, projects } from "./content";
 import { failDemos, playFail } from "./failures";
-import { openCase } from "./panel";
 
 type Item = { group: string; label: string; run: () => void; keywords: string };
 
@@ -80,12 +79,9 @@ export function initCommand() {
     })),
     ...projects.map((p) => ({
       group: "Projects",
-      label: `Open ${p.name}`,
+      label: `${p.name} case study`,
       keywords: `${p.name} ${p.slug} ${p.stack.join(" ")} case study`,
-      run: () => {
-        if (p.featured) openCase(p.slug, true);
-        else go(`#${p.slug}`);
-      },
+      run: () => { window.location.href = caseStudyPath(p); },
     })),
     {
       group: "Actions",
@@ -172,8 +168,8 @@ export function initCommand() {
       return;
     }
     close();
-    if (id === "crawlforge") openCase("crawlforge", true);
-    if (id === "grantline") openCase("grantline", true);
+    if (id === "crawlforge") window.location.href = "/work/crawlforge/";
+    if (id === "grantline") window.location.href = "/work/grantline/";
     if (id === "resume") window.open(person.resume, "_blank");
     if (id === "race") playFail("race");
   });

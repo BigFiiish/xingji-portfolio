@@ -1,4 +1,13 @@
-import { experience, person, principles, projects, type Project } from "./content";
+import {
+  caseStudyPath,
+  experience,
+  isRenderProject,
+  person,
+  principles,
+  projects,
+  projectStatus,
+  type Project,
+} from "./content";
 import { failDemos } from "./failures";
 
 export const shorts: Record<string, string> = {
@@ -57,7 +66,23 @@ export function workDirectoryHtml(): string {
   </nav>`;
 }
 
-export function workCopy(p: Project, i: number, extra = ""): string {
+const renderNote = (project: Project, compact = false) =>
+  isRenderProject(project)
+    ? `<p class="demo-note${compact ? " compact" : ""}">Render may need up to ~60s to wake. <a href="${caseStudyPath(project)}">View instant proof →</a></p>`
+    : "";
+
+export function proofFallbackHtml(project: Project): string {
+  return `<div class="work-visual proof-fallback" data-demo-pending>
+    <div class="proof-fallback-card">
+      <span>Static proof</span>
+      <strong>${esc(project.evidence?.result ?? project.headline)}</strong>
+      <p>${esc(project.evidence?.validation ?? project.caseStudy.artifact?.caption ?? project.blurb)}</p>
+      <a href="${caseStudyPath(project)}">Open full case study →</a>
+    </div>
+  </div>`;
+}
+
+export function workCopy(p: Project, i: number): string {
   const proof = p.proof?.length
     ? `<p class="proof">${p.proof.map((s) => `<span>${esc(s)}</span>`).join("")}</p>`
     : "";
@@ -73,13 +98,15 @@ export function workCopy(p: Project, i: number, extra = ""): string {
           <h3>${esc(p.name)}</h3>
           <p class="work-head">${esc(p.headline)}</p>
           ${proof}
+          <p class="project-status">${esc(projectStatus(p))}</p>
           <p class="tags">${p.stack.map((s) => `<span>${esc(s)}</span>`).join("")}</p>
           ${evidence}
           <p class="work-links">
             ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a>` : ""}
             <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
-            ${extra}
+            <a href="${caseStudyPath(p)}">Case study →</a>
           </p>
+          ${renderNote(p)}
         </div>`;
 }
 
@@ -104,8 +131,9 @@ export function staticFeaturedHtml(): string {
   const rows = featuredProjects()
       .map(
         (p, i) => `
-      <article class="work-row" id="${esc(p.slug)}" data-slug="${esc(p.slug)}" style="--accent:${esc(p.accent)}">
+      <article class="work-row scene-${esc(p.slug)}" id="${esc(p.slug)}" data-slug="${esc(p.slug)}" style="--accent:${esc(p.accent)}">
         ${workCopy(p, i)}
+        ${proofFallbackHtml(p)}
       </article>`,
       )
       .join("");
@@ -129,12 +157,14 @@ export function moreArticle(p: Project): string {
         <div class="more-card-top"><span>${String(index).padStart(2, "0")}</span><em>${esc(p.year)}</em></div>
         <h4>${esc(p.name)}</h4>
         <p class="more-summary">${esc(shorts[p.slug] ?? p.headline)}</p>
+        <p class="project-status">${esc(projectStatus(p))}</p>
         <p class="more-tags">${p.stack.slice(0, 4).map((item) => `<span>${esc(item)}</span>`).join("")}</p>
         <p class="more-links">
           ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Live ↗</a>` : ""}
           <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
-          <button type="button" data-case="${esc(p.slug)}">Case study →</button>
+          <a href="${caseStudyPath(p)}">Case study →</a>
         </p>
+        ${renderNote(p, true)}
       </article>`;
 }
 
@@ -209,7 +239,8 @@ export function jsonLd(): string {
     name: p.name,
     description: p.headline,
     codeRepository: p.repo,
-    ...(p.live ? { url: p.live } : {}),
+    url: `https://www.xingjiyan.com${caseStudyPath(p)}`,
+    ...(p.live ? { sameAs: p.live } : {}),
     programmingLanguage: p.stack[0],
   }));
   return JSON.stringify({

@@ -198,7 +198,8 @@ let play: ((id: FailId) => void) | null = null;
 export function playFail(id: FailId) {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.querySelector("#failures")?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
-  play?.(id);
+  if (play) play(id);
+  else history.replaceState(history.state, "", `#failures/${id}`);
 }
 
 export function bindFailures(root: HTMLElement) {

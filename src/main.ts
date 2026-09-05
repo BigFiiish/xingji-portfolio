@@ -3,10 +3,9 @@ import { person } from "./content";
 import { initCommand } from "./command";
 import { bindFailures, failSection } from "./failures";
 import { initMap } from "./map";
-import { initPanel } from "./panel";
 import { initPointer } from "./pointer";
 import { initWarm } from "./warm";
-import { bindXray, renderMore, renderPrinciples, renderWork } from "./work";
+import { renderMore, renderPrinciples, renderWork } from "./work";
 
 document.documentElement.classList.add("js");
 
@@ -25,7 +24,6 @@ const work = document.querySelector<HTMLElement>("#work-list");
 const more = document.querySelector<HTMLElement>("#more");
 if (work) {
   renderWork(work);
-  bindXray(work);
   work.querySelectorAll(".reveal").forEach((n) => io.observe(n));
 }
 if (more) {
@@ -34,9 +32,25 @@ if (more) {
 
 const fails = document.querySelector<HTMLElement>("#fail-grid");
 if (fails) {
-  fails.innerHTML = failSection();
-  bindFailures(fails);
-  fails.querySelectorAll(".reveal").forEach((n) => io.observe(n));
+  const initFailures = () => {
+    if (fails.dataset.ready === "true") return;
+    fails.dataset.ready = "true";
+    fails.innerHTML = failSection();
+    bindFailures(fails);
+    fails.querySelectorAll(".reveal").forEach((n) => io.observe(n));
+  };
+  if (location.hash.startsWith("#failures/")) initFailures();
+  else {
+    const failureObserver = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        failureObserver.disconnect();
+        initFailures();
+      },
+      { rootMargin: "500px 0px", threshold: 0.01 },
+    );
+    failureObserver.observe(fails);
+  }
 }
 
 const principles = document.querySelector<HTMLElement>("#principles");
@@ -48,10 +62,14 @@ if (principles && !principles.children.length) {
 const map = document.querySelector<SVGSVGElement>("#systems-map");
 if (map) initMap(map);
 
-initPanel();
 initCommand();
 initPointer();
 initWarm();
+
+const mobileNav = document.querySelector<HTMLDetailsElement>(".mobile-nav");
+mobileNav?.addEventListener("click", (event) => {
+  if ((event.target as HTMLElement).closest("a")) mobileNav.removeAttribute("open");
+});
 
 document.querySelector("#mail")?.setAttribute("href", `mailto:${person.email}`);
 

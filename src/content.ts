@@ -107,6 +107,27 @@ export type Project = {
   xray: string[];
 };
 
+export const caseStudyPath = (project: Project) => `/work/${project.slug}/`;
+
+export const isRenderProject = (project: Project) => {
+  if (!project.live) return false;
+  return new URL(project.live).hostname.endsWith("onrender.com");
+};
+
+export const projectStatus = (project: Project) => {
+  const verified = project.evidence?.validation.split(" · ")[0].replace(" passing", "");
+  const compactProof: Record<string, string> = {
+    grantline: "policy-checked grants",
+    "durable-brief": "durable workflow",
+    pulsequeue: "lease-safe retries",
+    dockline: "40 eval cases",
+    sketchsync: "raw WebSockets",
+    resumatch: "deterministic scoring",
+  };
+  const proof = verified ?? compactProof[project.slug] ?? project.proof?.[0] ?? project.stack[0];
+  return `${project.live ? "Live" : "Source"} · ${proof} · Updated ${project.year}`;
+};
+
 export const projects: Project[] = [
   {
     name: "Catalog Order Service",

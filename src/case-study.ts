@@ -1,4 +1,4 @@
-import type { Project } from "./content";
+import { isRenderProject, projectStatus, type Project } from "./content";
 import { xrayMarkup } from "./mockups";
 
 const archCaption: Record<string, string> = {
@@ -13,22 +13,23 @@ function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 }
 
-function header(p: Project): string {
-  return `<header class="case-id">
-      <h2 id="case-title" class="case-name" tabindex="-1">${esc(p.name)}</h2>
-      <p class="case-kicker">${esc(p.headline)}</p>
+function header(p: Project, standalone: boolean): string {
+  return `<header class="case-id${standalone ? " case-page-hero" : ""}">
+      ${standalone ? `<p class="case-name">${esc(p.name)}</p><h1 id="case-title" class="case-page-title">${esc(p.headline)}</h1>` : `<h2 id="case-title" class="case-name" tabindex="-1">${esc(p.name)}</h2><p class="case-kicker">${esc(p.headline)}</p>`}
+      <p class="project-status">${esc(projectStatus(p))}</p>
       <p class="case-stack">${esc(p.stack.join(" · "))}</p>
       <p class="case-id-links">
         ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a>` : ""}
         <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
       </p>
+      ${isRenderProject(p) ? `<p class="demo-note">Hosted on Render. The first open may take up to about 60 seconds; the proof below remains available immediately.</p>` : ""}
     </header>`;
 }
 
 function artifact(p: Project): string {
   const a = p.caseStudy.artifact;
   if (!a) return "";
-  return `<figure class="trace case-open">
+  return `<figure class="trace case-open" id="proof">
       <p>${esc(a.caption)}</p>
       <code>${esc(a.body)}</code>
     </figure>`;
@@ -51,6 +52,7 @@ function inspect(p: Project): string {
   return `<div class="case-inspect">
         ${p.live ? `<p><span class="case-k">Live</span> <a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a></p>` : ""}
         <p><span class="case-k">Source</span> <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a></p>
+        ${isRenderProject(p) ? `<p><span class="case-k">Wake time</span> <span>Allow up to about 60 seconds on the first request.</span></p>` : ""}
       </div>`;
 }
 
@@ -62,8 +64,8 @@ function arch(p: Project): string {
       </figure>`;
 }
 
-function objectFirst(p: Project): string {
-  return `${header(p)}
+function objectFirst(p: Project, standalone: boolean): string {
+  return `${header(p, standalone)}
     <section>
       ${artifact(p)}
       ${problem(p)}
@@ -78,8 +80,8 @@ function objectFirst(p: Project): string {
     </section>`;
 }
 
-function grantFirst(p: Project): string {
-  return `${header(p)}
+function grantFirst(p: Project, standalone: boolean): string {
+  return `${header(p, standalone)}
     <section>
       ${artifact(p)}
       ${problem(p)}
@@ -98,8 +100,8 @@ function grantFirst(p: Project): string {
     </section>`;
 }
 
-function hookOnly(p: Project): string {
-  return `${header(p)}
+function hookOnly(p: Project, standalone: boolean): string {
+  return `${header(p, standalone)}
     <section>
       ${problem(p)}
       ${artifact(p)}
@@ -110,9 +112,9 @@ function hookOnly(p: Project): string {
     </section>`;
 }
 
-function full(p: Project): string {
+function full(p: Project, standalone: boolean): string {
   const c = p.caseStudy;
-  return `${header(p)}
+  return `${header(p, standalone)}
     <section>
       <h3><span>01</span> Problem</h3>
       ${problem(p)}
@@ -161,10 +163,10 @@ function full(p: Project): string {
     </section>`;
 }
 
-export function caseHtml(p: Project): string {
+export function caseHtml(p: Project, standalone = false): string {
   const shape = p.caseStudy.shape ?? "full";
-  if (shape === "object") return objectFirst(p);
-  if (shape === "grant") return grantFirst(p);
-  if (shape === "hook") return hookOnly(p);
-  return full(p);
+  if (shape === "object") return objectFirst(p, standalone);
+  if (shape === "grant") return grantFirst(p, standalone);
+  if (shape === "hook") return hookOnly(p, standalone);
+  return full(p, standalone);
 }

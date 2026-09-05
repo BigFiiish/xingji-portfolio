@@ -1,33 +1,51 @@
-import { featuredProjects, moreArticle, secondaryProjects, staticPrinciplesHtml, workCopy, workDirectoryHtml } from "./markup";
+import { featuredProjects, moreArticle, secondaryProjects, staticFeaturedHtml, staticPrinciplesHtml } from "./markup";
 import { xrayMarkup } from "./mockups";
 import { bindScenes, sceneMarkup, type PulseCtl } from "./scenes";
 
 export function renderWork(root: HTMLElement) {
-  const rows = featuredProjects()
-    .map((p, i) => {
-      const caseBtn = `<button type="button" data-case="${p.slug}">${p.slug === "catalog-order-service" || p.slug === "crawlforge" || p.slug === "clearbay" || p.slug === "grantline" ? "Case study →" : "Case study"}</button>`;
-      return `
-      <article class="work-row scene-${p.slug}" id="${p.slug}" data-slug="${p.slug}" style="--accent:${p.accent}">
-        ${workCopy(p, i, caseBtn)}
-        <div class="work-visual">
-          <div class="view-tabs" role="tablist" aria-label="Product or architecture">
-            <button type="button" class="view-tab on" role="tab" data-view="product" aria-selected="true">Product</button>
-            <button type="button" class="view-tab" role="tab" data-view="xray" aria-selected="false" title="Hold Shift while hovering to preview">Architecture</button>
-          </div>
-          <div class="stage">
-            <div class="scan" aria-hidden="true"></div>
-            <div class="stage-body product">${sceneMarkup(p)}</div>
-            <div class="stage-body xray">${xrayMarkup(p)}</div>
-          </div>
-        </div>
-      </article>`;
-    })
-    .join("");
-  root.innerHTML = `${workDirectoryHtml()}<div class="work-rows">${rows}</div>`;
-  bindScenes(root);
+  if (!root.querySelector(".work-row")) root.innerHTML = staticFeaturedHtml();
+
+  const mount = (row: HTMLElement) => {
+    if (row.dataset.demoReady === "true") return;
+    const project = featuredProjects().find((item) => item.slug === row.dataset.slug);
+    const fallback = row.querySelector<HTMLElement>(".work-visual");
+    if (!project || !fallback) return;
+    fallback.outerHTML = `<div class="work-visual">
+      <div class="view-tabs" role="tablist" aria-label="Product or architecture">
+        <button type="button" class="view-tab on" role="tab" data-view="product" aria-selected="true">Product</button>
+        <button type="button" class="view-tab" role="tab" data-view="xray" aria-selected="false" title="Hold Shift while hovering to preview">Architecture</button>
+      </div>
+      <div class="stage">
+        <div class="scan" aria-hidden="true"></div>
+        <div class="stage-body product">${sceneMarkup(project)}</div>
+        <div class="stage-body xray">${xrayMarkup(project)}</div>
+      </div>
+    </div>`;
+    row.dataset.demoReady = "true";
+    bindScenes(row);
+    bindXray(row);
+  };
+
+  const rows = [...root.querySelectorAll<HTMLElement>(".work-row")];
+  if (!("IntersectionObserver" in window)) {
+    rows.forEach(mount);
+    return;
+  }
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        observer.unobserve(entry.target);
+        mount(entry.target as HTMLElement);
+      });
+    },
+    { rootMargin: "500px 0px", threshold: 0.01 },
+  );
+  rows.forEach((row) => observer.observe(row));
 }
 
 export function renderMore(root: HTMLElement) {
+  if (root.children.length) return;
   root.innerHTML =
     `<div class="more-heading"><span>06 more projects</span><h3>More systems</h3></div><div class="more-grid">` +
     secondaryProjects()
