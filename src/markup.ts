@@ -35,6 +35,20 @@ export function esc(s: string): string {
 const featured = () => projects.filter((p) => p.featured);
 const rest = () => projects.filter((p) => !p.featured);
 
+export function workDirectoryHtml(): string {
+  return `<nav class="work-directory" aria-label="Selected project overview">
+    ${featured()
+      .map(
+        (p, i) => `<a href="#${esc(p.slug)}">
+          <span>${String(i + 1).padStart(2, "0")}</span>
+          <strong>${esc(p.name)}</strong>
+          <small>${esc(p.proof?.[0] ?? p.stack[0])}</small>
+        </a>`,
+      )
+      .join("")}
+  </nav>`;
+}
+
 export function workCopy(p: Project, i: number, extra = ""): string {
   const proof = p.proof?.length
     ? `<p class="proof">${p.proof.map((s) => `<span>${esc(s)}</span>`).join("")}</p>`
@@ -72,14 +86,15 @@ export function productFigure(p: Project, compact = false): string {
 }
 
 export function staticFeaturedHtml(): string {
-  return featured()
-    .map(
-      (p, i) => `
+  const rows = featured()
+      .map(
+        (p, i) => `
       <article class="work-row" id="${esc(p.slug)}" data-slug="${esc(p.slug)}" style="--accent:${esc(p.accent)}">
         ${workCopy(p, i)}
       </article>`,
-    )
-    .join("");
+      )
+      .join("");
+  return `${workDirectoryHtml()}<div class="work-rows">${rows}</div>`;
 }
 
 export function staticMoreHtml(): string {

@@ -1,5 +1,5 @@
 import { projects } from "./content";
-import { moreArticle, productFigure, staticPrinciplesHtml, workCopy } from "./markup";
+import { moreArticle, staticPrinciplesHtml, workCopy, workDirectoryHtml } from "./markup";
 import { xrayMarkup } from "./mockups";
 import { bindScenes, sceneMarkup, type PulseCtl } from "./scenes";
 import { secondaryPreview } from "./secondary";
@@ -8,7 +8,7 @@ const featured = () => projects.filter((p) => p.featured);
 const rest = () => projects.filter((p) => !p.featured);
 
 export function renderWork(root: HTMLElement) {
-  root.innerHTML = featured()
+  const rows = featured()
     .map((p, i) => {
       const caseBtn = `<button type="button" data-case="${p.slug}">${p.slug === "catalog-order-service" || p.slug === "crawlforge" || p.slug === "clearbay" || p.slug === "grantline" ? "Case study →" : "Case study"}</button>`;
       return `
@@ -24,11 +24,11 @@ export function renderWork(root: HTMLElement) {
             <div class="stage-body product">${sceneMarkup(p)}</div>
             <div class="stage-body xray">${xrayMarkup(p)}</div>
           </div>
-          ${productFigure(p)}
         </div>
       </article>`;
     })
     .join("");
+  root.innerHTML = `${workDirectoryHtml()}<div class="work-rows">${rows}</div>`;
   bindScenes(root);
 }
 
