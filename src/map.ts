@@ -15,6 +15,7 @@ const nodes: Node[] = [
   { id: "catalog", x: 264, y: 70, label: "Catalog Orders", domain: "reliable", href: "#catalog-order-service" },
   { id: "clearbay", x: 448, y: 82, label: "Clearbay", domain: "reliable", href: "#clearbay" },
   { id: "grantline", x: 78, y: 186, label: "Grantline", domain: "reliable", href: "#grantline" },
+  { id: "crawlforge", x: 514, y: 380, label: "CrawlForge", domain: "reliable", href: "#crawlforge" },
   { id: "pulsequeue", x: 548, y: 158, label: "PulseQueue", domain: "infra", href: "#pulsequeue" },
   { id: "durable", x: 168, y: 418, label: "Durable Brief", domain: "ai", href: "#durable-brief" },
   { id: "dockline", x: 418, y: 452, label: "Dockline", domain: "ai", href: "#dockline" },
@@ -26,6 +27,7 @@ const edges: [string, string][] = [
   ["catalog", "xy"],
   ["xy", "pulsequeue"],
   ["xy", "clearbay"],
+  ["xy", "crawlforge"],
   ["catalog", "clearbay"],
   ["grantline", "durable"],
   ["pulsequeue", "durable"],
@@ -66,6 +68,7 @@ export function initMap(svg: SVGSVGElement) {
         pathD("catalog", "xy"),
         pathD("catalog", "clearbay"),
         pathD("xy", "pulsequeue"),
+        pathD("xy", "crawlforge"),
         pathD("grantline", "durable"),
         pathD("pulsequeue", "sketchsync"),
       ]

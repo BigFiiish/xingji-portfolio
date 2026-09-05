@@ -47,6 +47,7 @@ export function initCommand() {
     chips.setAttribute("role", "group");
     chips.setAttribute("aria-label", "Suggested searches");
     chips.innerHTML = `
+      <button type="button" class="cmd-chip" data-chip="crawlforge">CrawlForge</button>
       <button type="button" class="cmd-chip" data-chip="grantline">Grantline</button>
       <button type="button" class="cmd-chip" data-chip="java">Java</button>
       <button type="button" class="cmd-chip" data-chip="resume">Resume</button>
@@ -171,6 +172,7 @@ export function initCommand() {
       return;
     }
     close();
+    if (id === "crawlforge") openCase("crawlforge", true);
     if (id === "grantline") openCase("grantline", true);
     if (id === "resume") window.open(person.resume, "_blank");
     if (id === "race") playFail("race");

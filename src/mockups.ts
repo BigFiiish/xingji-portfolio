@@ -13,6 +13,28 @@ function label(x: number, y: number, t: string, cls = ""): string {
 }
 
 function diagram(kind: Project["preview"]): string {
+  if (kind === "crawlforge") {
+    return `<svg class="xray-svg" viewBox="0 0 280 340" aria-hidden="true">
+      ${label(140, 22, "Careers URL")}
+      ${line(140, 32, 140, 52)}
+      ${label(140, 68, "Safety + robots")}
+      ${line(140, 78, 140, 98)}
+      ${label(140, 114, "Durable BFS")}
+      ${line(140, 124, 140, 152)}
+      ${line(60, 152, 220, 152)}
+      ${label(60, 174, "JSON-LD")}
+      ${label(140, 174, "jsoup")}
+      ${label(220, 174, "Dedup")}
+      ${line(140, 184, 140, 212)}
+      ${label(140, 228, "Job postings")}
+      ${line(140, 238, 140, 266)}
+      ${line(76, 266, 204, 266)}
+      ${label(76, 288, "JSON / CSV")}
+      ${label(204, 288, "Match")}
+      ${line(204, 298, 204, 318)}
+      ${label(204, 334, "Optional AI")}
+    </svg>`;
+  }
   if (kind === "catalog") {
     return `<svg class="xray-svg" viewBox="0 0 280 340" aria-hidden="true">
       ${label(140, 22, "Browser")}

@@ -39,6 +39,7 @@ export const domains = [
     href: "#catalog-order-service",
     related: [
       { name: "Catalog Order Service", href: "#catalog-order-service" },
+      { name: "CrawlForge", href: "#crawlforge" },
       { name: "Clearbay", href: "#clearbay" },
       { name: "Grantline", href: "#grantline" },
     ],
@@ -95,7 +96,7 @@ export type Project = {
   live: string | null;
   repo: string;
   accent: string;
-  preview: "catalog" | "clearbay" | "grantline" | "durable" | "pulse" | "dockline" | "sketch" | "resumatch";
+  preview: "catalog" | "crawlforge" | "clearbay" | "grantline" | "durable" | "pulse" | "dockline" | "sketch" | "resumatch";
   caseStudy: CaseStudy;
   xray: string[];
 };
@@ -184,6 +185,90 @@ export const projects: Project[] = [
   "successfulDeductions": 1,
   "rejectedDeductions": 1,
   "stockQuantity": 0
+}`,
+      },
+    },
+  },
+  {
+    name: "CrawlForge",
+    slug: "crawlforge",
+    year: "2026",
+    featured: true,
+    headline: "A careers page in. Structured job intelligence out.",
+    blurb:
+      "A Java 21 / Spring Boot crawler that discovers company and ATS job pages, extracts title, location, skills, and experience, exports JSON or CSV, and ranks resume fit with an optional AI explanation layer.",
+    stack: ["Java 21", "Spring Boot", "Spring JDBC", "H2", "jsoup"],
+    proof: ["JobPosting extraction", "JSON / CSV", "20 tests"],
+    live: "https://xingji-crawlforge.onrender.com",
+    repo: "https://github.com/BigFiiish/crawlforge",
+    accent: "#4FA685",
+    preview: "crawlforge",
+    xray: [
+      "Careers URL",
+      "URL safety + robots.txt",
+      "Durable BFS frontier",
+      "JSON-LD / HTML extraction",
+      "Structured job postings",
+      "JSON / CSV export",
+      "Deterministic + optional AI match",
+    ],
+    caseStudy: {
+      shape: "full",
+      problem:
+        "Company careers sites and ATS pages expose the same job data through inconsistent HTML, embedded JSON-LD, redirects, and deep link graphs. A useful crawler has to find the listings, normalize them, and return evidence a person or downstream system can actually use.",
+      constraints: [
+        "Private and local network targets are blocked before requests and after redirects.",
+        "Crawls are bounded by page count, depth, host scope, robots.txt, and per-host request rate.",
+        "The breadth-first frontier and visited URLs persist so interrupted runs can recover.",
+        "Job extraction prefers JobPosting JSON-LD and falls back to conservative HTML signals.",
+        "Exports and deterministic resume matching remain available without an AI provider key.",
+      ],
+      architecture: [
+        { label: "Careers URL → canonicalize + validate" },
+        {
+          label: "Durable breadth-first crawler",
+          children: [
+            { label: "robots.txt + host rate limit" },
+            { label: "persistent frontier + deduplication" },
+            { label: "redirect and content safety" },
+          ],
+        },
+        { label: "JSON-LD / jsoup job extractor" },
+        { label: "Structured job_posting records" },
+        { label: "JSON / CSV export" },
+        { label: "Deterministic match → optional AI explanation" },
+      ],
+      decisions: [
+        {
+          decision: "Discovery and extraction are separate stages.",
+          why: "The crawler can reason about URLs and recovery without coupling every fetch to one careers-site layout.",
+          tradeoff: "There are more persisted states, but parser changes do not rewrite the crawl engine.",
+        },
+        {
+          decision: "Structured data wins over page chrome.",
+          why: "JobPosting JSON-LD carries title, location, description, and hiring metadata with less navigation noise than rendered text.",
+          tradeoff: "Malformed or missing structured data still needs a conservative HTML fallback.",
+        },
+        {
+          decision: "AI is optional; scoring is not.",
+          why: "A live demo and API integration must still return repeatable matches when no provider key is configured.",
+          tradeoff: "The deterministic score is less nuanced, while the optional model is limited to grounded explanation.",
+        },
+      ],
+      failures: [
+        { fail: "A target resolves to a private address.", handle: "Validation rejects it before retrieval; redirects are checked again." },
+        { fail: "The careers page links into an infinite graph.", handle: "Canonicalization, deduplication, depth, and page limits bound the crawl." },
+        { fail: "The process restarts mid-run.", handle: "The frontier and visited state remain in H2 so work can resume." },
+        { fail: "The page has navigation text but no job schema.", handle: "The extractor avoids inventing a job and records parser diagnostics." },
+        { fail: "AI matching is not configured.", handle: "Deterministic score, matched skills, gaps, and exports continue to work." },
+      ],
+      artifact: {
+        caption: "live ZoomInfo scan · one structured posting",
+        body: `{
+  "title": "Senior Software Engineer, Data Infrastructure",
+  "location": "US; Remote",
+  "experience": "5+ years of professional software engineering experience",
+  "skills": ["Java", "Python", "AWS", "Kubernetes", "Kafka", "Distributed Systems"]
 }`,
       },
     },

@@ -698,6 +698,7 @@ html:not(.js) .more-row:not(:has(figure)) {
 }
 
 .work-row.scene-catalog-order-service,
+.work-row.scene-crawlforge,
 .work-row.scene-clearbay {
   grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.32fr);
 }
@@ -707,6 +708,7 @@ html:not(.js) .more-row:not(:has(figure)) {
 }
 
 .js .work-row.scene-catalog-order-service,
+.js .work-row.scene-crawlforge,
 .js .work-row.scene-clearbay,
 .js .work-row.scene-grantline,
 .js .work-row.scene-durable-brief,
@@ -721,6 +723,7 @@ html:not(.js) .more-row:not(:has(figure)) {
 }
 
 .work-row.scene-catalog-order-service .stage,
+.work-row.scene-crawlforge .stage,
 .work-row.scene-clearbay .stage,
 .work-row.scene-grantline .stage {
   min-height: min(30rem, 52svh);
@@ -863,6 +866,7 @@ html:not(.js) .more-row:not(:has(figure)) {
 }
 
 .work-row.scene-catalog-order-service .work-copy h3,
+.work-row.scene-crawlforge .work-copy h3,
 .work-row.scene-clearbay .work-copy h3,
 .work-row.scene-grantline .work-copy h3 {
   font-size: 0.68rem;
@@ -873,6 +877,9 @@ html:not(.js) .more-row:not(:has(figure)) {
 .work-row.scene-catalog-order-service .work-head,
 .work-row.scene-catalog-order-service .work-body,
 .work-row.scene-catalog-order-service .work-links,
+.work-row.scene-crawlforge .work-head,
+.work-row.scene-crawlforge .work-body,
+.work-row.scene-crawlforge .work-links,
 .work-row.scene-clearbay .work-head,
 .work-row.scene-clearbay .work-body,
 .work-row.scene-clearbay .work-links,
@@ -889,18 +896,21 @@ html:not(.js) .more-row:not(:has(figure)) {
 }
 
 .work-row.scene-catalog-order-service .tags,
+.work-row.scene-crawlforge .tags,
 .work-row.scene-clearbay .tags,
 .work-row.scene-grantline .tags {
   opacity: 0.88;
 }
 
 .work-row.scene-catalog-order-service .work-links a:not(.btn),
+.work-row.scene-crawlforge .work-links a:not(.btn),
 .work-row.scene-clearbay .work-links a:not(.btn),
 .work-row.scene-grantline .work-links a:not(.btn) {
   color: var(--faint);
 }
 
 .work-row.scene-catalog-order-service .work-links button,
+.work-row.scene-crawlforge .work-links button,
 .work-row.scene-clearbay .work-links button,
 .work-row.scene-grantline .work-links button {
   color: var(--faint);
@@ -2474,6 +2484,171 @@ html:has(#case[open]) {
   letter-spacing: -0.06em;
   line-height: 0.95;
   font-family: "Inter Tight", system-ui, sans-serif;
+}
+
+.scene-cf {
+  min-height: min(28rem, 52svh);
+  gap: 1rem;
+}
+
+.cf-request {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.3rem 1rem;
+  align-items: end;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.cf-request .scene-k {
+  grid-column: 1 / -1;
+  color: var(--faint);
+}
+
+.cf-url,
+.cf-status,
+.cf-flow,
+.cf-result {
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.cf-url {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink);
+  font-size: 0.78rem;
+}
+
+.cf-status {
+  color: var(--accent);
+  font-size: 0.62rem;
+  letter-spacing: 0.09em;
+  text-align: right;
+}
+
+.cf-flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.cf-flow li {
+  position: relative;
+  min-width: 0;
+  padding: 0.75rem 0.45rem 0.7rem;
+  color: var(--faint);
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+.cf-flow li + li {
+  border-left: 1px solid var(--line);
+}
+
+.cf-flow li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -1px;
+  height: 2px;
+  background: var(--accent);
+  transition: right 240ms var(--ease);
+}
+
+.cf-flow li.on {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+
+.cf-flow li.on::after {
+  right: 0;
+}
+
+.cf-flow span,
+.cf-flow b {
+  display: block;
+}
+
+.cf-flow span {
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.32rem;
+}
+
+.cf-flow b {
+  font-size: 0.64rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cf-result {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem 1.2rem;
+  padding: 0.9rem;
+  border: 1px solid var(--line);
+  opacity: 0.38;
+  transform: translateY(3px);
+  transition: opacity 260ms ease, transform 260ms ease, border-color 260ms ease;
+}
+
+.scene-cf[data-step="done"] .cf-result {
+  opacity: 1;
+  transform: none;
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+}
+
+.cf-result p {
+  min-width: 0;
+}
+
+.cf-result span,
+.cf-result strong {
+  display: block;
+}
+
+.cf-result span {
+  color: var(--faint);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.2rem;
+}
+
+.cf-result strong {
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.scene-cf[data-step="done"] .cf-result strong {
+  color: var(--ink);
+}
+
+.cf-output strong {
+  color: var(--accent);
+}
+
+.scene-cf .cf-note {
+  min-height: 1.3em;
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.scene-cf .scene-ops button {
+  color: var(--muted);
+  font-size: 0.74rem;
+}
+
+.scene-cf .scene-ops > button:not(.text) {
+  color: var(--ink);
 }
 
 .scene-co {
@@ -4159,6 +4334,7 @@ html:has(#case[open]) {
     grid-column: 1 / -1;
   }
   .work-row.scene-catalog-order-service,
+  .work-row.scene-crawlforge,
   .work-row.scene-clearbay,
   .work-row.scene-grantline,
   .work-row.scene-pulsequeue,
@@ -4167,6 +4343,7 @@ html:has(#case[open]) {
     min-height: 0;
   }
   .work-row.scene-catalog-order-service,
+  .work-row.scene-crawlforge,
   .work-row.scene-clearbay,
   .work-row.scene-grantline {
     gap: 2.4rem;
@@ -4179,6 +4356,10 @@ html:has(#case[open]) {
   .work-row.scene-catalog-order-service .work-copy,
   .work-row.scene-catalog-order-service .work-visual,
   .work-row.scene-catalog-order-service .stage,
+  .work-row.scene-crawlforge > *,
+  .work-row.scene-crawlforge .work-copy,
+  .work-row.scene-crawlforge .work-visual,
+  .work-row.scene-crawlforge .stage,
   .work-row.scene-clearbay > *,
   .work-row.scene-grantline > *,
   .work-row.scene-clearbay .work-copy,
@@ -4191,23 +4372,27 @@ html:has(#case[open]) {
     max-width: 100%;
   }
   .scene-co,
+  .scene-cf,
   .scene-cb,
   .scene-gl {
     min-height: 0;
     padding-top: 0.4rem;
   }
   .work-row.scene-catalog-order-service .stage,
+  .work-row.scene-crawlforge .stage,
   .work-row.scene-clearbay .stage,
   .work-row.scene-grantline .stage {
     min-height: 0;
     overflow: visible;
   }
   .work-row.scene-catalog-order-service .work-visual.is-xray .stage,
+  .work-row.scene-crawlforge .work-visual.is-xray .stage,
   .work-row.scene-clearbay .work-visual.is-xray .stage,
   .work-row.scene-grantline .work-visual.is-xray .stage {
     overflow: hidden;
   }
   .scene-co,
+  .scene-cf,
   .scene-cb .cb-stack,
   .scene-gl {
     min-width: 0;
@@ -4231,23 +4416,28 @@ html:has(#case[open]) {
     gap: 0.7rem;
   }
   .scene-co .scene-ops,
+  .scene-cf .scene-ops,
   .scene-cb .scene-ops,
   .scene-gl .scene-ops,
   .scene-db .scene-ops {
     gap: 0.75rem 1.2rem;
   }
   .scene-co .scene-ops button:not([hidden]),
+  .scene-cf .scene-ops button:not([hidden]),
   .scene-cb .scene-ops button:not([hidden]),
   .scene-gl .scene-ops button:not([hidden]),
   .scene-db .scene-ops button:not([hidden]),
   .scene-pq .scene-ops button:not([hidden]),
   .work-row.scene-catalog-order-service .view-tab,
+  .work-row.scene-crawlforge .view-tab,
   .work-row.scene-clearbay .view-tab,
   .work-row.scene-grantline .view-tab,
   .work-row.scene-durable-brief .view-tab,
   .work-row.scene-pulsequeue .view-tab,
   .work-row.scene-catalog-order-service .work-links a,
   .work-row.scene-catalog-order-service .work-links button,
+  .work-row.scene-crawlforge .work-links a,
+  .work-row.scene-crawlforge .work-links button,
   .work-row.scene-clearbay .work-links a,
   .work-row.scene-clearbay .work-links button,
   .work-row.scene-grantline .work-links a,
@@ -4312,7 +4502,21 @@ html:has(#case[open]) {
   .stage {
     min-height: 16rem;
   }
+  .cf-request,
+  .cf-result {
+    grid-template-columns: 1fr;
+  }
+  .cf-status {
+    text-align: left;
+  }
+  .cf-flow li {
+    padding-inline: 0.24rem;
+  }
+  .cf-flow b {
+    font-size: 0.56rem;
+  }
   .work-row.scene-clearbay .stage,
+  .work-row.scene-crawlforge .stage,
   .work-row.scene-grantline .stage,
   .work-row.scene-durable-brief .stage,
   .work-row.scene-pulsequeue .stage {

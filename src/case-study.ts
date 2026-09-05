@@ -2,6 +2,7 @@ import type { Project } from "./content";
 import { xrayMarkup } from "./mockups";
 
 const archCaption: Record<string, string> = {
+  crawlforge: "Careers intelligence path",
   clearbay: "Request path",
   grantline: "Trust path",
   "durable-brief": "Durable execution path",

@@ -9,6 +9,8 @@ export function sceneMarkup(p: Project): string {
   switch (p.preview) {
     case "catalog":
       return catalog();
+    case "crawlforge":
+      return crawlforge();
     case "clearbay":
       return clearbay();
     case "grantline":
@@ -20,6 +22,35 @@ export function sceneMarkup(p: Project): string {
     default:
       return "";
   }
+}
+
+function crawlforge(): string {
+  return `
+    <div class="scene scene-cf" data-scene="crawlforge" data-step="idle">
+      <div class="cf-request">
+        <p class="scene-k">CAREERS URL</p>
+        <p class="cf-url">zoominfo.com/careers/…</p>
+        <p class="cf-status" data-status aria-live="polite">READY · BOUNDED CRAWL</p>
+      </div>
+      <ol class="cf-flow" aria-label="Careers intelligence pipeline">
+        <li data-stage="discover"><span>01</span><b>Discover</b></li>
+        <li data-stage="extract"><span>02</span><b>Extract</b></li>
+        <li data-stage="structure"><span>03</span><b>Structure</b></li>
+        <li data-stage="export"><span>04</span><b>Export</b></li>
+        <li data-stage="match"><span>05</span><b>Match</b></li>
+      </ol>
+      <div class="cf-result" data-result>
+        <p><span>ROLE</span><strong>Senior Software Engineer</strong></p>
+        <p><span>LOCATION</span><strong>US · Remote</strong></p>
+        <p><span>FOUND</span><strong>Java · AWS · Kafka · Kubernetes</strong></p>
+        <p class="cf-output"><span>OUTPUT</span><strong>JSON · CSV · 64% match</strong></p>
+      </div>
+      <p class="scene-note cf-note" data-note>Robots-aware discovery. Structured output without an AI key.</p>
+      <div class="scene-ops">
+        <button type="button" data-act="scan">Run careers scan</button>
+        <button type="button" class="text" data-act="replay" hidden>Replay</button>
+      </div>
+    </div>`;
 }
 
 function catalog(): string {
@@ -269,10 +300,65 @@ export function bindScenes(root: HTMLElement) {
   root.querySelectorAll<HTMLElement>("[data-scene]").forEach((el) => {
     const kind = el.dataset.scene;
     if (kind === "catalog") bindCatalog(el, reduce);
+    if (kind === "crawlforge") bindCrawlforge(el, reduce);
     if (kind === "clearbay") bindClearbay(el, reduce);
     if (kind === "grantline") bindGrantline(el, reduce);
     if (kind === "durable") bindDurable(el, reduce);
     if (kind === "pulse") bindPulse(el, reduce);
+  });
+}
+
+function bindCrawlforge(el: HTMLElement, reduce: boolean) {
+  const status = el.querySelector<HTMLElement>("[data-status]");
+  const note = el.querySelector<HTMLElement>("[data-note]");
+  const runBtn = el.querySelector<HTMLButtonElement>("[data-act='scan']");
+  const replayBtn = el.querySelector<HTMLButtonElement>("[data-act='replay']");
+  const stages = [...el.querySelectorAll<HTMLElement>("[data-stage]")];
+  const sequence = [
+    ["discover", "DISCOVERING · HOST-BOUND BFS"],
+    ["extract", "EXTRACTING · JOBPOSTING JSON-LD"],
+    ["structure", "STRUCTURING · 1 JOB FOUND"],
+    ["export", "EXPORTING · JSON + CSV"],
+    ["match", "MATCHING · DETERMINISTIC CORE"],
+  ] as const;
+  let run = 0;
+  const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, reduce ? 0 : ms));
+
+  const reset = () => {
+    run += 1;
+    el.dataset.step = "idle";
+    stages.forEach((stage) => stage.classList.remove("on"));
+    if (status) status.textContent = "READY · BOUNDED CRAWL";
+    if (note) note.textContent = "Robots-aware discovery. Structured output without an AI key.";
+    if (runBtn) runBtn.hidden = false;
+    if (replayBtn) replayBtn.hidden = true;
+  };
+
+  const start = async () => {
+    if (el.dataset.step === "running") return;
+    const token = ++run;
+    el.dataset.step = "running";
+    stages.forEach((stage) => stage.classList.remove("on"));
+    if (runBtn) runBtn.hidden = true;
+    if (replayBtn) replayBtn.hidden = true;
+    for (const [stageName, message] of sequence) {
+      if (token !== run) return;
+      const stage = stages.find((item) => item.dataset.stage === stageName);
+      stage?.classList.add("on");
+      if (status) status.textContent = message;
+      await wait(310);
+    }
+    if (token !== run) return;
+    el.dataset.step = "done";
+    if (status) status.textContent = "COMPLETED · 1 JOB · 0 FAILED";
+    if (note) note.textContent = "One posting. Structured fields. Two export formats. Repeatable match.";
+    if (replayBtn) replayBtn.hidden = false;
+  };
+
+  runBtn?.addEventListener("click", () => void start());
+  replayBtn?.addEventListener("click", () => {
+    reset();
+    void start();
   });
 }
 
