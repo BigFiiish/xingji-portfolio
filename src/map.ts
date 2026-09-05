@@ -19,6 +19,7 @@ const nodes: Node[] = [
   { id: "pulsequeue", x: 548, y: 158, label: "PulseQueue", domain: "infra", href: "#pulsequeue" },
   { id: "durable", x: 168, y: 418, label: "Durable Brief", domain: "ai", href: "#durable-brief" },
   { id: "dockline", x: 418, y: 452, label: "Dockline", domain: "ai", href: "#dockline" },
+  { id: "resumatch", x: 76, y: 334, label: "ResuMatch", domain: "ai", href: "#resumatch" },
   { id: "sketchsync", x: 600, y: 302, label: "SketchSync", domain: "infra", href: "#sketchsync" },
 ];
 
@@ -32,6 +33,7 @@ const edges: [string, string][] = [
   ["grantline", "durable"],
   ["pulsequeue", "durable"],
   ["durable", "dockline"],
+  ["resumatch", "durable"],
   ["pulsequeue", "sketchsync"],
 ];
 

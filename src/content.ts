@@ -54,6 +54,7 @@ export const domains = [
     related: [
       { name: "Durable Brief", href: "#durable-brief" },
       { name: "Dockline", href: "#dockline" },
+      { name: "ResuMatch", href: "#resumatch" },
     ],
     story: "Agents · evaluation · durable execution",
     accent: "#8F7BFF",

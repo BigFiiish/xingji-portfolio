@@ -36,8 +36,8 @@ const featured = () => projects.filter((p) => p.featured);
 const rest = () => projects.filter((p) => !p.featured);
 
 export function workDirectoryHtml(): string {
-  return `<nav class="work-directory" aria-label="Selected project overview">
-    ${featured()
+  return `<nav class="work-directory" aria-label="All project overview">
+    ${projects
       .map(
         (p, i) => `<a href="#${esc(p.slug)}">
           <span>${String(i + 1).padStart(2, "0")}</span>
