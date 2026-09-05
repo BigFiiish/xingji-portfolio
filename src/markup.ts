@@ -32,12 +32,20 @@ export function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 }
 
-const featured = () => projects.filter((p) => p.featured);
-const rest = () => projects.filter((p) => !p.featured);
+const flagshipOrder = ["crawlforge", "catalog-order-service", "clearbay"];
+
+export const featuredProjects = () =>
+  flagshipOrder
+    .map((slug) => projects.find((project) => project.slug === slug))
+    .filter((project): project is Project => Boolean(project?.featured));
+
+export const secondaryProjects = () => projects.filter((project) => !project.featured);
+
+export const orderedProjects = () => [...featuredProjects(), ...secondaryProjects()];
 
 export function workDirectoryHtml(): string {
   return `<nav class="work-directory" aria-label="All project overview">
-    ${projects
+    ${orderedProjects()
       .map(
         (p, i) => `<a href="#${esc(p.slug)}">
           <span>${String(i + 1).padStart(2, "0")}</span>
@@ -53,13 +61,20 @@ export function workCopy(p: Project, i: number, extra = ""): string {
   const proof = p.proof?.length
     ? `<p class="proof">${p.proof.map((s) => `<span>${esc(s)}</span>`).join("")}</p>`
     : "";
+  const evidence = p.evidence
+    ? `<dl class="work-evidence">
+        <div><dt>Problem</dt><dd>${esc(p.evidence.problem)}</dd></div>
+        <div><dt>Result</dt><dd>${esc(p.evidence.result)}</dd></div>
+        <div><dt>Verified</dt><dd>${esc(p.evidence.validation)}</dd></div>
+      </dl>`
+    : `<p class="work-body">${esc(p.blurb)}</p>`;
   return `<div class="work-copy">
           <span class="work-idx">${String(i + 1).padStart(2, "0")}</span>
           <h3>${esc(p.name)}</h3>
           <p class="work-head">${esc(p.headline)}</p>
           ${proof}
           <p class="tags">${p.stack.map((s) => `<span>${esc(s)}</span>`).join("")}</p>
-          <p class="work-body">${esc(p.blurb)}</p>
+          ${evidence}
           <p class="work-links">
             ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a>` : ""}
             <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
@@ -86,7 +101,7 @@ export function productFigure(p: Project, compact = false): string {
 }
 
 export function staticFeaturedHtml(): string {
-  const rows = featured()
+  const rows = featuredProjects()
       .map(
         (p, i) => `
       <article class="work-row" id="${esc(p.slug)}" data-slug="${esc(p.slug)}" style="--accent:${esc(p.accent)}">
@@ -99,29 +114,27 @@ export function staticFeaturedHtml(): string {
 
 export function staticMoreHtml(): string {
   return (
-    `<h3 class="more-label">Also</h3>` +
-    rest()
-      .map((p) => moreArticle(p, "", false))
-      .join("")
+    `<div class="more-heading"><span>06 more projects</span><h3>More systems</h3></div><div class="more-grid">` +
+    secondaryProjects()
+      .map((p) => moreArticle(p))
+      .join("") +
+    `</div>`
   );
 }
 
-export function moreArticle(p: Project, previewInner: string, withShot = true): string {
+export function moreArticle(p: Project): string {
+  const index = orderedProjects().findIndex((project) => project.slug === p.slug) + 1;
   return `
-      <article class="more-row" id="${esc(p.slug)}" data-more="${esc(p.slug)}" data-phase="idle">
-        <div class="more-copy">
-          <h4>${esc(p.name)}</h4>
-          <span>${esc(shorts[p.slug] ?? p.headline)}</span>
-          ${p.slug === "dockline" ? `<p class="more-aside">40 deterministic cases. <a href="${esc(person.note)}">The model is never the judge.</a></p>` : ""}
-        </div>
-        <div class="more-preview">${previewInner}${withShot && p.slug === "sketchsync" ? productFigure(p, true) : ""}</div>
-        <div class="more-foot">
-          <em>${p.stack.map(esc).join(" · ")}</em>
-          <p class="more-links">
-            ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a>` : ""}
-            <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
-          </p>
-        </div>
+      <article class="more-row" id="${esc(p.slug)}" data-more="${esc(p.slug)}" style="--accent:${esc(p.accent)}">
+        <div class="more-card-top"><span>${String(index).padStart(2, "0")}</span><em>${esc(p.year)}</em></div>
+        <h4>${esc(p.name)}</h4>
+        <p class="more-summary">${esc(shorts[p.slug] ?? p.headline)}</p>
+        <p class="more-tags">${p.stack.slice(0, 4).map((item) => `<span>${esc(item)}</span>`).join("")}</p>
+        <p class="more-links">
+          ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Live ↗</a>` : ""}
+          <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
+          <button type="button" data-case="${esc(p.slug)}">Case study →</button>
+        </p>
       </article>`;
 }
 

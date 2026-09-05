@@ -94,6 +94,11 @@ export type Project = {
   blurb: string;
   stack: string[];
   proof?: string[];
+  evidence?: {
+    problem: string;
+    result: string;
+    validation: string;
+  };
   live: string | null;
   repo: string;
   accent: string;
@@ -113,6 +118,11 @@ export const projects: Project[] = [
       "A Java 21 / Spring service that creates each order in one transaction, atomically decrements stock, replays idempotent requests, and ships with bounded asynchronous webhook retries.",
     stack: ["Java 21", "Spring Boot", "Spring JDBC", "H2", "JUnit 5"],
     proof: ["Atomic stock", "Idempotent", "Race-tested"],
+    evidence: {
+      problem: "Concurrent buyers and client retries can oversell stock or create the same order twice.",
+      result: "With stock = 1, exactly one order wins; a repeated idempotency key replays the original order.",
+      validation: "44 passing tests · real two-thread race · transactional rollback · bounded webhook retry",
+    },
     live: "https://xingji-catalog-order-service.onrender.com",
     repo: "https://github.com/BigFiiish/catalog-order-service",
     accent: "#E6B566",
@@ -200,6 +210,11 @@ export const projects: Project[] = [
       "A Java 21 / Spring Boot crawler that discovers company and ATS job pages, extracts title, location, skills, and experience, exports JSON or CSV, and ranks resume fit with an optional AI explanation layer.",
     stack: ["Java 21", "Spring Boot", "Spring JDBC", "H2", "jsoup"],
     proof: ["JobPosting extraction", "JSON / CSV", "20 tests"],
+    evidence: {
+      problem: "Company and ATS careers pages expose the same job data through inconsistent markup and link graphs.",
+      result: "One Careers URL becomes structured title, location, skills, and experience with JSON/CSV export and optional AI matching.",
+      validation: "20 passing tests · bounded persistent BFS · SSRF-safe redirects · robots-aware retrieval",
+    },
     live: "https://xingji-crawlforge.onrender.com",
     repo: "https://github.com/BigFiiish/crawlforge",
     accent: "#4FA685",
@@ -284,6 +299,11 @@ export const projects: Project[] = [
       "The contracts I carried on-call at JASCI — tenant isolation, idempotent billing, optimistic concurrency — as a system you can retry.",
     stack: ["Java 21", "Spring Boot", "PostgreSQL", "Redis", "MCP"],
     proof: ["Idempotent", "Multi-tenant", "Retry-safe"],
+    evidence: {
+      problem: "Retries, spoofed tenant context, and concurrent releases can double-bill or leak warehouse data.",
+      result: "Invoice retries replay safely, JWT tenant context wins, and stale concurrent updates return 409.",
+      validation: "10 passing integration tests · tenant-isolated cache · unique idempotency · optimistic locking",
+    },
     live: "https://clearbay.onrender.com",
     repo: "https://github.com/BigFiiish/clearbay",
     accent: "#3ECF8E",
@@ -353,7 +373,7 @@ export const projects: Project[] = [
     name: "Grantline",
     slug: "grantline",
     year: "2026",
-    featured: true,
+    featured: false,
     headline: "Identity from a signed grant, never a header.",
     blurb:
       "Passwordless Go broker: humans, machines, and AI agents prove an ed25519 key, receive a five-minute grant, then open policy-checked sessions. Tenant isolation and server-side pagination included.",
@@ -416,7 +436,7 @@ export const projects: Project[] = [
     name: "Durable Brief",
     slug: "durable-brief",
     year: "2026",
-    featured: true,
+    featured: false,
     headline: "AI workflows that can wait.",
     blurb:
       "A durable TypeScript workflow with parallel research, sequential drafting, evaluator-optimizer loops, and human approval.",
@@ -486,7 +506,7 @@ export const projects: Project[] = [
     name: "PulseQueue",
     slug: "pulsequeue",
     year: "2026",
-    featured: true,
+    featured: false,
     headline: "Retries are easy. Correct retries aren't.",
     blurb:
       "A TypeScript queue engine with lease exclusivity, exponential backoff, dead-lettering, worker state, and real-time SSE visualization.",

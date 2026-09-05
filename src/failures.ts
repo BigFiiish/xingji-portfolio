@@ -58,7 +58,13 @@ export function failSection(): string {
       ${failDemos
         .map(
           (d, i) =>
-            `<button type="button" role="tab" class="play-word" id="fail-tab-${d.id}" data-fail="${d.id}" aria-selected="false" aria-controls="play-stage" tabindex="${i === 0 ? "0" : "-1"}">${d.kicker}</button>`,
+            `<button type="button" role="tab" class="play-word" id="fail-tab-${d.id}" data-fail="${d.id}" aria-selected="false" aria-controls="play-stage" tabindex="${i === 0 ? "0" : "-1"}">
+              <span class="play-card-top"><span>${String(i + 1).padStart(2, "0")}</span><em>${d.kicker}</em></span>
+              <strong>${d.title}</strong>
+              <span class="play-project">${d.project}</span>
+              <span class="play-transition"><span>${d.from}</span><b>${d.to}</b></span>
+              <span class="play-line">${d.line}</span>
+            </button>`,
         )
         .join("")}
     </div>
@@ -135,17 +141,17 @@ function simMarkup(id: FailId): string {
   }
   if (id === "fail") {
     return `
-      <svg class="fp-svg fp-desk" viewBox="0 0 280 300" aria-hidden="true">
-        <path data-wire="a" d="M 140 36 V 90"/>
-        <path data-wire="b" d="M 140 108 V 170"/>
-        <path data-wire="c" d="M 140 188 V 250"/>
-        <text data-node="a1" x="24" y="40">Attempt 01</text>
-        <text data-node="w1" x="24" y="104">1s</text>
-        <text data-node="a2" x="24" y="176">Attempt 02</text>
-        <text data-node="w2" x="24" y="204">2s</text>
-        <text data-node="a3" x="24" y="252">Attempt 03</text>
-        <text data-node="dlq" x="24" y="292">DLQ</text>
-        <circle class="fp-sig" data-sig="s" r="3.4" cx="140" cy="36"/>
+      <svg class="fp-svg fp-desk" viewBox="0 0 720 240" aria-hidden="true">
+        <path data-wire="a" d="M 92 120 H 224"/>
+        <path data-wire="b" d="M 260 120 H 392"/>
+        <path data-wire="c" d="M 428 120 H 560"/>
+        <text data-node="a1" x="92" y="80" text-anchor="middle">Attempt 01</text>
+        <text data-node="w1" x="242" y="154" text-anchor="middle">1s</text>
+        <text data-node="a2" x="326" y="80" text-anchor="middle">Attempt 02</text>
+        <text data-node="w2" x="410" y="154" text-anchor="middle">2s</text>
+        <text data-node="a3" x="494" y="80" text-anchor="middle">Attempt 03</text>
+        <text data-node="dlq" x="624" y="124" text-anchor="middle">DLQ</text>
+        <circle class="fp-sig" data-sig="s" r="3.4" cx="92" cy="120"/>
       </svg>
       <svg class="fp-svg fp-hand" viewBox="0 0 320 340" aria-hidden="true">
         <path data-wire="a" d="M 200 40 V 96"/>
@@ -163,15 +169,15 @@ function simMarkup(id: FailId): string {
       <p class="fp-line">${d.line}</p>`;
   }
   return `
-    <svg class="fp-svg fp-desk" viewBox="0 0 280 300" aria-hidden="true">
-      <path data-wire="a" d="M 140 40 V 100"/>
-      <path data-wire="x" d="M 122 100 L 158 100"/>
-      <text data-node="call" x="24" y="44">Agent call</text>
-      <text data-node="blob" x="24" y="68">{ "action": "releaseWave" }</text>
-      <text data-node="schema" x="24" y="108">Schema</text>
-      <text data-node="auth" x="24" y="176">Auth</text>
-      <text data-node="exec" x="24" y="244">Execute</text>
-      <circle class="fp-sig" data-sig="s" r="3.4" cx="140" cy="40"/>
+    <svg class="fp-svg fp-desk" viewBox="0 0 720 240" aria-hidden="true">
+      <path data-wire="a" d="M 92 120 H 248"/>
+      <path data-wire="x" d="M 248 102 V 138"/>
+      <text data-node="call" x="92" y="80" text-anchor="middle">Agent call</text>
+      <text data-node="blob" x="92" y="162" text-anchor="middle">{ "action": "releaseWave" }</text>
+      <text data-node="schema" x="308" y="124" text-anchor="middle">Schema</text>
+      <text data-node="auth" x="456" y="124" text-anchor="middle">Auth</text>
+      <text data-node="exec" x="604" y="124" text-anchor="middle">Execute</text>
+      <circle class="fp-sig" data-sig="s" r="3.4" cx="92" cy="120"/>
     </svg>
     <svg class="fp-svg fp-hand" viewBox="0 0 320 340" aria-hidden="true">
       <path data-wire="a" d="M 200 44 V 110"/>

@@ -1,14 +1,9 @@
-import { projects } from "./content";
-import { moreArticle, staticPrinciplesHtml, workCopy, workDirectoryHtml } from "./markup";
+import { featuredProjects, moreArticle, secondaryProjects, staticPrinciplesHtml, workCopy, workDirectoryHtml } from "./markup";
 import { xrayMarkup } from "./mockups";
 import { bindScenes, sceneMarkup, type PulseCtl } from "./scenes";
-import { secondaryPreview } from "./secondary";
-
-const featured = () => projects.filter((p) => p.featured);
-const rest = () => projects.filter((p) => !p.featured);
 
 export function renderWork(root: HTMLElement) {
-  const rows = featured()
+  const rows = featuredProjects()
     .map((p, i) => {
       const caseBtn = `<button type="button" data-case="${p.slug}">${p.slug === "catalog-order-service" || p.slug === "crawlforge" || p.slug === "clearbay" || p.slug === "grantline" ? "Case study →" : "Case study"}</button>`;
       return `
@@ -34,10 +29,11 @@ export function renderWork(root: HTMLElement) {
 
 export function renderMore(root: HTMLElement) {
   root.innerHTML =
-    `<h3 class="more-label">Also</h3>` +
-    rest()
-      .map((p) => moreArticle(p, secondaryPreview(p.slug)))
-      .join("");
+    `<div class="more-heading"><span>06 more projects</span><h3>More systems</h3></div><div class="more-grid">` +
+    secondaryProjects()
+      .map((p) => moreArticle(p))
+      .join("") +
+    `</div>`;
 }
 
 export function bindXray(root: HTMLElement) {
