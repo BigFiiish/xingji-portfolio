@@ -4,7 +4,12 @@
   "framework": "vite",
   "redirects": [
     {
-      "source": "/note/:path*",
+      "source": "/note",
+      "destination": "/notes/the-model-is-never-the-judge/",
+      "permanent": true
+    },
+    {
+      "source": "/note/",
       "destination": "/notes/the-model-is-never-the-judge/",
       "permanent": true
     }
