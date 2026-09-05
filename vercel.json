@@ -1,5 +1,12 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "framework": "vite"
+  "framework": "vite",
+  "redirects": [
+    {
+      "source": "/note/:path*",
+      "destination": "/notes/the-model-is-never-the-judge/",
+      "permanent": true
+    }
+  ]
 }

@@ -5109,3 +5109,524 @@ html:has(#case[open]) {
     display: none;
   }
 }
+
+/* Writing system and case-study accountability */
+.case-context {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 0 1rem;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.case-context div {
+  min-height: 6.5rem;
+  padding: 1rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.case-context dt,
+.writing-card-top,
+.article-eyebrow,
+.article-meta,
+.article-section-label,
+.writing-index-hero > p:first-child,
+.writing-index-list p,
+.writing-index-no {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.case-context dt {
+  margin-bottom: 0.7rem;
+  color: var(--faint);
+}
+
+.case-context dd {
+  color: var(--ink);
+  font-size: 0.94rem;
+  line-height: 1.4;
+}
+
+.case-next ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  list-style: none;
+  counter-reset: next;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.case-next li {
+  counter-increment: next;
+  min-height: 10rem;
+  padding: 1.15rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+.case-next li::before {
+  content: "0" counter(next);
+  display: block;
+  margin-bottom: 1.7rem;
+  color: var(--accent);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+}
+
+.writing {
+  position: relative;
+  z-index: 1;
+  padding: clamp(6rem, 10vw, 10rem) var(--pad);
+  border-top: 1px solid var(--line);
+}
+
+.writing-intro {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  align-items: baseline;
+  margin: 0 0 2.4rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.writing-intro a,
+.writing-card b {
+  color: var(--ink);
+}
+
+.writing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.writing-card {
+  min-width: 0;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.writing-card > a {
+  display: flex;
+  min-height: 27rem;
+  height: 100%;
+  flex-direction: column;
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  transition: background 220ms var(--ease);
+}
+
+.writing-card > a:hover,
+.writing-card > a:focus-visible {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.writing-card-top {
+  display: flex;
+  justify-content: space-between;
+  color: var(--faint);
+}
+
+.writing-card-top span {
+  color: var(--accent);
+}
+
+.writing-card-top em {
+  font-style: normal;
+}
+
+.writing-card > a > p {
+  margin: 4.5rem 0 0.9rem;
+  color: var(--accent);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.writing-card h3 {
+  max-width: 18ch;
+  font-size: clamp(1.75rem, 3vw, 2.6rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.04;
+}
+
+.writing-card-dek {
+  max-width: 52ch;
+  margin: 1.25rem 0 2rem;
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.writing-card b {
+  margin-top: auto;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.article-page-shell,
+.writing-page-shell {
+  min-height: 100%;
+  background: #08090d;
+}
+
+.article-nav {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  min-height: 4rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem var(--pad);
+  border-bottom: 1px solid var(--line);
+  background: rgba(8, 9, 13, 0.94);
+  backdrop-filter: blur(16px);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+}
+
+.article-nav > a {
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+}
+
+.article-nav nav {
+  display: flex;
+  gap: clamp(1rem, 3vw, 2.25rem);
+  color: var(--muted);
+}
+
+.article-nav a:hover,
+.article-nav a:focus-visible {
+  color: var(--ink);
+}
+
+.article-page,
+.writing-index {
+  position: relative;
+  z-index: 1;
+  width: min(1160px, 100%);
+  margin: 0 auto;
+  padding: 0 var(--pad) 7rem;
+}
+
+.article-hero {
+  padding: clamp(5rem, 10vw, 9rem) 0 clamp(4rem, 8vw, 7rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.article-eyebrow {
+  margin-bottom: 1.4rem;
+  color: var(--accent);
+}
+
+.article-hero h1 {
+  max-width: 18ch;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 500;
+  letter-spacing: -0.065em;
+  line-height: 0.92;
+}
+
+.article-dek {
+  max-width: 43rem;
+  margin: 2.2rem 0 2rem;
+  color: var(--muted);
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  line-height: 1.5;
+}
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  color: var(--faint);
+}
+
+.article-meta a {
+  color: var(--ink);
+}
+
+.article-section {
+  display: grid;
+  grid-template-columns: minmax(5rem, 0.35fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 5vw, 5rem);
+  padding: clamp(3.5rem, 7vw, 6.5rem) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.article-section-label {
+  color: var(--accent);
+}
+
+.article-section-body {
+  max-width: 45rem;
+}
+
+.article-section h2 {
+  max-width: 19ch;
+  margin-bottom: 1.8rem;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1.04;
+}
+
+.article-section p,
+.article-section li {
+  color: #b7b6b0;
+  font-size: clamp(1.05rem, 1.5vw, 1.16rem);
+  line-height: 1.78;
+}
+
+.article-section p + p {
+  margin-top: 1.3rem;
+}
+
+.article-section ul {
+  margin: 2rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.article-section li {
+  padding: 0.35rem 0 0.35rem 0.35rem;
+}
+
+.article-section li::marker {
+  color: var(--accent);
+}
+
+.article-section blockquote {
+  margin: 2.5rem 0;
+  padding: 1.5rem 0 1.5rem 1.6rem;
+  border-left: 2px solid var(--accent);
+  color: var(--ink);
+  font-family: "Instrument Serif", serif;
+  font-size: clamp(1.55rem, 3vw, 2.15rem);
+  font-style: italic;
+  line-height: 1.2;
+}
+
+.article-section pre {
+  margin: 2.2rem 0;
+  padding: 1.4rem;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.article-section code {
+  color: color-mix(in srgb, var(--accent) 55%, var(--ink));
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.article-project {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 1rem 2rem;
+  align-items: center;
+  padding: 2rem;
+  margin: 5rem 0;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+.article-project p {
+  color: var(--muted);
+}
+
+.article-project strong {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.article-project div {
+  display: flex;
+  gap: 1.2rem;
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.article-next {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.article-next a {
+  display: grid;
+  align-content: space-between;
+  min-height: 9rem;
+  padding: 1.4rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 1.1rem;
+  line-height: 1.3;
+}
+
+.article-next span {
+  color: var(--faint);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.writing-index-hero {
+  padding: clamp(5rem, 10vw, 9rem) 0 clamp(4rem, 8vw, 7rem);
+}
+
+.writing-index-hero > p:first-child {
+  margin-bottom: 1.4rem;
+  color: var(--muted);
+}
+
+.writing-index-hero h1 {
+  max-width: 17ch;
+  font-size: clamp(3.4rem, 9vw, 7.8rem);
+  font-weight: 500;
+  letter-spacing: -0.07em;
+  line-height: 0.88;
+}
+
+.writing-index-hero h1 em {
+  color: #c7c1ff;
+  font-family: "Instrument Serif", serif;
+  font-weight: 400;
+}
+
+.writing-index-hero > p:last-child {
+  max-width: 42rem;
+  margin-top: 2.5rem;
+  color: var(--muted);
+  font-size: 1.2rem;
+  line-height: 1.55;
+}
+
+.writing-index-list {
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.writing-index-list li {
+  border-bottom: 1px solid var(--line);
+}
+
+.writing-index-list a {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr) auto;
+  gap: clamp(1rem, 4vw, 4rem);
+  align-items: start;
+  padding: clamp(2rem, 5vw, 4rem) 0;
+}
+
+.writing-index-no {
+  color: var(--accent);
+}
+
+.writing-index-list p {
+  margin-bottom: 0.8rem;
+  color: var(--faint);
+}
+
+.writing-index-list h2 {
+  max-width: 23ch;
+  margin-bottom: 0.85rem;
+  font-size: clamp(1.8rem, 4vw, 3.35rem);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+.writing-index-list div > span {
+  display: block;
+  max-width: 49rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.writing-index-list b {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.writing-index-list a:hover b,
+.writing-index-list a:focus-visible b {
+  color: var(--accent);
+}
+
+@media (max-width: 820px) {
+  .case-context,
+  .case-next ol,
+  .writing-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .article-project {
+    grid-template-columns: 1fr;
+  }
+  .writing-card > a {
+    min-height: 24rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .case-context,
+  .case-next ol,
+  .writing-grid,
+  .article-next {
+    grid-template-columns: 1fr;
+  }
+  .case-context div,
+  .case-next li {
+    min-height: 0;
+  }
+  .case-next li::before {
+    margin-bottom: 0.8rem;
+  }
+  .writing-intro {
+    display: grid;
+  }
+  .writing-card > a {
+    min-height: 21rem;
+  }
+  .writing-card > a > p {
+    margin-top: 3rem;
+  }
+  .article-nav nav a:nth-child(2) {
+    display: none;
+  }
+  .article-section {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .article-section h2 {
+    margin-bottom: 1.25rem;
+  }
+  .article-project {
+    padding: 1.25rem;
+  }
+  .writing-index-list a {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+  }
+  .writing-index-list b {
+    display: none;
+  }
+}

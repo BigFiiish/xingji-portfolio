@@ -15,7 +15,7 @@ export const person = {
   linkedin: "https://www.linkedin.com/in/xingji-yan",
   resume: "/Xingji-Yan-Resume.pdf",
   site: "https://www.xingjiyan.com/",
-  note: "/note/",
+  note: "/notes/",
   seat: "On-call for tenants, retries, and agents that fail closed.",
   aboutLede:
     "I ship the unglamorous systems that keep operations alive — then I put an agent on top of them, with guardrails, so people can talk to the warehouse instead of clicking through twelve screens.",
@@ -77,11 +77,18 @@ export type ArchNode = { label: string; children?: ArchNode[] };
 
 export type CaseStudy = {
   shape?: "object" | "grant" | "hook" | "full";
+  context: {
+    scope: string;
+    role: string;
+    team: string;
+    proof: string;
+  };
   problem: string;
   constraints: string[];
   architecture: ArchNode[];
   decisions: { decision: string; why: string; tradeoff: string }[];
   failures: { fail: string; handle: string }[];
+  next: string[];
   artifact?: { caption: string; body: string };
 };
 
@@ -159,6 +166,12 @@ export const projects: Project[] = [
     ],
     caseStudy: {
       shape: "object",
+      context: {
+        scope: "Independent systems project · 2026",
+        role: "Designer and sole engineer",
+        team: "Solo build",
+        proof: "44 tests · two-thread stock race",
+      },
       problem:
         "Checkout looks simple until two buyers want the last unit, a client retries after a timeout, or item three fails after items one and two already changed stock.",
       constraints: [
@@ -211,6 +224,11 @@ export const projects: Project[] = [
         { fail: "Two requests ship the same order.", handle: "Only CREATED can become SHIPPED; the loser receives 409." },
         { fail: "The webhook endpoint keeps failing.", handle: "Delivery stops after three attempts; the committed shipment remains shipped." },
       ],
+      next: [
+        "Move the demo from embedded H2 to PostgreSQL with versioned migrations and production query plans.",
+        "Replace in-process webhook retry with a transactional outbox and durable worker queue.",
+        "Add payload fingerprints, stronger client identity, URL allowlisting, and operator-facing redrive tooling.",
+      ],
       artifact: {
         caption: "two threads · product 4 · stock 1",
         body: `{
@@ -251,6 +269,12 @@ export const projects: Project[] = [
     ],
     caseStudy: {
       shape: "full",
+      context: {
+        scope: "Independent product project · 2026",
+        role: "Product designer and sole engineer",
+        team: "Solo build",
+        proof: "20 tests · persistent bounded BFS",
+      },
       problem:
         "Company careers sites and ATS pages expose the same job data through inconsistent HTML, embedded JSON-LD, redirects, and deep link graphs. A useful crawler has to find the listings, normalize them, and return evidence a person or downstream system can actually use.",
       constraints: [
@@ -299,6 +323,11 @@ export const projects: Project[] = [
         { fail: "The page has navigation text but no job schema.", handle: "The extractor avoids inventing a job and records parser diagnostics." },
         { fail: "AI matching is not configured.", handle: "Deterministic score, matched skills, gaps, and exports continue to work." },
       ],
+      next: [
+        "Add a browser-rendering adapter for JavaScript-only careers sites without weakening the default HTTP crawler.",
+        "Move crawl state to PostgreSQL and use database leases or fencing tokens for safe multi-worker ownership.",
+        "Expose crawl budgets, parser coverage, host latency, and retry causes as operational metrics.",
+      ],
       artifact: {
         caption: "live ZoomInfo scan · one structured posting",
         body: `{
@@ -332,6 +361,12 @@ export const projects: Project[] = [
     xray: ["Browser", "Spring REST API", "Tenant Context", "Service Layer", "PostgreSQL / Redis", "Async Worker", "MCP / Audit"],
     caseStudy: {
       shape: "object",
+      context: {
+        scope: "Independent public reimplementation · 2026",
+        role: "Designer and sole engineer",
+        team: "Solo build",
+        proof: "10 integration tests · production-shaped contracts",
+      },
       problem:
         "Warehouse SaaS shares one database across customers. A retry, a spoofed header, or a cache key without a tenant prefix is enough to charge twice or leak inventory.",
       constraints: [
@@ -379,6 +414,11 @@ export const projects: Project[] = [
         { fail: "Worker starts before the job row commits.", handle: "afterCommit callback. The insert is visible first." },
         { fail: "MCP call includes extra JSON fields.", handle: "Unknown fields rejected before execution." },
       ],
+      next: [
+        "Replace the demo token issuer with an external identity provider and rotate signing keys through managed secrets.",
+        "Load-test tenant-scoped PostgreSQL and Redis paths, then publish latency and isolation evidence.",
+        "Move jobs and side effects to a durable outbox with distributed claims, heartbeats, and fencing.",
+      ],
       artifact: {
         caption: "POST /api/v1/waves/482/release · loser",
         body: `{
@@ -407,6 +447,12 @@ export const projects: Project[] = [
     xray: ["Console", "Challenge / Prove", "Grant (ed25519)", "Policy", "Sessions + audit"],
     caseStudy: {
       shape: "grant",
+      context: {
+        scope: "Independent identity project · 2026",
+        role: "Designer and sole engineer",
+        team: "Solo build",
+        proof: "Signed five-minute grants · policy checks",
+      },
       problem:
         "Passwords and spoofable tenant headers confuse authentication with authorization. Humans, machines, and agents need short-lived access that still fails closed.",
       constraints: [
@@ -445,6 +491,11 @@ export const projects: Project[] = [
         { fail: "Machine opens billing.api.", handle: "403. Kind and role fail the resource policy." },
         { fail: "Grant past TTL.", handle: "Open session returns expired. Sessions expire lazily on list." },
       ],
+      next: [
+        "Add signing-key rotation, grant revocation, and a durable policy and audit store.",
+        "Replace the software proof adapter with real WebAuthn for people and KMS-backed keys for services.",
+        "Model delegated authority explicitly so an agent can receive a narrower grant than its human sponsor.",
+      ],
       artifact: {
         caption: "POST /v1/sessions · grant past TTL",
         body: `{
@@ -470,6 +521,12 @@ export const projects: Project[] = [
     xray: ["Next.js", "Workflow", "Parallel Research", "Draft", "Evaluator / Revision Loop", "Human Hook", "Publish"],
     caseStudy: {
       shape: "hook",
+      context: {
+        scope: "Independent AI workflow project · 2026",
+        role: "Workflow designer and sole engineer",
+        team: "Solo build",
+        proof: "Durable run · evaluator loop · human hook",
+      },
       problem:
         "Most AI demos die when the tab closes. A briefing desk that publishes without a human, or forgets the run, is not a workflow — it is a prompt.",
       constraints: [
@@ -513,6 +570,11 @@ export const projects: Project[] = [
         { fail: "Draft is weak.", handle: "Evaluator-optimizer loop revises before the hook." },
         { fail: "Someone tries to skip the human.", handle: "Publish is not a step the model can call." },
       ],
+      next: [
+        "Authenticate approvers and store a signed, queryable approval record with the artifact version.",
+        "Add approval timeouts, escalation, cancellation, and multi-reviewer quorum for higher-risk releases.",
+        "Version prompts and policies, then enforce per-run model, tool, latency, and cost budgets.",
+      ],
       artifact: {
         caption: "hook still waiting after the tab closed",
         body: `{
@@ -540,6 +602,12 @@ export const projects: Project[] = [
     xray: ["React Dashboard", "SSE", "Express", "Worker Pool", "Queue / Lease", "Retry / Backoff", "DLQ"],
     caseStudy: {
       shape: "full",
+      context: {
+        scope: "Independent queue-systems project · 2026",
+        role: "Designer and sole engineer",
+        team: "Solo build",
+        proof: "Lease-safe retries · visible dead letters",
+      },
       problem:
         "A retry that two workers both own is a double send. A retry with no backoff is a thundering herd. A retry that never dies is a poison pill.",
       constraints: [
@@ -579,6 +647,11 @@ export const projects: Project[] = [
         { fail: "A flaky job fails twice.", handle: "Exponential backoff. It becomes eligible later, not immediately." },
         { fail: "A job fails past maxAttempts.", handle: "Marked dead. It leaves the active cycle." },
       ],
+      next: [
+        "Persist jobs and leases so ownership survives process restarts and multiple queue nodes.",
+        "Add worker heartbeats and fencing tokens to prevent a paused worker from completing an expired lease.",
+        "Publish saturation, retry-age, and dead-letter metrics with an audited redrive workflow.",
+      ],
       artifact: {
         caption: "job_014 after maxAttempts",
         body: `{
@@ -609,6 +682,12 @@ export const projects: Project[] = [
     preview: "dockline",
     xray: ["Prompt", "Deterministic router", "Clearbay MCP", "Rule scorer", "Trace"],
     caseStudy: {
+      context: {
+        scope: "Independent agent-evaluation project · 2026",
+        role: "Eval designer and sole engineer",
+        team: "Solo build",
+        proof: "40 deterministic cases · complete traces",
+      },
       problem:
         "If the model grades the model, you will ship a confident wrong tool call. An ops agent on a warehouse API needs a judge that does not float.",
       constraints: [
@@ -648,6 +727,11 @@ export const projects: Project[] = [
         { fail: "Extra JSON fields on a tool call.", handle: "Schema case. Unknown fields rejected." },
         { fail: "Vague prompt.", handle: "Clarification case. No speculative write." },
       ],
+      next: [
+        "Generate adversarial and property-based cases, then use mutation testing to prove the rules catch regressions.",
+        "Build a replay corpus across model and prompt versions instead of treating one pass rate as permanent.",
+        "Add latency and cost budgets plus explicit human escalation for requests that cannot be scored safely.",
+      ],
     },
   },
   {
@@ -665,6 +749,12 @@ export const projects: Project[] = [
     preview: "sketch",
     xray: ["Canvas", "Typed messages", "Room logic", "WebSocket"],
     caseStudy: {
+      context: {
+        scope: "Independent realtime-systems project · 2026",
+        role: "Protocol designer and sole engineer",
+        team: "Solo build",
+        proof: "Typed raw WebSockets · per-user undo",
+      },
       problem: "A whiteboard that hides behind Socket.IO does not show whether rooms, undo, or presence are actually correct.",
       constraints: ["Raw WebSockets.", "Per-user undo.", "Room logic unit-tested without the browser."],
       architecture: [{ label: "React canvas" }, { label: "Typed protocol" }, { label: "Room server" }],
@@ -676,6 +766,11 @@ export const projects: Project[] = [
         },
       ],
       failures: [{ fail: "Two users undo.", handle: "Undo is per-user, not a shared stack." }],
+      next: [
+        "Persist room snapshots and replay deltas so reconnecting clients recover without losing the board.",
+        "Define ordering and conflict semantics explicitly before moving from per-user actions toward CRDT or OT collaboration.",
+        "Load-test fan-out, slow consumers, and backpressure across multiple room-server instances.",
+      ],
     },
   },
   {
@@ -693,6 +788,12 @@ export const projects: Project[] = [
     preview: "resumatch",
     xray: ["React", "TF-IDF core", "Optional LLM coach"],
     caseStudy: {
+      context: {
+        scope: "Independent applied-NLP project · 2026",
+        role: "Product designer and sole engineer",
+        team: "Solo build",
+        proof: "Deterministic score · grounded optional coach",
+      },
       problem: "An LLM-only matcher cannot explain a score, and cannot run in CI.",
       constraints: ["Score is deterministic.", "LLM is coaching, not the judge."],
       architecture: [{ label: "Paste resume + JD" }, { label: "TF-IDF + skills" }, { label: "Optional coach" }],
@@ -704,6 +805,11 @@ export const projects: Project[] = [
         },
       ],
       failures: [{ fail: "Coach unavailable.", handle: "Score and gaps still return." }],
+      next: [
+        "Build a labeled evaluation set and calibrate scores against recruiter-reviewed matches.",
+        "Expose weighted features and counterfactuals so every recommendation can be inspected.",
+        "Add local-first redaction, retention controls, and bias audits before accepting sensitive resumes at scale.",
+      ],
     },
   },
 ];

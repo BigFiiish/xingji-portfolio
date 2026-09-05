@@ -13,7 +13,8 @@ export function casePageHtml(project: Project, stylesheet: string): string {
   const previous = projects[(index - 1 + projects.length) % projects.length];
   const next = projects[(index + 1) % projects.length];
   const canonical = `https://www.xingjiyan.com${caseStudyPath(project)}`;
-  const description = `${project.name}: ${project.caseStudy.problem}`;
+  const image = `https://www.xingjiyan.com/og/projects/${project.slug}.png`;
+  const description = `${project.name}: ${project.blurb}`;
   const jsonLd = JSON.stringify({
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
@@ -39,8 +40,15 @@ export function casePageHtml(project: Project, stylesheet: string): string {
     <meta property="og:title" content="${esc(project.name)} case study — Xingji Yan" />
     <meta property="og:description" content="${esc(description)}" />
     <meta property="og:url" content="${canonical}" />
-    <meta property="og:image" content="https://www.xingjiyan.com/og.png" />
+    <meta property="og:image" content="${image}" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="${esc(project.name)} — ${esc(project.headline)}" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${esc(project.name)} case study — Xingji Yan" />
+    <meta name="twitter:description" content="${esc(description)}" />
+    <meta name="twitter:image" content="${image}" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     ${fontPreloads}
     <link rel="stylesheet" href="${stylesheet}" />

@@ -9,6 +9,7 @@ import {
   type Project,
 } from "./content";
 import { failDemos } from "./failures";
+import { articlePath, articles } from "./articles";
 
 export const shorts: Record<string, string> = {
   dockline: "The model is never the judge.",
@@ -222,6 +223,22 @@ export function staticExperienceHtml(): string {
     .join("");
 }
 
+export function staticWritingHtml(): string {
+  return articles
+    .map(
+      (article, index) => `<article class="writing-card reveal" style="--accent:${esc(article.accent)}">
+        <a href="${articlePath(article)}" aria-label="Read ${esc(article.title)}">
+          <div class="writing-card-top"><span>${String(index + 1).padStart(2, "0")}</span><em>${esc(article.readTime)}</em></div>
+          <p>${esc(article.eyebrow)}</p>
+          <h3>${esc(article.title)}</h3>
+          <span class="writing-card-dek">${esc(article.dek)}</span>
+          <b>Read essay →</b>
+        </a>
+      </article>`,
+    )
+    .join("");
+}
+
 export function staticFailHtml(): string {
   return `<ul class="fail-static-list">
       ${failDemos
@@ -254,6 +271,11 @@ export function jsonLd(): string {
     sameAs: [person.github, person.linkedin],
     knowsAbout: ["On-call systems", "Multi-tenant isolation", "Idempotency", "AI guardrails", "Java", "TypeScript"],
     workExample: works,
+    subjectOf: articles.map((article) => ({
+      "@type": "TechArticle",
+      headline: article.title,
+      url: `https://www.xingjiyan.com${articlePath(article)}`,
+    })),
   });
 }
 
@@ -263,6 +285,7 @@ export function injectStatic(html: string): string {
     .replace("<!--inject:more-->", staticMoreHtml())
     .replace("<!--inject:principles-->", staticPrinciplesHtml())
     .replace("<!--inject:experience-->", staticExperienceHtml())
+    .replace("<!--inject:writing-->", staticWritingHtml())
     .replace("<!--inject:fail-->", staticFailHtml())
     .replace("<!--inject:jsonld-->", jsonLd());
 }

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate:og": "node scripts/generate-og.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.3",

@@ -1,5 +1,6 @@
 import { caseStudyPath, experience, person, projects } from "./content";
 import { failDemos, playFail } from "./failures";
+import { articlePath, articles } from "./articles";
 
 type Item = { group: string; label: string; run: () => void; keywords: string };
 
@@ -63,7 +64,7 @@ export function initCommand() {
     { group: "Navigation", label: "Failure Modes", keywords: "race expire fail hallucinate playground", run: () => go("#failures") },
     { group: "Navigation", label: "Experience", keywords: "jobs career jasci sonos tencent", run: () => go("#experience") },
     { group: "Navigation", label: "Principles", keywords: "about bio principles correctness", run: () => go("#about") },
-    { group: "Navigation", label: "Note", keywords: "note essay dockline judge model", run: () => { window.location.href = person.note; } },
+    { group: "Navigation", label: "Writing", keywords: "notes essays bfs idempotency evals workflow", run: () => { window.location.href = person.note; } },
     { group: "Navigation", label: "Contact", keywords: "email", run: () => go("#contact") },
     ...failDemos.map((d) => ({
       group: "Failure modes",
@@ -82,6 +83,12 @@ export function initCommand() {
       label: `${p.name} case study`,
       keywords: `${p.name} ${p.slug} ${p.stack.join(" ")} case study`,
       run: () => { window.location.href = caseStudyPath(p); },
+    })),
+    ...articles.map((article) => ({
+      group: "Writing",
+      label: article.title,
+      keywords: `${article.eyebrow} ${article.tags.join(" ")} ${article.project.name}`,
+      run: () => { window.location.href = articlePath(article); },
     })),
     {
       group: "Actions",

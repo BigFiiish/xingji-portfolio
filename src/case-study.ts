@@ -39,6 +39,25 @@ function problem(p: Project): string {
   return `<p class="case-problem">${esc(p.caseStudy.problem)}</p>`;
 }
 
+function context(p: Project): string {
+  const c = p.caseStudy.context;
+  return `<dl class="case-context" aria-label="Project ownership and evidence">
+      <div><dt>Context</dt><dd>${esc(c.scope)}</dd></div>
+      <div><dt>My role</dt><dd>${esc(c.role)}</dd></div>
+      <div><dt>Team</dt><dd>${esc(c.team)}</dd></div>
+      <div><dt>Evidence</dt><dd>${esc(c.proof)}</dd></div>
+    </dl>`;
+}
+
+function improve(p: Project, numbered = false): string {
+  return `<section class="case-next" id="next">
+      <h3>${numbered ? "<span>08</span> " : ""}What I would improve next</h3>
+      <ol>
+        ${p.caseStudy.next.map((item) => `<li>${esc(item)}</li>`).join("")}
+      </ol>
+    </section>`;
+}
+
 function failures(p: Project): string {
   return `<div class="fail-cols" aria-hidden="true"><span>Failure</span><span>Handling</span></div>
       <ul class="fail-ledger">
@@ -66,6 +85,7 @@ function arch(p: Project): string {
 
 function objectFirst(p: Project, standalone: boolean): string {
   return `${header(p, standalone)}
+    ${context(p)}
     <section>
       ${artifact(p)}
       ${problem(p)}
@@ -77,11 +97,13 @@ function objectFirst(p: Project, standalone: boolean): string {
     <section>
       <h3>Inspect</h3>
       ${inspect(p)}
-    </section>`;
+    </section>
+    ${improve(p)}`;
 }
 
 function grantFirst(p: Project, standalone: boolean): string {
   return `${header(p, standalone)}
+    ${context(p)}
     <section>
       ${artifact(p)}
       ${problem(p)}
@@ -97,11 +119,13 @@ function grantFirst(p: Project, standalone: boolean): string {
     <section>
       <h3>Inspect</h3>
       ${inspect(p)}
-    </section>`;
+    </section>
+    ${improve(p)}`;
 }
 
 function hookOnly(p: Project, standalone: boolean): string {
   return `${header(p, standalone)}
+    ${context(p)}
     <section>
       ${problem(p)}
       ${artifact(p)}
@@ -109,12 +133,14 @@ function hookOnly(p: Project, standalone: boolean): string {
     <section>
       <h3>Inspect</h3>
       ${inspect(p)}
-    </section>`;
+    </section>
+    ${improve(p)}`;
 }
 
 function full(p: Project, standalone: boolean): string {
   const c = p.caseStudy;
   return `${header(p, standalone)}
+    ${context(p)}
     <section>
       <h3><span>01</span> Problem</h3>
       ${problem(p)}
@@ -160,7 +186,8 @@ function full(p: Project, standalone: boolean): string {
     <section>
       <h3><span>07</span> Inspect</h3>
       ${inspect(p)}
-    </section>`;
+    </section>
+    ${improve(p, true)}`;
 }
 
 export function caseHtml(p: Project, standalone = false): string {
