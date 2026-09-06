@@ -4394,10 +4394,31 @@ html:has(#case[open]) {
   transition: background-color 0.25s var(--ease), border-color 0.25s var(--ease);
 }
 
+.work-row,
+.more-row {
+  scroll-margin-top: 5.5rem;
+}
+
 .more-row:hover,
 .more-row:focus-within {
   background: color-mix(in srgb, var(--accent) 5%, transparent);
   border-color: color-mix(in srgb, var(--accent) 22%, var(--line));
+}
+
+.more-row:target,
+.more-row.is-anchor-target {
+  position: relative;
+  z-index: 1;
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  background: color-mix(in srgb, var(--accent) 9%, rgba(247, 246, 241, 0.012));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.more-row:target h4,
+.more-row.is-anchor-target h4,
+.more-row:target .more-card-top span,
+.more-row.is-anchor-target .more-card-top span {
+  color: var(--ink);
 }
 
 .more-card-top {
@@ -5628,6 +5649,10 @@ html:has(#case[open]) {
   }
   .writing-index-list b {
     display: none;
+  }
+  .work-row,
+  .more-row {
+    scroll-margin-top: 4.75rem;
   }
 }
 

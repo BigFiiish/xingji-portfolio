@@ -38,6 +38,7 @@ const edges: [string, string][] = [
 ];
 
 const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
+const projectHashes = new Set(nodes.flatMap((node) => (node.href ? [node.href] : [])));
 
 const esc = (value: string) =>
   value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
@@ -49,6 +50,41 @@ function pathD(a: string, b: string): string {
   const mx = (p.x + q.x) / 2 + lift * 0.12;
   const my = (p.y + q.y) / 2 - Math.abs(q.x - p.x) * 0.06;
   return `M ${p.x} ${p.y} Q ${mx} ${my} ${q.x} ${q.y}`;
+}
+
+function projectOffset(): number {
+  const nav = document.querySelector<HTMLElement>(".nav");
+  return Math.max(nav?.getBoundingClientRect().height ?? 0, 56) + 16;
+}
+
+function jumpToProject(hash: string, reduce: boolean, updateHistory = true): boolean {
+  if (!projectHashes.has(hash)) return false;
+  const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+  if (!target) return false;
+
+  if (updateHistory && location.hash !== hash) history.pushState(null, "", hash);
+  else if (updateHistory) history.replaceState(null, "", hash);
+
+  document.querySelectorAll<HTMLElement>(".is-anchor-target").forEach((item) => {
+    item.classList.remove("is-anchor-target");
+  });
+  target.classList.add("is-anchor-target");
+  target.setAttribute("tabindex", "-1");
+
+  const exactTop = () =>
+    Math.max(0, window.scrollY + target.getBoundingClientRect().top - projectOffset());
+  window.scrollTo({ top: exactTop(), behavior: reduce ? "auto" : "smooth" });
+
+  const settle = () => {
+    const correction = target.getBoundingClientRect().top - projectOffset();
+    if (Math.abs(correction) > 2) window.scrollBy({ top: correction, behavior: "auto" });
+    target.focus({ preventScroll: true });
+  };
+  window.setTimeout(settle, reduce ? 0 : 700);
+  document.fonts?.ready
+    .then(() => window.setTimeout(settle, reduce ? 0 : 700))
+    .catch(() => undefined);
+  return true;
 }
 
 export function initMap(svg: SVGSVGElement) {
@@ -199,4 +235,22 @@ export function initMap(svg: SVGSVGElement) {
     link.addEventListener("blur", clearHot);
     link.addEventListener("pointerenter", () => setHot(id));
   });
+
+  document
+    .querySelectorAll<Element>(".topo-link, .map-links a, .work-directory a")
+    .forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const hash = link.getAttribute("href") ?? "";
+        if (!jumpToProject(hash, reduce)) return;
+        event.preventDefault();
+      });
+    });
+
+  const restoreProjectHash = () => {
+    if (!projectHashes.has(location.hash)) return;
+    jumpToProject(location.hash, true, false);
+  };
+  window.addEventListener("popstate", restoreProjectHash);
+  if (document.readyState === "complete") restoreProjectHash();
+  else window.addEventListener("load", restoreProjectHash, { once: true });
 }
