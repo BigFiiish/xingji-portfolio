@@ -6,16 +6,33 @@ export type ArticleSection = {
   callout?: string;
 };
 
+export type ArticleDiagram = {
+  title: string;
+  caption: string;
+  steps: { label: string; detail: string }[];
+};
+
+export type ArticleSource = {
+  label: string;
+  href: string;
+  note: string;
+  kind: "Code" | "Reference";
+};
+
 export type Article = {
   title: string;
   slug: string;
   eyebrow: string;
   dek: string;
   date: string;
+  updated: string;
   readTime: string;
   accent: string;
   project: { name: string; href: string; repo: string };
   tags: string[];
+  diagram: ArticleDiagram;
+  sources: ArticleSource[];
+  related: string[];
   sections: ArticleSection[];
 };
 
@@ -28,6 +45,7 @@ export const articles: Article[] = [
     eyebrow: "Crawlers · Reliability",
     dek: "A careers URL is not a job API. The useful system is the one that discovers enough, stops on purpose, and can explain every URL it did or did not fetch.",
     date: "2026-09-05",
+    updated: "2026-09-06",
     readTime: "9 min read",
     accent: "#4FA685",
     project: {
@@ -36,6 +54,50 @@ export const articles: Article[] = [
       repo: "https://github.com/BigFiiish/crawlforge",
     },
     tags: ["Java 21", "Spring Boot", "BFS", "Web crawling"],
+    diagram: {
+      title: "Spend the crawl budget on the nearest useful evidence",
+      caption: "Discovery owns the graph. Extraction owns the evidence. Safety and budget checks sit between every page and the frontier.",
+      steps: [
+        { label: "Seed", detail: "Canonicalize one public Careers URL" },
+        { label: "Validate", detail: "SSRF, redirects, robots, host scope" },
+        { label: "Frontier", detail: "Persisted BFS with page and depth budgets" },
+        { label: "Extract", detail: "JobPosting JSON-LD, then guarded HTML" },
+        { label: "Deliver", detail: "Structured jobs, diagnostics, JSON / CSV" },
+      ],
+    },
+    sources: [
+      {
+        label: "CrawlerWorker.java · bounded frontier",
+        href: "https://github.com/BigFiiish/crawlforge/blob/96ecc346fde9516e2da92e743e44eaa11e8a30d3/src/main/java/io/github/bigfiiish/crawlforge/service/CrawlerWorker.java#L90-L176",
+        note: "The implemented page budget, frontier claim, policy checks, extraction, and bounded link expansion.",
+        kind: "Code",
+      },
+      {
+        label: "CrawlerWorkerIntegrationTest.java · graph proof",
+        href: "https://github.com/BigFiiish/crawlforge/blob/96ecc346fde9516e2da92e743e44eaa11e8a30d3/src/test/java/io/github/bigfiiish/crawlforge/service/CrawlerWorkerIntegrationTest.java#L101-L145",
+        note: "An in-process careers graph covering BFS, deduplication, robots rules, and retry recovery.",
+        kind: "Code",
+      },
+      {
+        label: "RFC 9309 · Robots Exclusion Protocol",
+        href: "https://www.rfc-editor.org/rfc/rfc9309.html",
+        note: "The standards-track definition of robots.txt access, matching, caching, and limits.",
+        kind: "Reference",
+      },
+      {
+        label: "OWASP · SSRF Prevention",
+        href: "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
+        note: "Defensive guidance for services that retrieve user-supplied URLs.",
+        kind: "Reference",
+      },
+      {
+        label: "Schema.org · JobPosting",
+        href: "https://schema.org/JobPosting",
+        note: "The structured-data vocabulary used as CrawlForge's preferred extraction evidence.",
+        kind: "Reference",
+      },
+    ],
+    related: ["idempotency-product-guarantee", "human-approval-durable-ai-workflows"],
     sections: [
       {
         heading: "A URL is the beginning, not the input format",
@@ -98,6 +160,7 @@ export const articles: Article[] = [
     eyebrow: "Transactions · APIs",
     dek: "The header only names a request. The database transaction, uniqueness rule, replay semantics, and side-effect boundary are what prevent a customer from paying twice.",
     date: "2026-09-05",
+    updated: "2026-09-06",
     readTime: "8 min read",
     accent: "#E6B566",
     project: {
@@ -106,6 +169,44 @@ export const articles: Article[] = [
       repo: "https://github.com/BigFiiish/catalog-order-service",
     },
     tags: ["Java 21", "Spring", "Transactions", "Idempotency"],
+    diagram: {
+      title: "One request identity, one committed result",
+      caption: "The fast read handles ordinary replay. The transaction and unique constraint close the concurrent race; the loser returns the winner's result.",
+      steps: [
+        { label: "Request", detail: "Stable client idempotency key" },
+        { label: "Replay read", detail: "Return an existing order without another write" },
+        { label: "Transaction", detail: "Order, items, and stock move together" },
+        { label: "Database gate", detail: "Unique key plus conditional stock update" },
+        { label: "Response", detail: "Winner creates; concurrent loser replays" },
+      ],
+    },
+    sources: [
+      {
+        label: "OrderService.java · replay and race handling",
+        href: "https://github.com/BigFiiish/catalog-order-service/blob/413cc125592fb319d2f2fa141121a6c82d6653ec/src/main/java/io/github/bigfiiish/catalog/service/OrderService.java#L51-L100",
+        note: "Fast replay, transactional creation, and unique-constraint conflict re-read in the implemented service.",
+        kind: "Code",
+      },
+      {
+        label: "ProductRepository.java · conditional stock claim",
+        href: "https://github.com/BigFiiish/catalog-order-service/blob/413cc125592fb319d2f2fa141121a6c82d6653ec/src/main/java/io/github/bigfiiish/catalog/repository/ProductRepository.java#L91-L105",
+        note: "The database update that prevents stock from going negative under concurrency.",
+        kind: "Code",
+      },
+      {
+        label: "StockConcurrencyTest.java · two-thread proof",
+        href: "https://github.com/BigFiiish/catalog-order-service/blob/413cc125592fb319d2f2fa141121a6c82d6653ec/src/test/java/io/github/bigfiiish/catalog/repository/StockConcurrencyTest.java#L24-L53",
+        note: "Two simultaneous buyers compete for one remaining unit.",
+        kind: "Code",
+      },
+      {
+        label: "AWS Builders' Library · Making retries safe",
+        href: "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+        note: "A production account of client request identifiers, atomicity, replay semantics, and changed intent.",
+        kind: "Reference",
+      },
+    ],
+    related: ["bounded-bfs-careers-crawler", "human-approval-durable-ai-workflows"],
     sections: [
       {
         heading: "The header is a label",
@@ -175,6 +276,7 @@ WHERE id = :productId
     eyebrow: "Agents · Evaluation",
     dek: "Language models are useful actors and useful critics. They are the wrong final authority for tenant isolation, tool schemas, write permissions, and other invariants that must not drift.",
     date: "2026-09-05",
+    updated: "2026-09-06",
     readTime: "8 min read",
     accent: "#7B8CFF",
     project: {
@@ -183,6 +285,44 @@ WHERE id = :productId
       repo: "https://github.com/BigFiiish/dockline",
     },
     tags: ["Agents", "MCP", "Evals", "Guardrails"],
+    diagram: {
+      title: "Keep the actor flexible and the release gate explicit",
+      caption: "The model or router may vary. The trace format and invariant scorers remain stable, and semantic review runs only after hard gates pass.",
+      steps: [
+        { label: "Prompt", detail: "One tenant-bound request" },
+        { label: "Actor", detail: "Deterministic router or optional model" },
+        { label: "MCP trace", detail: "Tool, arguments, result, and final answer" },
+        { label: "Invariant gate", detail: "Isolation, role, schema, disclosure" },
+        { label: "Review", detail: "Optional model or human quality judgment" },
+      ],
+    },
+    sources: [
+      {
+        label: "score.py · deterministic rule scorer",
+        href: "https://github.com/BigFiiish/dockline/blob/0c18337342e044f6dce4cb92e48895ceeb3d39ce/dockline/score.py#L19-L76",
+        note: "The implemented tool, tenant-disclosure, result, and argument checks over replayable traces.",
+        kind: "Code",
+      },
+      {
+        label: "cases.jsonl · versioned eval corpus",
+        href: "https://github.com/BigFiiish/dockline/blob/0c18337342e044f6dce4cb92e48895ceeb3d39ce/evals/cases.jsonl",
+        note: "Forty hand-authored cases that separate expected behavior from the system solving them.",
+        kind: "Code",
+      },
+      {
+        label: "OpenAI Evals · evaluation framework",
+        href: "https://github.com/openai/evals",
+        note: "Primary documentation for datasets, evaluation logic, run logs, and repeatable model comparison.",
+        kind: "Reference",
+      },
+      {
+        label: "MCP specification · authorization",
+        href: "https://modelcontextprotocol.io/specification/draft/basic/authorization",
+        note: "Current protocol requirements for token audience, validation, and transport authorization boundaries.",
+        kind: "Reference",
+      },
+    ],
+    related: ["human-approval-durable-ai-workflows", "idempotency-product-guarantee"],
     sections: [
       {
         heading: "A fluent answer can still be a failed run",
@@ -245,6 +385,7 @@ WHERE id = :productId
     eyebrow: "AI workflows · Durable execution",
     dek: "A human-in-the-loop button is not a safety boundary if the process forgets the wait, the approval has no identity, or the model can call publish by another route.",
     date: "2026-09-05",
+    updated: "2026-09-06",
     readTime: "8 min read",
     accent: "#8F7BFF",
     project: {
@@ -253,6 +394,44 @@ WHERE id = :productId
       repo: "https://github.com/BigFiiish/durable-brief",
     },
     tags: ["TypeScript", "Durable workflows", "Human approval", "AI"],
+    diagram: {
+      title: "Persist before waiting; authorize before publishing",
+      caption: "Research and evaluation may retry. The approval hook persists the pause, and only a recorded decision can cross the side-effect boundary.",
+      steps: [
+        { label: "Research", detail: "Parallel, retryable evidence lanes" },
+        { label: "Draft / evaluate", detail: "Bounded revision loop" },
+        { label: "Persisted hook", detail: "Workflow suspends without an open request" },
+        { label: "Human decision", detail: "Approve, reject, expire, or cancel" },
+        { label: "Publish", detail: "Side effect runs only after approval" },
+      ],
+    },
+    sources: [
+      {
+        label: "brief.ts · durable orchestration and approval",
+        href: "https://github.com/BigFiiish/durable-brief/blob/c8107ba53f3fc0edf773559a1271bbd5e341014a/workflows/brief.ts#L25-L93",
+        note: "Parallel research, bounded critique, a persisted hook, rejection, and post-approval publish in the implemented workflow.",
+        kind: "Code",
+      },
+      {
+        label: "approve route · resume boundary",
+        href: "https://github.com/BigFiiish/durable-brief/blob/c8107ba53f3fc0edf773559a1271bbd5e341014a/app/api/briefs/%5BrunId%5D/approve/route.ts#L1-L31",
+        note: "The HTTP boundary that validates a decision and resumes the waiting hook.",
+        kind: "Code",
+      },
+      {
+        label: "Vercel · durable human-in-the-loop agents",
+        href: "https://vercel.com/kb/guide/building-human-in-the-loop-agents-for-community-moderation-with-durable-workflows",
+        note: "Primary guidance on pausing, persisting state, resuming from a human decision, and retrying steps independently.",
+        kind: "Reference",
+      },
+      {
+        label: "Vercel Academy · record and approve the decision",
+        href: "https://vercel.com/academy/enterprise-apps-agents/record-and-approve-the-decision",
+        note: "A production-oriented treatment of verified reviewer identity, durable waits, and idempotent approval handling.",
+        kind: "Reference",
+      },
+    ],
+    related: ["the-model-is-never-the-judge", "idempotency-product-guarantee"],
     sections: [
       {
         heading: "Waiting is a state",

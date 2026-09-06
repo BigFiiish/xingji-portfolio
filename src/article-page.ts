@@ -28,10 +28,52 @@ function sectionHtml(section: ArticleSection, index: number): string {
     </section>`;
 }
 
+function diagramHtml(article: Article): string {
+  const diagram = article.diagram;
+  return `<figure class="article-diagram" aria-labelledby="decision-map-${esc(article.slug)}">
+    <figcaption>
+      <span>Decision map</span>
+      <strong id="decision-map-${esc(article.slug)}">${esc(diagram.title)}</strong>
+      <p>${esc(diagram.caption)}</p>
+    </figcaption>
+    <ol>
+      ${diagram.steps
+        .map(
+          (step, index) => `<li>
+            <span>${String(index + 1).padStart(2, "0")}</span>
+            <strong>${esc(step.label)}</strong>
+            <p>${esc(step.detail)}</p>
+          </li>`,
+        )
+        .join("")}
+    </ol>
+  </figure>`;
+}
+
+function sourcesHtml(article: Article): string {
+  return `<section class="article-sources" aria-labelledby="source-notes-${esc(article.slug)}">
+    <div>
+      <p>Source notes</p>
+      <h2 id="source-notes-${esc(article.slug)}">Claims you can inspect.</h2>
+    </div>
+    <ol>
+      ${article.sources
+        .map(
+          (source) => `<li>
+            <span>${esc(source.kind)}</span>
+            <a href="${esc(source.href)}" target="_blank" rel="noreferrer">${esc(source.label)} ↗</a>
+            <p>${esc(source.note)}</p>
+          </li>`,
+        )
+        .join("")}
+    </ol>
+  </section>`;
+}
+
 export function articlePageHtml(article: Article, stylesheet: string): string {
-  const index = articles.findIndex((item) => item.slug === article.slug);
-  const previous = articles[(index - 1 + articles.length) % articles.length];
-  const next = articles[(index + 1) % articles.length];
+  const related = article.related
+    .map((slug) => articles.find((item) => item.slug === slug))
+    .filter((item): item is Article => Boolean(item));
   const canonical = `https://www.xingjiyan.com${articlePath(article)}`;
   const image = `https://www.xingjiyan.com/og/writing/${article.slug}.png`;
   const jsonLd = JSON.stringify({
@@ -40,7 +82,7 @@ export function articlePageHtml(article: Article, stylesheet: string): string {
     headline: article.title,
     description: article.dek,
     datePublished: article.date,
-    dateModified: article.date,
+    dateModified: article.updated,
     url: canonical,
     image,
     keywords: article.tags.join(", "),
@@ -65,6 +107,7 @@ export function articlePageHtml(article: Article, stylesheet: string): string {
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="article:published_time" content="${article.date}" />
+    <meta property="article:modified_time" content="${article.updated}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${esc(article.title)}" />
     <meta name="twitter:description" content="${esc(article.dek)}" />
@@ -84,8 +127,9 @@ export function articlePageHtml(article: Article, stylesheet: string): string {
         <p class="article-eyebrow">${esc(article.eyebrow)}</p>
         <h1>${esc(article.title)}</h1>
         <p class="article-dek">${esc(article.dek)}</p>
-        <div class="article-meta"><time datetime="${article.date}">${displayDate(article.date)}</time><span>${esc(article.readTime)}</span><a href="${esc(article.project.href)}">Built from ${esc(article.project.name)} →</a></div>
+        <div class="article-meta"><span>Published <time datetime="${article.date}">${displayDate(article.date)}</time></span><span>Last updated <time datetime="${article.updated}">${displayDate(article.updated)}</time></span><span>${esc(article.readTime)}</span><a href="${esc(article.project.href)}">Built from ${esc(article.project.name)} →</a></div>
       </header>
+      ${diagramHtml(article)}
       <article class="article-copy">
         ${article.sections.map(sectionHtml).join("")}
       </article>
@@ -94,9 +138,9 @@ export function articlePageHtml(article: Article, stylesheet: string): string {
         <strong>${esc(article.project.name)}</strong>
         <div><a href="${esc(article.project.href)}">Case study →</a><a href="${esc(article.project.repo)}" target="_blank" rel="noreferrer">Source ↗</a></div>
       </aside>
-      <nav class="article-next" aria-label="More writing">
-        <a href="${articlePath(previous)}"><span>Previous essay</span>${esc(previous.title)}</a>
-        <a href="${articlePath(next)}"><span>Next essay</span>${esc(next.title)}</a>
+      ${sourcesHtml(article)}
+      <nav class="article-next" aria-label="Related writing">
+        ${related.map((item) => `<a href="${articlePath(item)}"><span>Related essay</span>${esc(item.title)}</a>`).join("")}
       </nav>
     </main>
   </body>
@@ -141,9 +185,9 @@ export function writingIndexHtml(stylesheet: string): string {
     </header>
     <main class="writing-index">
       <header class="writing-index-hero">
-        <p>Writing / 04 notes</p>
+        <p>Writing / Collection 01 / 04 notes</p>
         <h1>Engineering judgment,<br /><em>made inspectable.</em></h1>
-        <p>Field notes from building systems around correctness, state, failure, and humans. Each essay starts from a working project and names the tradeoffs still left to solve.</p>
+        <p>Four connected field notes launched as the first collection. Each starts from a working project, links to inspectable code and primary references, and keeps an honest revision date as the system evolves.</p>
       </header>
       <ol class="writing-index-list">
         ${articles
@@ -151,7 +195,7 @@ export function writingIndexHtml(stylesheet: string): string {
             (article, index) => `<li style="--accent:${esc(article.accent)}">
           <a href="${articlePath(article)}">
             <span class="writing-index-no">${String(index + 1).padStart(2, "0")}</span>
-            <div><p>${esc(article.eyebrow)} · ${esc(article.readTime)}</p><h2>${esc(article.title)}</h2><span>${esc(article.dek)}</span></div>
+            <div><p>${esc(article.eyebrow)} · ${esc(article.readTime)} · Updated ${displayDate(article.updated)}</p><h2>${esc(article.title)}</h2><span>${esc(article.dek)}</span></div>
             <b>Read →</b>
           </a>
         </li>`,

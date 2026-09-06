@@ -39,6 +39,9 @@ const edges: [string, string][] = [
 
 const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
 
+const esc = (value: string) =>
+  value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+
 function pathD(a: string, b: string): string {
   const p = byId[a];
   const q = byId[b];
@@ -88,16 +91,23 @@ export function initMap(svg: SVGSVGElement) {
     ${nodes
       .map((n) => {
         const domain = domains.find((d) => d.id === n.domain);
-        const aria = n.hub
-          ? "Xingji Yan"
-          : `${n.label}. ${domain?.label ?? ""}`;
-        return `<g class="topo-node${n.hub ? " hub" : ""}" data-id="${n.id}" data-domain="${n.domain ?? ""}" data-href="${n.href ?? ""}" tabindex="${n.hub ? -1 : 0}" role="${n.hub ? "presentation" : "link"}" aria-label="${aria}">
+        if (n.hub) {
+          return `<g class="topo-node hub" data-id="${n.id}" aria-hidden="true">
           <circle class="topo-hit" cx="${n.x}" cy="${n.y}" r="${n.hub ? 28 : 20}"/>
-          ${n.hub ? `<circle class="topo-halo" cx="${n.x}" cy="${n.y}" r="22"/>` : ""}
-          <circle class="topo-dot" cx="${n.x}" cy="${n.y}" r="${n.hub ? 17 : 4.4}"/>
-          ${n.hub ? `<text class="topo-hub" x="${n.x}" y="${n.y}" text-anchor="middle" dominant-baseline="middle">XY</text>` : ""}
-          ${n.hub ? "" : `<text class="topo-label" x="${n.x}" y="${n.y - 16}" text-anchor="${n.x > 520 ? "end" : "middle"}">${n.label}</text>`}
+          <circle class="topo-halo" cx="${n.x}" cy="${n.y}" r="22"/>
+          <circle class="topo-dot" cx="${n.x}" cy="${n.y}" r="17"/>
+          <text class="topo-hub" x="${n.x}" y="${n.y}" text-anchor="middle" dominant-baseline="middle">XY</text>
         </g>`;
+        }
+        const aria = `${n.label}. ${domain?.label ?? "Software project"}. Open project.`;
+        return `<a class="topo-link" href="${esc(n.href ?? "#work")}" data-id="${n.id}" data-domain="${n.domain ?? ""}" aria-label="${esc(aria)}">
+          <title>${esc(aria)}</title>
+          <g class="topo-node" data-id="${n.id}" data-domain="${n.domain ?? ""}">
+            <circle class="topo-hit" cx="${n.x}" cy="${n.y}" r="22"/>
+            <circle class="topo-dot" cx="${n.x}" cy="${n.y}" r="4.4"/>
+            <text class="topo-label" x="${n.x}" y="${n.y - 16}" text-anchor="${n.x > 520 ? "end" : "middle"}">${esc(n.label)}</text>
+          </g>
+        </a>`;
       })
       .join("")}
     ${domains
@@ -129,10 +139,6 @@ export function initMap(svg: SVGSVGElement) {
     const cap = document.createElement("small");
     cap.textContent = domain.detail;
     readout.replaceChildren(line, document.createElement("br"), cap);
-  };
-
-  const go = (href: string) => {
-    document.querySelector(href)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
   };
 
   const setHot = (id: string) => {
@@ -186,14 +192,11 @@ export function initMap(svg: SVGSVGElement) {
     { passive: true },
   );
 
-  svg.querySelectorAll<SVGGElement>(".topo-node").forEach((g) => {
-    const href = g.dataset.href;
-    if (!href) return;
-    g.addEventListener("click", () => go(href));
-    g.addEventListener("keydown", (e) => {
-      if (e.key !== "Enter" && e.key !== " ") return;
-      e.preventDefault();
-      go(href);
-    });
+  svg.querySelectorAll<SVGAElement>(".topo-link").forEach((link) => {
+    const id = link.dataset.id;
+    if (!id) return;
+    link.addEventListener("focus", () => setHot(id));
+    link.addEventListener("blur", clearHot);
+    link.addEventListener("pointerenter", () => setHot(id));
   });
 }

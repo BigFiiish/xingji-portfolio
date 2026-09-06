@@ -8,7 +8,7 @@ import {
   projectStatus,
   type Project,
 } from "./content";
-import { failDemos } from "./failures";
+import { failSection } from "./failures";
 import { articlePath, articles } from "./articles";
 
 export const shorts: Record<string, string> = {
@@ -42,6 +42,11 @@ export function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 }
 
+const compactDate = (date: string) =>
+  new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" }).format(
+    new Date(`${date}T00:00:00Z`),
+  );
+
 const flagshipOrder = ["crawlforge", "catalog-order-service", "clearbay"];
 
 export const featuredProjects = () =>
@@ -63,6 +68,33 @@ export function workDirectoryHtml(): string {
           <small>${esc(p.proof?.[0] ?? p.stack[0])}</small>
         </a>`,
       )
+      .join("")}
+  </nav>`;
+}
+
+export function nowHtml(): string {
+  const now = person.now;
+  return `<section class="now" id="now" aria-labelledby="now-heading">
+    <div class="now-intro reveal">
+      <p>${esc(now.eyebrow)}</p>
+      <h2 id="now-heading">${esc(now.headline)}</h2>
+      <p class="now-body">${esc(now.body)}</p>
+    </div>
+    <dl class="now-details reveal">
+      <div><dt>How I work</dt><dd>${esc(now.workingStyle)}</dd></div>
+      <div><dt>Where I own</dt><dd>${esc(now.ownership)}</dd></div>
+    </dl>
+    <div class="now-contact reveal">
+      <p>${esc(now.cta)}</p>
+      <p><a href="mailto:${esc(person.email)}">Start a conversation →</a><a href="${esc(person.resume)}">Read résumé ↓</a></p>
+    </div>
+  </section>`;
+}
+
+export function mapLinksHtml(): string {
+  return `<nav class="map-links" aria-label="Projects in the systems topology">
+    ${orderedProjects()
+      .map((project) => `<a href="#${esc(project.slug)}">${esc(project.name)}</a>`)
       .join("")}
   </nav>`;
 }
@@ -228,7 +260,7 @@ export function staticWritingHtml(): string {
     .map(
       (article, index) => `<article class="writing-card reveal" style="--accent:${esc(article.accent)}">
         <a href="${articlePath(article)}" aria-label="Read ${esc(article.title)}">
-          <div class="writing-card-top"><span>${String(index + 1).padStart(2, "0")}</span><em>${esc(article.readTime)}</em></div>
+          <div class="writing-card-top"><span>${String(index + 1).padStart(2, "0")}</span><em>${esc(article.readTime)} · Updated ${compactDate(article.updated)}</em></div>
           <p>${esc(article.eyebrow)}</p>
           <h3>${esc(article.title)}</h3>
           <span class="writing-card-dek">${esc(article.dek)}</span>
@@ -240,14 +272,7 @@ export function staticWritingHtml(): string {
 }
 
 export function staticFailHtml(): string {
-  return `<ul class="fail-static-list">
-      ${failDemos
-        .map(
-          (d) =>
-            `<li><b>${esc(d.kicker)}</b> · ${esc(d.project)}. ${esc(d.line)}</li>`,
-        )
-        .join("")}
-    </ul>`;
+  return failSection();
 }
 
 export function jsonLd(): string {
@@ -275,12 +300,16 @@ export function jsonLd(): string {
       "@type": "TechArticle",
       headline: article.title,
       url: `https://www.xingjiyan.com${articlePath(article)}`,
+      datePublished: article.date,
+      dateModified: article.updated,
     })),
   });
 }
 
 export function injectStatic(html: string): string {
   return html
+    .replace("<!--inject:now-->", nowHtml())
+    .replace("<!--inject:map-links-->", mapLinksHtml())
     .replace("<!--inject:work-->", staticFeaturedHtml())
     .replace("<!--inject:more-->", staticMoreHtml())
     .replace("<!--inject:principles-->", staticPrinciplesHtml())

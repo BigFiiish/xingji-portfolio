@@ -90,7 +90,7 @@ function objectFirst(p: Project, standalone: boolean): string {
       ${artifact(p)}
       ${problem(p)}
     </section>
-    <section>
+    <section id="failure">
       <h3>Failure</h3>
       ${failures(p)}
     </section>
@@ -112,7 +112,7 @@ function grantFirst(p: Project, standalone: boolean): string {
       <h3>Trust path</h3>
       ${arch(p)}
     </section>
-    <section>
+    <section id="failure">
       <h3>Failure</h3>
       ${failures(p)}
     </section>
@@ -175,7 +175,7 @@ function full(p: Project, standalone: boolean): string {
           .join("")}
       </div>
     </section>
-    <section>
+    <section id="failure">
       <h3><span>05</span> Failure</h3>
       ${failures(p)}
     </section>

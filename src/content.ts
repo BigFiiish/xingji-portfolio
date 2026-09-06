@@ -22,6 +22,17 @@ export const person = {
   aboutBody:
     "Most recently at JASCI Software: a smart WMS used by 20+ 3PL customers and 500+ concurrent users. I took an LLM action layer from a sketch to production — JSON Schema contracts, idempotent writes, audit trails — and I still carried on-call. Before that: search pipelines at Sonos, payment APIs at Tencent. M.S. ECE, Carnegie Mellon.",
   systemLine: "Xingji builds systems around correctness, state, failure, and humans.",
+  now: {
+    eyebrow: "Now / Looking for",
+    headline: "The next system should matter after the demo ends.",
+    body:
+      "I’m looking for software engineering teams building reliable backend platforms, developer infrastructure, or applied AI products where correctness and product judgment share the same roadmap.",
+    workingStyle:
+      "I turn ambiguous workflows into typed contracts, small releases, measurable outcomes, and failure paths the team can operate.",
+    ownership:
+      "I’m most useful when I can follow a problem from the product surface through the service boundary, data model, rollout, and on-call feedback loop.",
+    cta: "If your team needs that kind of end-to-end ownership, let’s talk.",
+  },
 };
 
 export const impact = [

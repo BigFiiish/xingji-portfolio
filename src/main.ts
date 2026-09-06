@@ -1,7 +1,7 @@
 import "./style.css";
 import { person } from "./content";
 import { initCommand } from "./command";
-import { bindFailures, failSection } from "./failures";
+import { bindFailures } from "./failures";
 import { initMap } from "./map";
 import { initPointer } from "./pointer";
 import { initWarm } from "./warm";
@@ -31,27 +31,7 @@ if (more) {
 }
 
 const fails = document.querySelector<HTMLElement>("#fail-grid");
-if (fails) {
-  const initFailures = () => {
-    if (fails.dataset.ready === "true") return;
-    fails.dataset.ready = "true";
-    fails.innerHTML = failSection();
-    bindFailures(fails);
-    fails.querySelectorAll(".reveal").forEach((n) => io.observe(n));
-  };
-  if (location.hash.startsWith("#failures/")) initFailures();
-  else {
-    const failureObserver = new IntersectionObserver(
-      (entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        failureObserver.disconnect();
-        initFailures();
-      },
-      { rootMargin: "500px 0px", threshold: 0.01 },
-    );
-    failureObserver.observe(fails);
-  }
-}
+if (fails) bindFailures(fails);
 
 const principles = document.querySelector<HTMLElement>("#principles");
 if (principles && !principles.children.length) {
