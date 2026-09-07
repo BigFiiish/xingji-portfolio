@@ -1,4 +1,5 @@
 import "./style.css";
+import { inject } from "@vercel/analytics";
 import { person } from "./content";
 import { initCommand } from "./command";
 import { bindFailures } from "./failures";
@@ -8,6 +9,7 @@ import { initWarm } from "./warm";
 import { renderMore, renderPrinciples, renderWork } from "./work";
 
 document.documentElement.classList.add("js");
+inject();
 
 const loader = document.querySelector("#loader");
 window.setTimeout(() => loader?.classList.add("gone"), 380);
