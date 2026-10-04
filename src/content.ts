@@ -119,8 +119,9 @@ export type Project = {
   };
   live: string | null;
   repo: string;
+  privateSource?: boolean;
   accent: string;
-  preview: "catalog" | "crawlforge" | "clearbay" | "grantline" | "durable" | "pulse" | "dockline" | "sketch" | "resumatch";
+  preview: "signal" | "catalog" | "crawlforge" | "clearbay" | "grantline" | "durable" | "pulse" | "dockline" | "sketch" | "resumatch";
   caseStudy: CaseStudy;
   xray: string[];
 };
@@ -147,6 +148,63 @@ export const projectStatus = (project: Project) => {
 };
 
 export const projects: Project[] = [
+  {
+    name: "Signal Ledger",
+    slug: "signal-ledger",
+    year: "2026",
+    featured: true,
+    headline: "Market data to decisions. Every step accounted for.",
+    blurb: "An auditable ETF research platform connecting data-quality checks, causal backtests, portfolio risk controls, and prospective paper accounting with real shares and cash flows.",
+    stack: ["Python", "pandas", "NumPy", "SQLite", "pytest"],
+    proof: ["Causal backtests", "Data audits", "Paper accounting"],
+    evidence: {
+      problem: "Backtests can hide data errors, future information, and execution assumptions that an account cannot actually fund.",
+      result: "Trace ETF research from audited prices to next-session decisions, modeled fills, integer shares, settled cash, and dividend receivables.",
+      validation: "Leakage checks · transaction and journal tests · unresolved data exceptions remain visible",
+    },
+    live: "https://signal-ledger.yanxingji7.chatgpt.site/",
+    repo: "https://github.com/BigFiiish/signal-ledger",
+    privateSource: true,
+    accent: "#72B7C8",
+    preview: "signal",
+    xray: ["Market snapshots", "Quality audit", "Causal research", "Frozen decision", "Next-session fill", "Shares + cash ledger"],
+    caseStudy: {
+      shape: "full",
+      context: { scope: "Independent quantitative research project · 2026", role: "Designer and sole engineer", team: "Solo build", proof: "Public research report · private source · automated correctness checks" },
+      problem: "A convincing return chart is only the beginning. Missing bars, corporate actions, future-data leakage, unaffordable orders, and retrospective decisions can all make a strategy look more credible than the evidence supports.",
+      constraints: [
+        "Long-only daily ETF research with explicit costs, slippage, and liquidity assumptions; no broker orders.",
+        "Signals use information available at the decision time; modeled execution occurs at the next session close.",
+        "The selected ETF universe retains selection bias. Timing checks do not establish a survivorship-free universe.",
+        "Historical data exceptions remain quarantined; issuer NAV is not interchangeable with exchange closing prices.",
+        "Prospective rules are frozen before recording begins. Missed decision windows stop the run rather than create backdated decisions.",
+        "The paper account uses integer shares, settled cash, fees, dividend receivables, and settlement dates under documented hypothetical account rules.",
+      ],
+      architecture: [
+        { label: "Immutable market snapshots + hash manifests" },
+        { label: "Calendar, OHLCV, and corporate-action audit" },
+        { label: "Vectorized research + portfolio risk allocation", children: [{ label: "Train-only walk-forward ML experiment" }, { label: "Cost, delay, and historical stress validation" }] },
+        { label: "Frozen prospective decision → next-session modeled fill" },
+        { label: "Transactional SQLite journal → shares + cash + receivables" },
+        { label: "Scheduled runs → failure records → public report snapshot" },
+      ],
+      decisions: [
+        { decision: "Preserve suspect data and its evidence trail.", why: "A large return may be genuine or a data defect. Silently repairing it hides a research decision.", tradeoff: "Unresolved exceptions can block validation; independent exchange-price evidence is still required." },
+        { decision: "Separate historical research from prospective accounting.", why: "A replayed decision is not evidence of what the system decided in real time.", tradeoff: "Forward evidence takes elapsed market sessions and cannot be manufactured by running more backtests." },
+        { decision: "Account for shares and cash explicitly.", why: "A target allocation is not a fill. Lots, fees, settlement, and corporate actions change what an account can hold.", tradeoff: "Paper fills are modeled; broker-specific rules and actual execution evidence require separate validation." },
+        { decision: "Keep model experiments and passive benchmarks visible.", why: "Walk-forward ML and trend research must be compared with simple alternatives, including unsuccessful experiments.", tradeoff: "The project demonstrates research infrastructure, not proven alpha. Historical drawdown limits cannot guarantee future losses." },
+      ],
+      failures: [
+        { fail: "A historical price jumps unexpectedly.", handle: "Record and quarantine the exception; NAV evidence does not automatically clear an exchange-price anomaly." },
+        { fail: "A future price changes in a leakage check.", handle: "Earlier signals and decisions must remain unchanged." },
+        { fail: "A scheduled run repeats or misses its window.", handle: "Duplicates do not create a second session; missed windows fail without backfilling." },
+        { fail: "Cash is unsettled or a dividend lacks evidence.", handle: "Restrict purchases to settled cash and stop affected processing when required corporate-action evidence is missing." },
+        { fail: "Paper fills are mistaken for observed execution.", handle: "Keep modeled fills and imported broker execution-cost evidence separate." },
+      ],
+      next: ["Resolve historical anomalies with independent exchange-price evidence.", "Accumulate genuine forward sessions under the frozen research version.", "Import observed broker execution costs and validate account-specific rules before considering live use."],
+      artifact: { caption: "Decision lifecycle · architecture illustration, not a trading record", body: "Audit prices → record decision after close\nNext session → model permitted fills\nBook shares, fees, settled cash, and receivables\nVerify journal continuity → publish report snapshot" },
+    },
+  },
   {
     name: "Catalog Order Service",
     slug: "catalog-order-service",

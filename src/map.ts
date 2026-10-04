@@ -11,6 +11,7 @@ type Node = {
 };
 
 const nodes: Node[] = [
+  { id: "signal-ledger", x: 96, y: 78, label: "Signal Ledger", domain: "reliable", href: "#signal-ledger" },
   { id: "xy", x: 310, y: 248, label: "XY", hub: true },
   { id: "catalog", x: 264, y: 70, label: "Catalog Orders", domain: "reliable", href: "#catalog-order-service" },
   { id: "clearbay", x: 448, y: 82, label: "Clearbay", domain: "reliable", href: "#clearbay" },
@@ -24,6 +25,7 @@ const nodes: Node[] = [
 ];
 
 const edges: [string, string][] = [
+  ["signal-ledger", "xy"],
   ["grantline", "xy"],
   ["catalog", "xy"],
   ["xy", "pulsequeue"],

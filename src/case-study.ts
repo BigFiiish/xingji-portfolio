@@ -20,7 +20,7 @@ function header(p: Project, standalone: boolean): string {
       <p class="case-stack">${esc(p.stack.join(" · "))}</p>
       <p class="case-id-links">
         ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a>` : ""}
-        <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
+        ${p.privateSource ? `<span>Private source</span>` : `<a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>`}
       </p>
       ${isRenderProject(p) ? `<p class="demo-note">Hosted on Render. The first open may take up to about 60 seconds; the proof below remains available immediately.</p>` : ""}
     </header>`;
@@ -70,7 +70,7 @@ function failures(p: Project): string {
 function inspect(p: Project): string {
   return `<div class="case-inspect">
         ${p.live ? `<p><span class="case-k">Live</span> <a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a></p>` : ""}
-        <p><span class="case-k">Source</span> <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a></p>
+        <p><span class="case-k">Source</span> ${p.privateSource ? `<span>Private source</span>` : `<a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>`}</p>
         ${isRenderProject(p) ? `<p><span class="case-k">Wake time</span> <span>Allow up to about 60 seconds on the first request.</span></p>` : ""}
       </div>`;
 }

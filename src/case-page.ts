@@ -21,7 +21,7 @@ export function casePageHtml(project: Project, stylesheet: string): string {
     name: project.name,
     description: project.headline,
     url: canonical,
-    codeRepository: project.repo,
+    ...(!project.privateSource ? { codeRepository: project.repo } : {}),
     programmingLanguage: project.stack[0],
     ...(project.live ? { sameAs: project.live } : {}),
     author: { "@type": "Person", name: "Xingji Yan", url: "https://www.xingjiyan.com" },
@@ -58,7 +58,7 @@ export function casePageHtml(project: Project, stylesheet: string): string {
     <header class="case-page-nav">
       <a href="/#work">← Selected work</a>
       <span>${esc(project.name)} / Case study</span>
-      <a href="${esc(project.repo)}" target="_blank" rel="noreferrer">Source ↗</a>
+      ${project.privateSource ? `<span>Private source</span>` : `<a href="${esc(project.repo)}" target="_blank" rel="noreferrer">Source ↗</a>`}
     </header>
     <main class="case case-page">
       <div class="case-body">${caseHtml(project, true)}</div>

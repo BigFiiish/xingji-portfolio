@@ -13,6 +13,9 @@ function label(x: number, y: number, t: string, cls = ""): string {
 }
 
 function diagram(kind: Project["preview"]): string {
+  if (kind === "signal") {
+    return `<svg class="xray-svg" viewBox="0 0 280 340" role="img" aria-label="Market snapshots through audit, research, decisions, modeled fills, and journal">${["Market snapshots", "Data quality audit", "Causal research", "Frozen decision", "Next-session fill", "Shares + cash journal"].map((text, i) => label(140, 32 + i * 55, text) + (i < 5 ? line(140, 42 + i * 55, 140, 68 + i * 55) : "")).join("")}</svg>`;
+  }
   if (kind === "crawlforge") {
     return `<svg class="xray-svg" viewBox="0 0 280 340" aria-hidden="true">
       ${label(140, 22, "Careers URL")}

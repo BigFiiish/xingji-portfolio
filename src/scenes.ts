@@ -7,6 +7,8 @@ export type PulseCtl = {
 
 export function sceneMarkup(p: Project): string {
   switch (p.preview) {
+    case "signal":
+      return `<div class="signal-proof"><p class="signal-kicker">RESEARCH → PAPER ACCOUNTING</p><h4>Evidence before confidence.</h4><ol><li><b>01 / Audit</b><span>Missing bars, corporate actions, and price anomalies.</span></li><li><b>02 / Decide</b><span>Use available information. Record the decision time.</span></li><li><b>03 / Account</b><span>Next-session modeled fills, shares, fees, and cash.</span></li></ol><p class="signal-note">System workflow illustration · no live orders or proven alpha.</p></div>`;
     case "catalog":
       return catalog();
     case "crawlforge":

@@ -47,7 +47,7 @@ const compactDate = (date: string) =>
     new Date(`${date}T00:00:00Z`),
   );
 
-const flagshipOrder = ["crawlforge", "catalog-order-service", "clearbay"];
+const flagshipOrder = ["crawlforge", "catalog-order-service", "clearbay", "signal-ledger"];
 
 export const featuredProjects = () =>
   flagshipOrder
@@ -135,8 +135,8 @@ export function workCopy(p: Project, i: number): string {
           <p class="tags">${p.stack.map((s) => `<span>${esc(s)}</span>`).join("")}</p>
           ${evidence}
           <p class="work-links">
-            ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Open product ↗</a>` : ""}
-            <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
+            ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">${p.privateSource ? "Open research dashboard ↗" : "Open product ↗"}</a>` : ""}
+            ${p.privateSource ? `<span>Private source</span>` : `<a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>`}
             <a href="${caseStudyPath(p)}">Case study →</a>
           </p>
           ${renderNote(p)}
@@ -194,7 +194,7 @@ export function moreArticle(p: Project): string {
         <p class="more-tags">${p.stack.slice(0, 4).map((item) => `<span>${esc(item)}</span>`).join("")}</p>
         <p class="more-links">
           ${p.live ? `<a href="${esc(p.live)}" target="_blank" rel="noreferrer">Live ↗</a>` : ""}
-          <a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>
+          ${p.privateSource ? `<span>Private source</span>` : `<a href="${esc(p.repo)}" target="_blank" rel="noreferrer">GitHub ↗</a>`}
           <a href="${caseStudyPath(p)}">Case study →</a>
         </p>
         ${renderNote(p, true)}
@@ -280,7 +280,7 @@ export function jsonLd(): string {
     "@type": "SoftwareSourceCode",
     name: p.name,
     description: p.headline,
-    codeRepository: p.repo,
+    ...(!p.privateSource ? { codeRepository: p.repo } : {}),
     url: `https://www.xingjiyan.com${caseStudyPath(p)}`,
     ...(p.live ? { sameAs: p.live } : {}),
     programmingLanguage: p.stack[0],

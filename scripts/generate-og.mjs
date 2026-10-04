@@ -8,6 +8,7 @@ const out = join(root, "public", "og");
 const scratch = mkdtempSync(join(tmpdir(), "xingji-og-"));
 
 const projects = [
+  { slug: "signal-ledger", no: "04", name: "SIGNAL LEDGER", title: ["Evidence before", "confidence."], accent: "#72B7C8", meta: "PYTHON · CAUSAL RESEARCH · PAPER LEDGER", kind: "signal", flagship: true },
   { slug: "crawlforge", no: "01", name: "CRAWLFORGE", title: ["Careers pages in.", "Job intelligence out."], accent: "#4FA685", meta: "JAVA 21 · BOUNDED BFS · 20 TESTS", kind: "crawl", flagship: true },
   { slug: "catalog-order-service", no: "02", name: "CATALOG ORDER SERVICE", title: ["One last unit.", "One winning order."], accent: "#E6B566", meta: "SPRING · TRANSACTIONS · 44 TESTS", kind: "catalog", flagship: true },
   { slug: "clearbay", no: "03", name: "CLEARBAY", title: ["Financial workflows", "that survive retries."], accent: "#3ECF8E", meta: "MULTI-TENANT · BILLING · MCP", kind: "clearbay", flagship: true },
@@ -31,6 +32,7 @@ const line = (x1, y1, x2, y2, color = "#47505f", dash = "") => `<line x1="${x1}"
 const node = (x, y, label, accent, active = false) => `<circle cx="${x}" cy="${y}" r="${active ? 9 : 6}" fill="${active ? accent : "#d9d8d2"}"/><text x="${x}" y="${y - 22}" text-anchor="middle" class="mono dim">${esc(label)}</text>`;
 
 function motif(kind, accent) {
+  if (kind === "signal") return `<g transform="translate(670 180)">${["AUDIT PRICES", "RECORD DECISION", "MODEL FILL", "SHARES + CASH"].map((t,i)=>`<text x="0" y="${i*62}" class="mono accent">${t}</text>${i<3?line(0,i*62+20,420,i*62+20):""}`).join("")}</g>`;
   if (kind === "crawl") return `<g transform="translate(630 220)">${line(0, 135, 500, 135, accent)}${["DISCOVER", "EXTRACT", "STRUCTURE", "EXPORT", "MATCH"].map((x, i) => node(i * 125, 135, x, accent, i === 4)).join("")}<text x="0" y="55" class="metric">CAREERS</text><text x="492" y="55" text-anchor="end" class="metric accent">JSON / CSV</text><text x="0" y="190" class="mono dim">BOUNDED · PERSISTED · RESTART-SAFE</text></g>`;
   if (kind === "catalog") return `<g transform="translate(650 188)"><text x="230" y="55" text-anchor="middle" class="mono dim">STOCK 1</text>${line(0, 130, 175, 130)}${line(285, 130, 460, 130)}<circle cx="230" cy="130" r="78" fill="none" stroke="${accent}" stroke-width="2"/><text x="230" y="159" text-anchor="middle" class="big accent">1</text><text x="0" y="112" class="mono">ORDER A</text><text x="460" y="112" text-anchor="end" class="mono">ORDER B</text><text x="0" y="175" class="mono accent">CREATED</text><text x="460" y="175" text-anchor="end" class="mono dim">CONFLICT</text><text x="230" y="265" text-anchor="middle" class="mono dim">ONE CONDITIONAL UPDATE WINS</text></g>`;
   if (kind === "clearbay") return `<g transform="translate(640 170)"><rect x="0" y="0" width="475" height="265" rx="2" fill="none" stroke="#303744"/><text x="28" y="40" class="mono dim">JWT: tid=acme · ROLE_OPS</text>${line(28, 72, 447, 72, accent)}<text x="28" y="115" class="mono">TENANT A</text><text x="447" y="115" text-anchor="end" class="mono accent">INVOICE #482</text>${line(28, 143, 447, 143)}<text x="28" y="184" class="mono dim">TENANT B</text><text x="447" y="184" text-anchor="end" class="mono dim">ISOLATED</text><text x="28" y="232" class="mono accent">IDEMPOTENT REPLAY · SAME RESULT</text></g>`;
@@ -103,8 +105,8 @@ function render(svg, target) {
 }
 
 try {
-  projects.forEach((project) => render(projectSvg(project), `projects/${project.slug}`));
-  essays.forEach((essay) => render(essaySvg(essay), `writing/${essay.slug}`));
+  projects.filter((p) => !process.argv[2] || p.slug === process.argv[2]).forEach((project) => render(projectSvg(project), `projects/${project.slug}`));
+  if (!process.argv[2]) essays.forEach((essay) => render(essaySvg(essay), `writing/${essay.slug}`));
 } finally {
   rmSync(scratch, { recursive: true, force: true });
 }
