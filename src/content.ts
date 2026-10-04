@@ -121,7 +121,7 @@ export type Project = {
   repo: string;
   privateSource?: boolean;
   accent: string;
-  preview: "signal" | "catalog" | "crawlforge" | "clearbay" | "grantline" | "durable" | "pulse" | "dockline" | "sketch" | "resumatch";
+  preview: "event" | "signal" | "catalog" | "crawlforge" | "clearbay" | "grantline" | "durable" | "pulse" | "dockline" | "sketch" | "resumatch";
   caseStudy: CaseStudy;
   xray: string[];
 };
@@ -148,6 +148,31 @@ export const projectStatus = (project: Project) => {
 };
 
 export const projects: Project[] = [
+  {
+    name: "Event Ledger", slug: "event-ledger", year: "2026", featured: false,
+    headline: "Correct events. Measured latency.",
+    blurb: "A Java 21 order-book and event-replay laboratory comparing map and array implementations with differential tests, scheduled-arrival queue experiments, and reproducible performance evidence.",
+    stack: ["Java 21", "JUnit 5", "Maven", "Concurrency"],
+    proof: ["17 tests", "3 JVM forks", "Tail latency"],
+    evidence: { problem: "A faster event handler does not guarantee lower end-to-end latency when scheduling and queues dominate.", result: "Compare a reference book with bounded arrays under identical synthetic event streams; inspect every measured round and its timing boundary.", validation: "17 passing tests · randomized differential checks · three independent JVM forks" },
+    live: "https://event-ledger-beryl.vercel.app/", repo: "https://github.com/BigFiiish/event-ledger",
+    accent: "#83D8BD", preview: "event", xray: ["Synthetic feed", "Sequence validation", "Bounded queue", "Single writer", "Order book", "Latency evidence"],
+    caseStudy: {
+      shape: "full", context: { scope: "Independent systems experiment · 2026", role: "Project design and implementation with AI-assisted development", team: "Solo project", proof: "17 JUnit tests · raw benchmark results and source hashes" },
+      problem: "Low-latency claims need correctness, explicit measurement boundaries, and repeatable evidence. Average speed alone can hide queue saturation and long latency spikes.",
+      constraints: ["Synthetic single-instrument events, not an exchange feed or live trading system.", "ADD, REDUCE and DELETE events use integer ticks and quantities; sequence errors reject without mutation.", "The optimized book requires dense order IDs and a bounded price range, trading memory and flexibility for fewer allocations.", "Service timings exclude parsing, disk IO and data generation. Scheduled-to-done includes producer lag, backpressure, queue wait and processing.", "Desktop Windows timing is noisy; no pinned cores, kernel bypass, wire-to-wire measurement or worst-case guarantee."],
+      architecture: [{label:"Deterministic synthetic events"},{label:"Strict sequence and attribute validation"},{label:"Reference maps / bounded arrays"},{label:"Bounded producer-consumer queue"},{label:"Raw CSV rounds + environment and source hashes"},{label:"Interactive evidence report"}],
+      decisions: [
+        {decision:"Keep a readable reference implementation.",why:"Randomized differential checks compare state while explicit tests cover known failure cases.",tradeoff:"A shared mistake remains possible; differential testing complements semantic assertions."},
+        {decision:"Measure service and scheduled completion separately.",why:"Arrival deadlines remain fixed under backlog, so slow scheduling and queue saturation stay visible.",tradeoff:"Timestamping and a volatile result sink perturb service timing; figures are workload-specific."},
+        {decision:"Retain every round and unsuccessful result.",why:"Three JVM forks with alternating implementation order expose variability rather than cherry-picking the fastest run.",tradeoff:"Median round percentiles are descriptive; they are not pooled percentiles or confidence estimates."},
+      ],
+      failures: [{fail:"Duplicate, missing or out-of-order sequence.",handle:"Reject the event without advancing state; repair or replay the input."},{fail:"An order reduction exceeds its remaining quantity.",handle:"Reject without mutating order or level totals."},{fail:"The consumer falls behind.",handle:"Bounded queue applies backpressure; timing includes the backlog and records blocked offers."},{fail:"A journal record is corrupted.",handle:"Hash validation rejects replay. Full-chain rewriting or clean suffix removal requires external evidence to detect."}],
+      next: ["Repeat on controlled Linux hardware with profiling and JMH.","Add licensed exchange-event normalization and checkpoint recovery.","Measure multiple symbols and different load distributions before generalizing."],
+      artifact: { caption: "October 4, 2026 · i9-13900HK / Windows / Java 21 · synthetic workload", body: "Median round service P99: reference 1.75 us / array 0.40 us\n500k scheduled events/s completion P99: 487.75 us / 467.90 us\nWorst observed array service sample: 5.17 ms\nEngine speedup did not translate into comparable end-to-end speedup." },
+    },
+  },
+
   {
     name: "Signal Ledger",
     slug: "signal-ledger",

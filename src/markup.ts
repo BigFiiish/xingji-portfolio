@@ -175,7 +175,7 @@ export function staticFeaturedHtml(): string {
 
 export function staticMoreHtml(): string {
   return (
-    `<div class="more-heading"><span>06 more projects</span><h3>More systems</h3></div><div class="more-grid">` +
+    `<div class="more-heading"><span>${String(secondaryProjects().length).padStart(2, "0")} more projects</span><h3>More systems</h3></div><div class="more-grid">` +
     secondaryProjects()
       .map((p) => moreArticle(p))
       .join("") +

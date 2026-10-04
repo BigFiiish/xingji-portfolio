@@ -1,6 +1,7 @@
 import type { Project } from "./content";
 
 export function xrayMarkup(p: Project): string {
+  if (p.preview === "event") return `<div class="xray-board"><svg class="xray-svg" viewBox="0 0 280 340" role="img" aria-label="Event processing and measurement pipeline">${p.xray.map((t,i)=>label(140,32+i*55,t)+(i<5?line(140,42+i*55,140,68+i*55):"")).join("")}</svg></div>`;
   return `<div class="xray-board">${diagram(p.preview)}</div>`;
 }
 
